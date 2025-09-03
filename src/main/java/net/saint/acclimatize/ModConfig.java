@@ -165,12 +165,8 @@ public class ModConfig implements ConfigData {
 	public double blockTemperatureAbsoluteMaximum = 40.0;
 
 	@ConfigEntry.Category("blocks")
-	@Comment("The value added to distance under heat intensity used in the fall-off calculation. (Default: 0.75)")
-	public double blockTemperatureFalloffConstant = 0.75;
-
-	@ConfigEntry.Category("blocks")
-	@Comment("The factor multiplied by the distance between player and heat source. Lower means less falloff. (Default: 0.075)")
-	public double blockTemperatureDistanceFalloffFactor = 0.075;
+	@Comment("The decay factor used to compute applied temperature by distance between player and heat source. Higher values mean quicker falloff. (Default: 0.1)")
+	public double blockTemperatureDistanceFalloffFactor = 0.1;
 
 	@ConfigEntry.Category("blocks")
 	@Comment("The factor applied to base acclimatization rate when close to a block heat source. (Default: 5.0)")
