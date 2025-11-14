@@ -31,6 +31,10 @@ public class ModConfig implements ConfigData {
 	public String temperatureDisplayType = "glass_thermometer";
 
 	@ConfigEntry.Category("hud")
+	@Comment("Automatically hides the temperature while in a vehicle (e.g. horses, boats, aircraft). (Default: true)")
+	public boolean hideTemperatureWhileInVehicle = true;
+
+	@ConfigEntry.Category("hud")
 	@Comment("Whether or not temperature damage decreases your saturation. Beware disabling this makes it really easy to bypass temperature damage just by eating. (Default: true)")
 	public boolean temperatureDamageDecreasesSaturation = true;
 

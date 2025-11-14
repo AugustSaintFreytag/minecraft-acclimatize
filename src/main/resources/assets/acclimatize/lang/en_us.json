@@ -26,6 +26,7 @@
 	"text.autoconfig.acclimatize.option.thermometerXOffset": "Thermometer X Offset",
 	"text.autoconfig.acclimatize.option.thermometerYOffset": "Thermometer Y Offset",
 	"text.autoconfig.acclimatize.option.temperatureDisplayType": "Temperature Display Type",
+	"text.autoconfig.acclimatize.option.hideTemperatureWhileInVehicle": "Hide Temperature While in Vehicle",
 	"text.autoconfig.acclimatize.option.temperatureDamageDecreasesSaturation": "Temperature Damage Decreases Saturation",
 	"text.autoconfig.acclimatize.option.enableTemperatureVignette": "Enable Temperature Vignette",
 	"text.autoconfig.acclimatize.option.temperatureVignetteAlpha": "Temperature Vignette Alpha",
