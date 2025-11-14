@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.Entity;
@@ -21,6 +22,13 @@ public abstract class InGameHudMixin {
 	@Inject(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", ordinal = 1))
 	private void mixinRenderStatusBars(DrawContext context, CallbackInfo callbackInfo) {
 		if (!ModClient.enableHUD) {
+			return;
+		}
+
+		var client = MinecraftClient.getInstance();
+		var player = client.player;
+
+		if (Mod.CONFIG.hideTemperatureWhileInVehicle && player.hasVehicle()) {
 			return;
 		}
 
