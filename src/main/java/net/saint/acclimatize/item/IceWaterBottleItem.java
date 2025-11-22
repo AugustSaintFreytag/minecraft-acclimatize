@@ -1,5 +1,6 @@
 package net.saint.acclimatize.item;
 
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -7,7 +8,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
@@ -15,9 +20,9 @@ import net.minecraft.world.World;
 import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.ModStatusEffects;
 
-public class IceWaterItem extends Item {
+public class IceWaterBottleItem extends Item {
 
-	public IceWaterItem(Settings settings) {
+	public IceWaterBottleItem(Settings settings) {
 		super(settings);
 	}
 
@@ -33,20 +38,34 @@ public class IceWaterItem extends Item {
 
 	@Override
 	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-		PlayerEntity playerEntity = user instanceof PlayerEntity ? (PlayerEntity) user : null;
+		super.finishUsing(stack, world, user);
 
-		playerEntity.playSound(SoundEvents.ENTITY_WANDERING_TRADER_DRINK_POTION, 1.0F, 1.0F);
-		Hand hand = playerEntity.getActiveHand();
+		if (!(user instanceof PlayerEntity player)) {
+			return ItemStack.EMPTY;
+		}
 
-		if (!world.isClient()) {
-			playerEntity.getStackInHand(hand).setCount(playerEntity.getStackInHand(hand).getCount() - 1);
-			playerEntity.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE));
+		if (user instanceof ServerPlayerEntity serverPlayer) {
+			Criteria.CONSUME_ITEM.trigger(serverPlayer, stack);
+			serverPlayer.incrementStat(Stats.USED.getOrCreateStat(this));
 
-			playerEntity.addStatusEffect(
+			var serverWorld = (ServerWorld) world;
+			serverWorld.playSound(null, serverPlayer.getBlockPos(), SoundEvents.ENTITY_WANDERING_TRADER_DRINK_POTION, SoundCategory.PLAYERS,
+					1.0F, 1.0F);
+
+			serverPlayer.addStatusEffect(
 					new StatusEffectInstance(ModStatusEffects.HEAT_DISSIPATION, Mod.CONFIG.iceWaterEffectDuration, 0, false, true));
 		}
 
-		return super.finishUsing(stack, world, user);
+		if (!player.isCreative()) {
+			stack.decrement(1);
+			var emptyBottleStack = new ItemStack(Items.GLASS_BOTTLE);
+
+			if (!player.getInventory().insertStack(emptyBottleStack)) {
+				player.dropItem(emptyBottleStack, false);
+			}
+		}
+
+		return stack;
 	}
 
 	@Override

@@ -2,19 +2,19 @@
 	"type": "minecraft:crafting_shaped",
 	"pattern": [
 		"sss",
-		"sss",
-		" W "
+		"sWs",
+		"sss"
 	],
 	"key": {
 		"s": {
 			"item": "minecraft:snowball"
 		},
 		"W": {
-			"item": "minecraft:glass_bottle"
+			"item": "dehydration:purified_water_bottle"
 		}
 	},
 	"result": {
-		"item": "acclimatize:ice_water",
+		"item": "acclimatize:ice_water_bottle",
 		"count": 1
 	}
 }
