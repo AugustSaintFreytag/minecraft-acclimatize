@@ -20,7 +20,7 @@ import net.saint.acclimatize.data.block.BlockTemperatureUtil;
 import net.saint.acclimatize.data.item.ItemTemperatureUtil;
 import net.saint.acclimatize.data.wind.WindTemperatureUtil;
 import net.saint.acclimatize.item.GoldSweetBerriesItem;
-import net.saint.acclimatize.item.IceWaterItem;
+import net.saint.acclimatize.item.IceWaterBottleItem;
 import net.saint.acclimatize.item.ThermometerItem;
 import net.saint.acclimatize.item.WoolClothItem;
 import net.saint.acclimatize.profiler.Profiler;
@@ -40,7 +40,7 @@ public class Mod implements ModInitializer {
 	// Items
 
 	public static final GoldSweetBerriesItem GOLDEN_SWEET_BERRIES_ITEM = new GoldSweetBerriesItem(new FabricItemSettings().maxCount(64));
-	public static final IceWaterItem ICE_WATER_ITEM = new IceWaterItem(new FabricItemSettings().maxCount(4));
+	public static final IceWaterBottleItem ICE_WATER_BOTTLE_ITEM = new IceWaterBottleItem(new FabricItemSettings().maxCount(4));
 	public static final ThermometerItem THERMOMETER_ITEM = new ThermometerItem(new FabricItemSettings().maxCount(1));
 	public static final WoolClothItem WOOL_CLOTH_ITEM = new WoolClothItem(new FabricItemSettings().maxCount(64));
 
@@ -113,14 +113,14 @@ public class Mod implements ModInitializer {
 
 		Registry.register(Registries.ITEM, new Identifier(MOD_ID, "thermometer"), THERMOMETER_ITEM);
 		Registry.register(Registries.ITEM, new Identifier(MOD_ID, "golden_sweet_berries"), GOLDEN_SWEET_BERRIES_ITEM);
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID, "ice_water"), ICE_WATER_ITEM);
+		Registry.register(Registries.ITEM, new Identifier(MOD_ID, "ice_water_bottle"), ICE_WATER_BOTTLE_ITEM);
 		Registry.register(Registries.ITEM, new Identifier(MOD_ID, "wool_cloth"), WOOL_CLOTH_ITEM);
 
 		// Item Groups
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(content -> {
 			content.add(GOLDEN_SWEET_BERRIES_ITEM);
-			content.add(ICE_WATER_ITEM);
+			content.add(ICE_WATER_BOTTLE_ITEM);
 		});
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(content -> {
 			content.add(THERMOMETER_ITEM);

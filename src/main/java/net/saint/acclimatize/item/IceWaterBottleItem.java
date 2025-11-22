@@ -20,9 +20,9 @@ import net.minecraft.world.World;
 import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.ModStatusEffects;
 
-public class IceWaterItem extends Item {
+public class IceWaterBottleItem extends Item {
 
-	public IceWaterItem(Settings settings) {
+	public IceWaterBottleItem(Settings settings) {
 		super(settings);
 	}
 
