@@ -60,7 +60,6 @@ public final class ModCommands {
 
 					ServerState serverState = ServerStateUtil.getServerState(context.getSource().getServer());
 
-					context.getSource().sendMessage(Text.literal("§e=====Wind Info====="));
 					context.getSource().sendMessage(Text.literal("§eWind Direction: §6" + Math.toDegrees(serverState.windDirection) + "°"));
 					context.getSource().sendMessage(Text.literal("§eWind Temperature Modifier: §6" + serverState.windIntensity));
 

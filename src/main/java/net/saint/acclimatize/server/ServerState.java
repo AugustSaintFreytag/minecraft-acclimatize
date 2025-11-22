@@ -32,11 +32,11 @@ public class ServerState extends PersistentState {
 	public NbtCompound writeNbt(NbtCompound nbt) {
 		// Player State Properties
 
-		NbtCompound playersNbt = new NbtCompound();
+		var playersNbt = new NbtCompound();
 
 		for (var entry : players.entrySet()) {
-			UUID id = entry.getKey();
-			PlayerState playerState = entry.getValue();
+			var id = entry.getKey();
+			var playerState = entry.getValue();
 
 			playersNbt.put(id.toString(), playerState.writeNbt(new NbtCompound()));
 		}
@@ -55,16 +55,17 @@ public class ServerState extends PersistentState {
 	}
 
 	public static ServerState createFromNbt(NbtCompound tag) {
-		ServerState serverState = new ServerState();
+		var serverState = new ServerState();
 
 		// Player State Properties
 
-		NbtCompound playersTag = tag.getCompound(ServerStateNBTKeys.players);
+		var playersTag = tag.getCompound(ServerStateNBTKeys.players);
 
-		for (String key : playersTag.getKeys()) {
-			NbtCompound ptag = playersTag.getCompound(key);
-			PlayerState ps = PlayerState.fromNbt(ptag);
-			serverState.players.put(UUID.fromString(key), ps);
+		for (var playerTagKey : playersTag.getKeys()) {
+			var playerTag = playersTag.getCompound(playerTagKey);
+			var playerState = PlayerState.fromNbt(playerTag);
+
+			serverState.players.put(UUID.fromString(playerTagKey), playerState);
 		}
 
 		// Server State Properties

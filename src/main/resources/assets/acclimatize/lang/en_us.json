@@ -70,7 +70,6 @@
 	"text.autoconfig.acclimatize.option.blockTemperatureRadius": "Block Temperature Radius",
 	"text.autoconfig.acclimatize.option.blockTemperatureAbsoluteMinimum": "Block Temperature Absolute Minimum",
 	"text.autoconfig.acclimatize.option.blockTemperatureAbsoluteMaximum": "Block Temperature Absolute Maximum",
-	"text.autoconfig.acclimatize.option.blockTemperatureFalloffConstant": "Block Temperature Falloff Constant",
 	"text.autoconfig.acclimatize.option.blockTemperatureDistanceFalloffFactor": "Block Temperature Distance Falloff Factor",
 	"text.autoconfig.acclimatize.option.blockAcclimatizationBoostFactor": "Block Acclimatization Boost Factor",
 	"text.autoconfig.acclimatize.option.blockTemperatureAcclimatizationBoostThreshold": "Block Temperature Acclimatization Boost Threshold",

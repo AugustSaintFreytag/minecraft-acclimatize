@@ -24,7 +24,6 @@ public final class BlockTemperatureUtil {
 
 	public static double temperatureDeltaForBlocksInVicinity(ServerPlayerEntity player) {
 		var radius = Mod.CONFIG.blockTemperatureRadius;
-		var falloffConstant = Mod.CONFIG.blockTemperatureFalloffConstant;
 		var distanceFalloffFactor = Mod.CONFIG.blockTemperatureDistanceFalloffFactor;
 
 		var world = player.getWorld();
@@ -44,9 +43,8 @@ public final class BlockTemperatureUtil {
 						continue;
 					}
 
-					var blockDistance = blockPosition.getSquaredDistance(player.getPos());
-					var fallOffTemperature = blockTemperature
-							/ Math.max(0.001, ((blockDistance * distanceFalloffFactor) + falloffConstant));
+					var blockDistance = Math.sqrt(blockPosition.getSquaredDistance(player.getPos()));
+					var fallOffTemperature = blockTemperature * Math.exp(-distanceFalloffFactor * blockDistance);
 
 					aggregateTemperatureDelta += Math.min(blockTemperature, fallOffTemperature);
 				}

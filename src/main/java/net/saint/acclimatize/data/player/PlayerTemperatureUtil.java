@@ -27,6 +27,7 @@ public class PlayerTemperatureUtil {
 	public static void tickPlayerTemperature(ServerPlayerEntity player, ServerState serverState, PlayerState playerState) {
 		// Prerequisites
 
+		var bodyTemperature = playerState.bodyTemperature;
 		var isInInterior = SpaceUtil.checkPlayerIsInInterior(player);
 
 		// Biome Temperature
@@ -82,11 +83,7 @@ public class PlayerTemperatureUtil {
 		// Player Temperature
 
 		acclimatizationRate = applicableAcclimatizationRate(acclimatizationRate);
-
-		var bodyTemperature = playerState.bodyTemperature;
-
-		bodyTemperature = bodyTemperature + ((effectiveTemperature - bodyTemperature) * acclimatizationRate);
-		bodyTemperature = MathUtil.clamp(bodyTemperature, 0, 100);
+		bodyTemperature = (1 - acclimatizationRate) * bodyTemperature + acclimatizationRate * effectiveTemperature;
 
 		// State
 
