@@ -361,4 +361,8 @@ public class ModConfig implements ConfigData {
 	@Comment("Enables debug visualization of sun vectors showing the raycast direction from player to sun. (Default: false)")
 	public boolean enableSunVectorDebug = false;
 
+	@ConfigEntry.Category("developer")
+	@Comment("Enables continuous logging of the current world sky angle. (Default: false)")
+	public boolean enableSkyAngleLogging = false;
+
 }

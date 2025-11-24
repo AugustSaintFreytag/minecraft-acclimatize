@@ -133,7 +133,7 @@ public class ModClient implements ClientModInitializer {
 		ClientTickEvents.START_CLIENT_TICK.register(client -> {
 			var world = client.world;
 
-			if (world == null || !world.isClient()) {
+			if (world == null || !world.isClient() || client.player == null) {
 				return;
 			}
 
@@ -141,6 +141,11 @@ public class ModClient implements ClientModInitializer {
 
 			if (Mod.CONFIG.enableWindParticles && !isPaused) {
 				WindParticleUtil.renderWindParticles(client);
+			}
+
+			if (Mod.CONFIG.enableSkyAngleLogging && world.getTime() % 20 == 0) {
+				var skyAngle = world.getSkyAngle(1.0f);
+				client.player.sendMessage(Text.of("Current sky angle: " + skyAngle));
 			}
 		});
 	}

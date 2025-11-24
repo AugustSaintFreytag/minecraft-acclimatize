@@ -99,5 +99,6 @@
 	"text.autoconfig.acclimatize.option.enableParticleFunneling": "Enable Particle Funneling",
 	"text.autoconfig.acclimatize.option.enableLogging": "Enable Logging",
 	"text.autoconfig.acclimatize.option.enableCreativeModeTemperature": "Enable Temperature in Creative Mode",
-	"text.autoconfig.acclimatize.option.enableSunVectorDebug": "Enable Sun Vector Debug"
+	"text.autoconfig.acclimatize.option.enableSunVectorDebug": "Enable Sun Vector Debug",
+	"text.autoconfig.acclimatize.option.enableSkyAngleLogging": "Enable Sky Angle Logging"
 }
