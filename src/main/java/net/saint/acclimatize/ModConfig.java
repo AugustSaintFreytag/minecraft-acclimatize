@@ -61,8 +61,8 @@ public class ModConfig implements ConfigData {
 	// Player
 
 	@ConfigEntry.Category("player")
-	@Comment("The rate by which body temperature adapts to ambient temperatures. (Default: 0.01)")
-	public double acclimatizationRate = 0.01;
+	@Comment("The rate by which body temperature adapts to ambient temperatures. (Default: 0.0075)")
+	public double acclimatizationRate = 0.0075;
 
 	@ConfigEntry.Category("player")
 	@Comment("The lowest possible value for player acclimatization after all factors have been applied. (Default: 0.001)")
@@ -73,16 +73,16 @@ public class ModConfig implements ConfigData {
 	public double wetAcclimatizationRateBoostFactor = 2.5;
 
 	@ConfigEntry.Category("player")
-	@Comment("First threshold for hypothermia, being below this you will start to freeze (Default: 35.0)")
-	public double hypothermiaThresholdMinor = 35.0;
+	@Comment("First threshold for hypothermia, being below this you will start to freeze (Default: 30.0)")
+	public double hypothermiaThresholdMinor = 30.0;
 
 	@ConfigEntry.Category("player")
 	@Comment("Second threshold for hypothermia, being below this you will freeze faster. (Default: 15.0)")
 	public double hypothermiaThresholdMajor = 15.0;
 
 	@ConfigEntry.Category("player")
-	@Comment("First threshold for hyperthermia, being above this you will start to burn (Default: 65.0)")
-	public double hyperthermiaThresholdMinor = 65.0;
+	@Comment("First threshold for hyperthermia, being above this you will start to burn (Default: 70.0)")
+	public double hyperthermiaThresholdMinor = 70.0;
 
 	@ConfigEntry.Category("player")
 	@Comment("Second threshold for hyperthermia, being above this you will burn faster (Default: 85.0)")
@@ -169,8 +169,8 @@ public class ModConfig implements ConfigData {
 	public double blockTemperatureDistanceFalloffFactor = 0.1;
 
 	@ConfigEntry.Category("blocks")
-	@Comment("The factor applied to base acclimatization rate when close to a block heat source. (Default: 5.0)")
-	public double blockAcclimatizationBoostFactor = 5.0;
+	@Comment("The factor applied to base acclimatization rate when close to a block heat source. (Default: 4.0)")
+	public double blockAcclimatizationBoostFactor = 4.0;
 
 	@ConfigEntry.Category("blocks")
 	@Comment("The minimum temperature at which the acclimatization boost is applied. (Default: 10.0)")
@@ -302,8 +302,8 @@ public class ModConfig implements ConfigData {
 	public double windIntensityMin = 0.15;
 
 	@ConfigEntry.Category("wind")
-	@Comment("The maximum intensity wind can be transitioned to in random tick assignment. (Default: 4.0)")
-	public double windIntensityMax = 4.0;
+	@Comment("The maximum intensity wind can be transitioned to in random tick assignment. (Default: 5.0)")
+	public double windIntensityMax = 5.0;
 
 	@ConfigEntry.Category("wind")
 	@Comment("The factor for how much wind affects ambient temperature when fully exposed. (Default: -1.25)")
