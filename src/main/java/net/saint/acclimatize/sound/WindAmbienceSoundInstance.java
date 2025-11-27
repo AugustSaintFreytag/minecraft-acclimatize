@@ -23,13 +23,13 @@ public class WindAmbienceSoundInstance extends MovingSoundInstance {
 
 	// Init
 
-	protected WindAmbienceSoundInstance(MinecraftClient client, SoundEvent soundEvent, float initialVolume) {
+	protected WindAmbienceSoundInstance(MinecraftClient client, SoundEvent soundEvent) {
 		super(soundEvent, SoundCategory.AMBIENT, SoundInstance.createRandom());
 
 		this.client = client;
 		this.repeat = true;
 		this.repeatDelay = 0;
-		this.volume = MathUtil.clamp(initialVolume, 0.0f, 1.0f);
+		this.volume = 0.01f;
 		this.targetVolume = this.volume;
 		this.pitch = 1.0f;
 		this.relative = true;

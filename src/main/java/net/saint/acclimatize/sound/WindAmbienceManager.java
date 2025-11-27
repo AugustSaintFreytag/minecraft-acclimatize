@@ -75,8 +75,7 @@ public final class WindAmbienceManager {
 			}
 
 			activeProperties = properties;
-			var initialVolume = targetVolume * Mod.CONFIG.windSoundVolume;
-			activeSound = new WindAmbienceSoundInstance(client, soundEvent, initialVolume);
+			activeSound = new WindAmbienceSoundInstance(client, soundEvent);
 			client.getSoundManager().play(activeSound);
 
 			return;
