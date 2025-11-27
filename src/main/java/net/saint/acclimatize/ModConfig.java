@@ -278,6 +278,14 @@ public class ModConfig implements ConfigData {
 	public boolean enableWind = true;
 
 	@ConfigEntry.Category("wind")
+	@Comment("Toggles wind ambient sounds based on biome, wind intensity, and exterior/interior state. (Default: true)")
+	public boolean enableWindSounds = true;
+
+	@ConfigEntry.Category("wind")
+	@Comment("The base volume for all wind ambient sounds. (Default: 1.0)")
+	public float windSoundVolume = 1.0f;
+
+	@ConfigEntry.Category("wind")
 	@Comment("The base number of ticks until wind direction is updated, plus randomization. (Default: 6000)")
 	public int windDirectionUpdateInterval = 6000;
 
