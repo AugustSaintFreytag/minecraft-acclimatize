@@ -1,5 +1,8 @@
 package net.saint.acclimatize.sound;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.sound.SoundEvent;
 import net.saint.acclimatize.Mod;
@@ -14,7 +17,7 @@ public final class WindAmbienceManager {
 	private static final double MAX_WIND_REFERENCE = 6.0;
 	private static final double HIGH_WIND_THRESHOLD = 1.75;
 
-	private static final float INTERIOR_VOLUME_MULTIPLIER = 1.0f;
+	private static final float INTERIOR_VOLUME_MULTIPLIER = 0.8f;
 	private static final float FOREST_VOLUME_MULTIPLIER = 1.0f;
 	private static final float SNOW_VOLUME_MULTIPLIER = 1.0f;
 
@@ -23,10 +26,13 @@ public final class WindAmbienceManager {
 	private static WindProperties activeProperties = WindProperties.none();
 
 	private static WindAmbienceSoundInstance activeSound;
+	private static final List<WindAmbienceSoundInstance> fadingSounds = new ArrayList<>();
 
 	// Tick
 
 	public static void tick(MinecraftClient client, boolean isPaused) {
+		cleanUpFadingSounds();
+
 		if (isPaused || !Mod.CONFIG.enableWind || !Mod.CONFIG.enableWindSounds) {
 			fadeOutActiveSound();
 			return;
@@ -65,8 +71,10 @@ public final class WindAmbienceManager {
 					properties.biomeKind(), properties.isInterior(), targetVolume);
 		}
 
-		if (activeSound == null || activeProperties.hashCode() != properties.hashCode() || activeSound.isDone()) {
-			fadeOutActiveSound();
+		if (activeSound == null || !activeProperties.equals(properties) || activeSound.isDone()) {
+			if (activeSound != null) {
+				fadeOutSound(activeSound);
+			}
 
 			var soundEvent = soundEventForWindProperties(properties);
 
@@ -86,11 +94,22 @@ public final class WindAmbienceManager {
 
 	private static void fadeOutActiveSound() {
 		if (activeSound != null) {
-			activeSound.setTargetVolume(0.0f);
+			fadeOutSound(activeSound);
 			activeSound = null;
 		}
 
 		activeProperties = WindProperties.none();
+	}
+
+	private static void fadeOutSound(WindAmbienceSoundInstance sound) {
+		sound.setTargetVolume(0.0f);
+		if (!fadingSounds.contains(sound)) {
+			fadingSounds.add(sound);
+		}
+	}
+
+	private static void cleanUpFadingSounds() {
+		fadingSounds.removeIf(WindAmbienceSoundInstance::isDone);
 	}
 
 	// Utilities
