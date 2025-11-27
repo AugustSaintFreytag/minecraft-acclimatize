@@ -15,6 +15,7 @@ import net.saint.acclimatize.data.item.ItemTemperatureUtil;
 import net.saint.acclimatize.data.wind.WindParticleUtil;
 import net.saint.acclimatize.networking.StateNetworkingPackets;
 import net.saint.acclimatize.networking.StateNetworkingPackets.TemperaturePacketTuple;
+import net.saint.acclimatize.sound.WindAmbienceManager;
 import net.saint.acclimatize.util.MathUtil;
 
 public class ModClient implements ClientModInitializer {
@@ -24,6 +25,7 @@ public class ModClient implements ClientModInitializer {
 	private static TemperaturePacketTuple cachedTemperatureValues = new TemperaturePacketTuple();
 
 	private static long lastWindUpdateTick = 0;
+	private static boolean playerIsInInterior = false;
 
 	private static double lastWindIntensity = 0;
 	private static double lastWindDirection = 0;
@@ -57,6 +59,7 @@ public class ModClient implements ClientModInitializer {
 		var serverTick = world.getTimeOfDay();
 		var previousValues = cachedTemperatureValues;
 		cachedTemperatureValues = values;
+		playerIsInInterior = values.isInInterior;
 
 		if (previousValues.windDirection != values.windDirection) {
 			lastWindDirection = previousValues.windDirection;
@@ -87,6 +90,10 @@ public class ModClient implements ClientModInitializer {
 
 	public static double getWindDirection() {
 		return MathUtil.lerp(lastWindDirection, cachedTemperatureValues.windDirection, windInterpolationValue());
+	}
+
+	public static boolean isPlayerInInterior() {
+		return playerIsInInterior;
 	}
 
 	public static double getWindIntensity() {
@@ -134,10 +141,13 @@ public class ModClient implements ClientModInitializer {
 			var world = client.world;
 
 			if (world == null || !world.isClient() || client.player == null) {
+				WindAmbienceManager.tick(client, true);
 				return;
 			}
 
 			var isPaused = client.isInSingleplayer() && client.isPaused();
+
+			WindAmbienceManager.tick(client, isPaused);
 
 			if (Mod.CONFIG.enableWindParticles && !isPaused) {
 				WindParticleUtil.renderWindParticles(client);
