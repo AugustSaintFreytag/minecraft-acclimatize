@@ -25,6 +25,7 @@ import net.saint.acclimatize.item.ThermometerItem;
 import net.saint.acclimatize.item.WoolClothItem;
 import net.saint.acclimatize.profiler.Profiler;
 import net.saint.acclimatize.recipe.LeatherArmorWoolRecipe;
+import net.saint.acclimatize.sound.WindSoundEvents;
 
 public class Mod implements ModInitializer {
 	// Metadata
@@ -94,6 +95,7 @@ public class Mod implements ModInitializer {
 
 		// Registration
 
+		registerSoundEvents();
 		registerStatusEffects();
 		registerItems();
 		registerBlocks();
@@ -106,6 +108,10 @@ public class Mod implements ModInitializer {
 		Registry.register(Registries.STATUS_EFFECT, new Identifier(MOD_ID, "heat_dissipation"), ModStatusEffects.HEAT_DISSIPATION);
 		Registry.register(Registries.STATUS_EFFECT, new Identifier(MOD_ID, "hypothermia"), ModStatusEffects.HYPOTHERMIA);
 		Registry.register(Registries.STATUS_EFFECT, new Identifier(MOD_ID, "hyperthermia"), ModStatusEffects.HYPERTHERMIA);
+	}
+
+	private static void registerSoundEvents() {
+		WindSoundEvents.registerAll();
 	}
 
 	private static void registerItems() {
