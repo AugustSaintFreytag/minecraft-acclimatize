@@ -1,0 +1,74 @@
+{
+	"wind_plains_light": {
+		"sounds": [
+			{
+				"name": "acclimatize:wind/wind_plains_light",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	},
+	"wind_plains_strong": {
+		"sounds": [
+			{
+				"name": "acclimatize:wind/wind_plains_strong",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	},
+	"wind_forest_light": {
+		"sounds": [
+			{
+				"name": "acclimatize:wind/wind_forest_light",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	},
+	"wind_forest_strong": {
+		"sounds": [
+			{
+				"name": "acclimatize:wind/wind_forest_strong",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	},
+	"wind_snow_light": {
+		"sounds": [
+			{
+				"name": "acclimatize:wind/wind_snow_light",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	},
+	"wind_snow_strong": {
+		"sounds": [
+			{
+				"name": "acclimatize:wind/wind_snow_strong",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	},
+	"wind_interior_light": {
+		"sounds": [
+			{
+				"name": "acclimatize:wind/wind_interior_light",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	},
+	"wind_interior_strong": {
+		"sounds": [
+			{
+				"name": "acclimatize:wind/wind_interior_strong",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	}
+}
