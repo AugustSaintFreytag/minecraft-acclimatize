@@ -46,7 +46,10 @@ public final class ModServerEvents {
 			var serverState = ServerStateUtil.getServerState(server);
 			var serverWorld = server.getOverworld();
 
-			Mod.LOGGER.info("Randomizing new wind direction and intensity at server start.");
+			if (Mod.CONFIG.enableLogging) {
+				Mod.LOGGER.info("Randomizing new wind direction and intensity at server start.");
+			}
+
 			WindUtil.tickWindInSchedule(serverWorld, serverState);
 		});
 
@@ -77,14 +80,6 @@ public final class ModServerEvents {
 	}
 
 	private static void tickPlayerInSchedule(ServerState serverState, PlayerState playerState, ServerPlayerEntity player) {
-		if (player.isSpectator()) {
-			return;
-		}
-
-		if (player.isCreative() && !Mod.CONFIG.enableCreativeModeTemperature) {
-			return;
-		}
-
 		// Temperature
 		PlayerTemperatureUtil.tickPlayerTemperatureInSchedule(player, serverState, playerState);
 
