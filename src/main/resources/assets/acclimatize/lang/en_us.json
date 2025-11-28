@@ -33,6 +33,8 @@
 	"text.autoconfig.acclimatize.option.temperatureVignetteAlpha": "Temperature Vignette Alpha",
 	"text.autoconfig.acclimatize.option.temperatureVignetteTransitionDuration": "Temperature Vignette Transition Duration",
 	"text.autoconfig.acclimatize.option.enableWindParticles": "Enable Wind Particles",
+	"text.autoconfig.acclimatize.option.windParticleSpawnRate": "Wind Particle Spawn Rate",
+	"text.autoconfig.acclimatize.option.windParticleSpawnRadius": "Wind Particle Spawn Radius",
 	"text.autoconfig.acclimatize.option.enableThermometerTemperatureDisplay": "Enable Thermometer Temperature Display",
 	"text.autoconfig.acclimatize.option.temperatureTickInterval": "Temperature Tick Interval",
 	"text.autoconfig.acclimatize.option.biomeTemperatureZeroingAnchor": "Biome Temperature Zeroing Anchor",

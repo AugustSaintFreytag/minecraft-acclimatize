@@ -38,7 +38,7 @@ public class IceBoxFrozenBlock extends Block {
 			return;
 		}
 
-		var biomeBaseTemperature = BiomeTemperatureUtil.baseTemperatureForPosition(world, position);
+		var biomeBaseTemperature = BiomeTemperatureUtil.biomeTemperatureForPosition(world, position);
 		var biomeIsCold = biomeBaseTemperature <= Mod.CONFIG.hypothermiaThresholdMinor;
 		var biomeIsVeryCold = biomeBaseTemperature <= Mod.CONFIG.hypothermiaThresholdMajor;
 

@@ -52,10 +52,6 @@ public class ModConfig implements ConfigData {
 	public int temperatureVignetteTransitionDuration = 1500;
 
 	@ConfigEntry.Category("hud")
-	@Comment("When enabled, particles will spawn showing the direction that the wind is flowing. More wind = more particles. (Default: true)")
-	public boolean enableWindParticles = false;
-
-	@ConfigEntry.Category("hud")
 	@Comment("When enabled, holding a thermometer will show the exact measured ambient temperature. (Default: false)")
 	public boolean enableThermometerTemperatureDisplay = false;
 
@@ -325,6 +321,18 @@ public class ModConfig implements ConfigData {
 	public boolean enableParticleWindEffects = true;
 
 	@ConfigEntry.Category("particles")
+	@Comment("When enabled, random particles will spawn based on wind intensity. Helps with naturally determining wind direction. (Default: true)")
+	public boolean enableWindParticles = true;
+
+	@ConfigEntry.Category("particles")
+	@Comment("Spawn rate for random wind particles. Spawn rate is first determined by wind intensity, then scaled by this value. (Default: 0.05)")
+	public double windParticleSpawnRate = 0.05;
+
+	@ConfigEntry.Category("particles")
+	@Comment("Radius around the player to spawn wind particles. (Default: 16)")
+	public int windParticleSpawnRadius = 16;
+
+	@ConfigEntry.Category("particles")
 	@Comment("The intensity by which all particles are affected by wind if enabled. (Default: 1.0)")
 	public double particleWindEffectFactor = 1.0;
 
@@ -369,8 +377,8 @@ public class ModConfig implements ConfigData {
 	public boolean enableLogging = false;
 
 	@ConfigEntry.Category("developer")
-	@Comment("Enables temperature ticking and HUD display for players in creative mode. Useful for debugging. (Default: false)")
-	public boolean enableCreativeModeTemperature = false;
+	@Comment("Enables temperature ticking for players in creative or spectator mode. Sound systems may also rely on environmental data. (Default: true)")
+	public boolean enableCreativeModeTemperature = true;
 
 	@ConfigEntry.Category("developer")
 	@Comment("Enables debug visualization of sun vectors showing the raycast direction from player to sun. (Default: false)")

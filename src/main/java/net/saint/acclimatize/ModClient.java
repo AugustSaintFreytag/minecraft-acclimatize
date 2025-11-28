@@ -112,11 +112,11 @@ public class ModClient implements ClientModInitializer {
 	// Transforms
 
 	private static double windInterpolationValue() {
-		var serverTick = getWorld().getTimeOfDay();
+		var serverTick = getWorld().getTime();
 		var deltaTime = serverTick - lastWindUpdateTick;
 		var transitionFactor = (double) deltaTime / (double) Mod.CONFIG.windTransitionInterval;
 
-		return transitionFactor;
+		return MathUtil.clamp(transitionFactor, 0.0, 1.0);
 	}
 
 	private static double windPrecipitationFactor() {
