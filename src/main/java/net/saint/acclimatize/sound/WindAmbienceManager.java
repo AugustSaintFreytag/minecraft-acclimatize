@@ -146,6 +146,7 @@ public final class WindAmbienceManager {
 	private static float calculateScaledVolume(double value, double lowerBound, double upperBound, float minVolume, float maxVolume) {
 		var clampedValue = MathUtil.clamp(value, lowerBound, upperBound);
 		var progress = (clampedValue - lowerBound) / (upperBound - lowerBound);
+		progress *= MathUtil.clamp(Mod.CONFIG.windSoundIntensityFactor, 0.0, 1.0);
 
 		return minVolume + (float) progress * (maxVolume - minVolume);
 	}
