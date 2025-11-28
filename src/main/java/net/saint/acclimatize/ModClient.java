@@ -6,6 +6,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -23,6 +24,8 @@ public class ModClient implements ClientModInitializer {
 	// State
 
 	private static TemperaturePacketTuple cachedTemperatureValues = new TemperaturePacketTuple();
+
+	private static long clientTickElapsed = 0;
 
 	private static long lastWindUpdateTick = 0;
 	private static double lastWindIntensity = 0;
@@ -53,6 +56,10 @@ public class ModClient implements ClientModInitializer {
 	}
 
 	// Access
+
+	public static long getClientTickElapsed() {
+		return clientTickElapsed;
+	}
 
 	public static void updateTemperatureValues(TemperaturePacketTuple values) {
 		var world = MinecraftClient.getInstance().world;
@@ -140,6 +147,10 @@ public class ModClient implements ClientModInitializer {
 	}
 
 	private static void setUpClientTickEventHandler() {
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+			ModClient.clientTickElapsed = 0;
+		});
+
 		ClientTickEvents.START_CLIENT_TICK.register(client -> {
 			var world = client.world;
 
@@ -151,6 +162,8 @@ public class ModClient implements ClientModInitializer {
 			var isPaused = client.isInSingleplayer() && client.isPaused();
 
 			WindAmbienceManager.tick(client, isPaused);
+
+			ModClient.clientTickElapsed++;
 
 			if (Mod.CONFIG.enableWindParticles && !isPaused) {
 				WindParticleUtil.renderWindParticles(client);
