@@ -62,13 +62,15 @@ public final class WindUtil {
 		var random = world.getRandom();
 		var randomWindOffset = Math.toRadians(random.nextDouble() * 110.0 - 55.0);
 
-		serverState.windDirection = currentWindDirection + randomWindOffset;
+		serverState.windDirection = wrapRadians(currentWindDirection + randomWindOffset);
 		serverState.markDirty();
 	}
 
 	private static void tickWindIntensity(ServerWorld world, ServerState serverState) {
 		var random = world.getRandom();
-		var windIntensity = random.nextDouble() * (Mod.CONFIG.windIntensityMax + Mod.CONFIG.windIntensityMin) - Mod.CONFIG.windIntensityMin;
+		var min = Mod.CONFIG.windIntensityMin;
+		var max = Mod.CONFIG.windIntensityMax;
+		var windIntensity = random.nextDouble() * (max - min) + min;
 
 		if (world.isThundering()) {
 			windIntensity *= 2.0;
@@ -78,5 +80,15 @@ public final class WindUtil {
 
 		serverState.windIntensity = Math.max(0, windIntensity);
 		serverState.markDirty();
+	}
+
+	private static double wrapRadians(double angle) {
+		var wrapped = angle % (Math.PI * 2.0);
+
+		if (wrapped < 0) {
+			wrapped += Math.PI * 2.0;
+		}
+
+		return wrapped;
 	}
 }

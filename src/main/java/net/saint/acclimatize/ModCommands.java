@@ -35,8 +35,9 @@ public final class ModCommands {
 					WindUtil.tickWindDirectionAndIntensity(serverWorld, serverState);
 
 					context.getSource().sendMessage(Text.literal("Wind randomized."));
-					context.getSource().sendMessage(Text.literal("Wind Direction: " + Math.toDegrees(serverState.windDirection) + "°"));
-					context.getSource().sendMessage(Text.literal("Wind Intensity: " + serverState.windIntensity));
+					context.getSource().sendMessage(
+							Text.literal("Wind Direction: " + formattedValue(Math.toDegrees(serverState.windDirection)) + "°"));
+					context.getSource().sendMessage(Text.literal("Wind Intensity: " + formattedValue(serverState.windIntensity)));
 
 					return 1;
 				}))
@@ -49,8 +50,9 @@ public final class ModCommands {
 					WindUtil.overrideWind(serverState, Math.toRadians(0.5), 5.0);
 
 					context.getSource().sendMessage(Text.literal("Wind set to straight north."));
-					context.getSource().sendMessage(Text.literal("Wind Direction: " + Math.toDegrees(serverState.windDirection) + "°"));
-					context.getSource().sendMessage(Text.literal("Wind Intensity: " + serverState.windIntensity));
+					context.getSource().sendMessage(
+							Text.literal("Wind Direction: " + formattedValue(Math.toDegrees(serverState.windDirection)) + "°"));
+					context.getSource().sendMessage(Text.literal("Wind Intensity: " + formattedValue(serverState.windIntensity)));
 
 					return 1;
 				}))
@@ -60,11 +62,18 @@ public final class ModCommands {
 
 					ServerState serverState = ServerStateUtil.getServerState(context.getSource().getServer());
 
-					context.getSource().sendMessage(Text.literal("§eWind Direction: §6" + Math.toDegrees(serverState.windDirection) + "°"));
-					context.getSource().sendMessage(Text.literal("§eWind Temperature Modifier: §6" + serverState.windIntensity));
+					context.getSource().sendMessage(
+							Text.literal("§eWind Direction: §6" + formattedValue(Math.toDegrees(serverState.windDirection)) + "°"));
+					context.getSource().sendMessage(Text.literal("§eWind Intensity: §6" + formattedValue(serverState.windIntensity)));
 
 					return 1;
 				}))));
+	}
+
+	// Formatting
+
+	private static String formattedValue(double value) {
+		return String.format("%.3f", value);
 	}
 
 }
