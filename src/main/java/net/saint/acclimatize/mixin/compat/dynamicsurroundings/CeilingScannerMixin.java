@@ -24,7 +24,7 @@ public abstract class CeilingScannerMixin {
 		}
 	}
 
-	@Inject(method = "tick", at = @At("HEAD"))
+	@Inject(method = "tick", at = @At("HEAD"), cancellable = true, remap = false)
 	private void acclimatize$tick(CallbackInfo callbackInfo) {
 		if (!Mod.CONFIG.enableDynamicSurroundingsInterop) {
 			return;
@@ -33,18 +33,13 @@ public abstract class CeilingScannerMixin {
 		callbackInfo.cancel();
 	}
 
-	@Inject(method = "isReallyInside", at = @At("HEAD"), cancellable = true)
-	private void isReallyInside(CallbackInfoReturnable<Boolean> callbackInfo) {
+	@Inject(method = "isReallyInside", at = @At("HEAD"), cancellable = true, remap = false)
+	private void acclimatize$isReallyInside(CallbackInfoReturnable<Boolean> callbackInfo) {
 		if (!Mod.CONFIG.enableDynamicSurroundingsInterop) {
 			return;
 		}
 
 		var isInInterior = ModClient.getIsPlayerInInterior();
-
-		if (Mod.CONFIG.enableLogging) {
-			Mod.LOGGER.info("Passing interior detection result {} to Dynamic Surroundings.", isInInterior);
-		}
-
 		callbackInfo.setReturnValue(isInInterior);
 	}
 
