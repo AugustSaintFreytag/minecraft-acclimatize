@@ -1,16 +1,16 @@
 {
 	"required": true,
 	"package": "net.saint.acclimatize.mixin",
-	"compatibilityLevel": "JAVA_16",
+	"compatibilityLevel": "JAVA_17",
 	"minVersion": "0.8",
 	"plugin": "net.saint.acclimatize.ModMixinPlugin",
 	"client": [
 		"InGameHudMixin",
 		"PlayerStatusEffectsMixin",
 		"ParticleMixin",
-		"FallingLeafParticleMixin",
-		"RainParticleMixin",
-		"SuspendedParticleMixin"
+		"SuspendedParticleMixin",
+		"compat/fallingleaves/FallingLeafParticleMixin",
+		"compat/particlerain/RainParticleMixin",
 	],
 	"injectors": {
 		"defaultRequire": 1

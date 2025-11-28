@@ -1,4 +1,4 @@
-package net.saint.acclimatize.mixin;
+package net.saint.acclimatize.mixin.compat.particlerain;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,7 +14,8 @@ import net.saint.acclimatize.mixinlogic.RainParticleMixinLogic;
 import pigcart.particlerain.particle.RainParticle;
 import pigcart.particlerain.particle.WeatherParticle;
 
-@Environment(EnvType.CLIENT) @Mixin(RainParticle.class)
+@Environment(EnvType.CLIENT)
+@Mixin(RainParticle.class)
 public abstract class RainParticleMixin extends WeatherParticle implements RainParticleMixinLogic {
 
 	// Init

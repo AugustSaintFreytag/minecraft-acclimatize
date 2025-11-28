@@ -1,4 +1,4 @@
-package net.saint.acclimatize.mixin;
+package net.saint.acclimatize.mixin.compat.fallingleaves;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +13,8 @@ import net.minecraft.client.particle.SpriteBillboardParticle;
 import net.minecraft.client.world.ClientWorld;
 import randommcsomethin.fallingleaves.particle.FallingLeafParticle;
 
-@Environment(EnvType.CLIENT) @Mixin(FallingLeafParticle.class)
+@Environment(EnvType.CLIENT)
+@Mixin(FallingLeafParticle.class)
 public abstract class FallingLeafParticleMixin extends SpriteBillboardParticle {
 
 	// Properties
