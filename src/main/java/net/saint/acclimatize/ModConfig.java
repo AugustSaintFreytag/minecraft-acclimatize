@@ -5,7 +5,8 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
-@Config(name = Mod.MOD_ID) @Config.Gui.Background("minecraft:textures/block/ice.png")
+@Config(name = Mod.MOD_ID)
+@Config.Gui.Background("minecraft:textures/block/ice.png")
 public class ModConfig implements ConfigData {
 
 	// HUD
@@ -354,6 +355,12 @@ public class ModConfig implements ConfigData {
 	@ConfigEntry.Category("particles")
 	@Comment("Toggles complex wind simulation to allow particles to be funelled through gaps in obstacles. (Performance impact: high) (Default: false)")
 	public boolean enableParticleFunneling = false;
+
+	// Compatibility
+
+	@ConfigEntry.Category("compatibility")
+	@Comment("Forces Dynamic Surroundings to use Acclimatize interior detection. Only used if mod is installed. (Default: true)")
+	public boolean enableDynamicSurroundingsInterop = true;
 
 	// Developer
 

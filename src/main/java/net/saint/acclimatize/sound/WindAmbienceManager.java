@@ -17,7 +17,7 @@ public final class WindAmbienceManager {
 	private static final double MAX_WIND_REFERENCE = 6.0;
 	private static final double HIGH_WIND_THRESHOLD = 1.75;
 
-	private static final float INTERIOR_VOLUME_MULTIPLIER = 0.8f;
+	private static final float INTERIOR_VOLUME_MULTIPLIER = 0.85f;
 	private static final float FOREST_VOLUME_MULTIPLIER = 1.0f;
 	private static final float SNOW_VOLUME_MULTIPLIER = 1.0f;
 
@@ -53,7 +53,7 @@ public final class WindAmbienceManager {
 
 		targetVolume = applyBiomeVolume(targetVolume, properties.biomeKind());
 
-		if (ModClient.isPlayerInInterior()) {
+		if (ModClient.getIsPlayerInInterior()) {
 			targetVolume *= INTERIOR_VOLUME_MULTIPLIER;
 		}
 
@@ -118,7 +118,7 @@ public final class WindAmbienceManager {
 		var windIntensity = Math.max(0.0, ModClient.getWindIntensity());
 		var windLevel = determineWindLevel(windIntensity);
 		var windBiomeKind = WindBiomeKindUtil.kindForPlayer(client);
-		var windProperties = new WindProperties(windLevel, windBiomeKind, ModClient.isPlayerInInterior());
+		var windProperties = new WindProperties(windLevel, windBiomeKind, ModClient.getIsPlayerInInterior());
 
 		return windProperties;
 	}

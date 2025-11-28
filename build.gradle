@@ -80,6 +80,12 @@ dependencies {
 		transitive = false
 	}
 
+	// Dynamic Surroundings
+
+	modImplementation("maven.modrinth:dynamicsurroundingsfabric:${project.dynamicsurroundings_version}") {
+		transitive = false
+	}
+
 }
 
 processResources {

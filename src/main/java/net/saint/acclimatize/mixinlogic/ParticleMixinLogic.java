@@ -2,9 +2,11 @@ package net.saint.acclimatize.mixinlogic;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.particle.AshParticle;
 import net.minecraft.client.particle.LargeFireSmokeParticle;
 import net.minecraft.client.particle.RainSplashParticle;
 import net.minecraft.client.particle.SnowflakeParticle;
+import net.minecraft.client.particle.WhiteAshParticle;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.util.math.BlockPos;
@@ -439,6 +441,10 @@ public interface ParticleMixinLogic {
 
 		if (this instanceof RainSplashParticle) {
 			return 0.25;
+		}
+
+		if (this instanceof AshParticle || this instanceof WhiteAshParticle) {
+			return 2.0;
 		}
 
 		if (ParticleRainParticleCompat.isRainParticle(this)) {
