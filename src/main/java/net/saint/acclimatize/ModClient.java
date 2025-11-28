@@ -25,10 +25,10 @@ public class ModClient implements ClientModInitializer {
 	private static TemperaturePacketTuple cachedTemperatureValues = new TemperaturePacketTuple();
 
 	private static long lastWindUpdateTick = 0;
-	private static boolean playerIsInInterior = false;
-
 	private static double lastWindIntensity = 0;
 	private static double lastWindDirection = 0;
+
+	private static boolean playerIsInInterior = false;
 
 	// References
 
@@ -58,6 +58,7 @@ public class ModClient implements ClientModInitializer {
 		var world = MinecraftClient.getInstance().world;
 		var serverTick = world.getTimeOfDay();
 		var previousValues = cachedTemperatureValues;
+
 		cachedTemperatureValues = values;
 		playerIsInInterior = values.isInInterior;
 
@@ -92,7 +93,7 @@ public class ModClient implements ClientModInitializer {
 		return MathUtil.lerp(lastWindDirection, cachedTemperatureValues.windDirection, windInterpolationValue());
 	}
 
-	public static boolean isPlayerInInterior() {
+	public static boolean getIsPlayerInInterior() {
 		return playerIsInInterior;
 	}
 
@@ -100,6 +101,8 @@ public class ModClient implements ClientModInitializer {
 		return MathUtil.lerp(lastWindIntensity, cachedTemperatureValues.windIntensity, windInterpolationValue())
 				* windPrecipitationFactor();
 	}
+
+	// Transforms
 
 	private static double windInterpolationValue() {
 		var serverTick = getWorld().getTimeOfDay();
