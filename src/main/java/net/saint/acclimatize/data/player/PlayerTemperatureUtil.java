@@ -30,10 +30,17 @@ public class PlayerTemperatureUtil {
 		var bodyTemperature = playerState.bodyTemperature;
 		var isInInterior = SpaceUtil.checkPlayerIsInInterior(player);
 
+		if ((player.isSpectator() || player.isCreative()) && !Mod.CONFIG.enableCreativeModeTemperature) {
+			playerState.isInInterior = isInInterior;
+			playerState.markDirty();
+			return;
+		}
+
 		// Biome Temperature
 
 		var biomeTemperature = BiomeTemperatureUtil.biomeTemperatureForPlayer(player, isInInterior);
-		var effectiveTemperature = biomeTemperature;
+		var positionalBiomeTemperature = BiomeTemperatureUtil.positionalTemperatureForPlayer(player, biomeTemperature, isInInterior);
+		var effectiveTemperature = positionalBiomeTemperature;
 
 		// Shade Temperature
 

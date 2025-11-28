@@ -48,14 +48,12 @@ public final class BiomeTemperatureUtil {
 		}
 	};
 
-	// Aggregate Temperature
+	// Positional Temperature
 
-	public static double biomeTemperatureForPlayer(ServerPlayerEntity player, boolean isInInterior) {
+	public static double positionalTemperatureForPlayer(ServerPlayerEntity player, double biomeTemperature, boolean isInInterior) {
 		var world = player.getWorld();
 		var position = player.getBlockPos();
 		var dimension = world.getDimension();
-
-		var biomeTemperature = baseTemperatureForPosition(world, position);
 
 		// Nether & End
 
@@ -87,9 +85,16 @@ public final class BiomeTemperatureUtil {
 		return biomeTemperature;
 	}
 
-	// Base Temperature
+	// Biome Temperature
 
-	public static double baseTemperatureForPosition(World world, BlockPos position) {
+	public static double biomeTemperatureForPlayer(ServerPlayerEntity player, boolean isInInterior) {
+		var world = player.getWorld();
+		var position = player.getBlockPos();
+
+		return biomeTemperatureForPosition(world, position);
+	}
+
+	public static double biomeTemperatureForPosition(World world, BlockPos position) {
 		var dimensionKey = world.getRegistryKey();
 
 		if (dimensionKey == World.NETHER) {
