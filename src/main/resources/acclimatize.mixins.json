@@ -11,6 +11,7 @@
 		"SuspendedParticleMixin",
 		"compat/fallingleaves/FallingLeafParticleMixin",
 		"compat/particlerain/RainParticleMixin",
+		"compat/dynamicsurroundings/CeilingScannerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
