@@ -11,7 +11,8 @@
 		"SuspendedParticleMixin",
 		"compat/fallingleaves/FallingLeafParticleMixin",
 		"compat/particlerain/RainParticleMixin",
-		"compat/dynamicsurroundings/CeilingScannerMixin"
+		"compat/dynamicsurroundings/CeilingScannerMixin",
+		"compat/dynamicsurroundings/SoundVolumeEvaluatorMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
