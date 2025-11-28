@@ -283,6 +283,10 @@ public class ModConfig implements ConfigData {
 	public float windSoundVolume = 1.0f;
 
 	@ConfigEntry.Category("wind")
+	@Comment("Scales how strongly wind intensity affects volume. 1.0 produces a broad range, lower values soften the impact. (Default: 1.0)")
+	public double windSoundIntensityFactor = 1.0;
+
+	@ConfigEntry.Category("wind")
 	@Comment("The base number of ticks until wind direction is updated, plus randomization. (Default: 6000)")
 	public int windDirectionUpdateInterval = 6000;
 
