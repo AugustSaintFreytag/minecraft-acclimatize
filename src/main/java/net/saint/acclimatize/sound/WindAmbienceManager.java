@@ -66,7 +66,7 @@ public final class WindAmbienceManager {
 	}
 
 	private static void startOrUpdateSound(MinecraftClient client, WindProperties properties, float targetVolume) {
-		if (client.world.getTime() % 20 == 0) {
+		if (Mod.CONFIG.enableLogging && client.world.getTime() % 20 == 0) {
 			Mod.LOGGER.info("Wind Ambience - Level: {}, Biome: {}, Interior: {}, Target Volume: {}", properties.level(),
 					properties.biomeKind(), properties.isInterior(), targetVolume);
 		}
