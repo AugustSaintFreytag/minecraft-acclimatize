@@ -23,6 +23,10 @@ public final class ModMixinPlugin implements IMixinConfigPlugin {
 			"net.saint.acclimatize.mixin.compat.particlerain.RainParticleMixin",
 			() -> FabricLoader.getInstance().isModLoaded("particlerain"),
 			"net.saint.acclimatize.mixin.compat.dynamicsurroundings.CeilingScannerMixin",
+			() -> FabricLoader.getInstance().isModLoaded("dsurround"),
+			"net.saint.acclimatize.mixin.compat.dynamicsurroundings.CeilingScannerMixin",
+			() -> FabricLoader.getInstance().isModLoaded("dsurround"),
+			"net.saint.acclimatize.mixin.compat.dynamicsurroundings.SoundVolumeEvaluatorMixin",
 			() -> FabricLoader.getInstance().isModLoaded("dsurround")
 
 	);
