@@ -30,6 +30,12 @@ public final class AmbienceSoundManager {
 	private static AmbienceSoundInstance activeSound;
 	private static final List<AmbienceSoundInstance> fadingSounds = new ArrayList<>();
 
+	// Access
+
+	public static AmbienceStateProperties getActiveSoundProperties() {
+		return activeProperties;
+	}
+
 	// Tick
 
 	public static void tick(MinecraftClient client, boolean isPaused) {
