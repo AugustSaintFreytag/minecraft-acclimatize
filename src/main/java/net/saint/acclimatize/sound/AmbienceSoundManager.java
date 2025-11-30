@@ -117,6 +117,10 @@ public final class AmbienceSoundManager {
 		var world = client.world;
 		var player = client.player;
 
+		if (player.isSubmergedInWater()) {
+			return AmbienceStateProperties.none();
+		}
+
 		var windIntensity = Math.max(0.0, ModClient.getWindIntensity());
 		var windLevel = determineWindLevel(windIntensity);
 		var windBiomeKind = WindBiomeKindUtil.kindForPlayer(client);

@@ -17,7 +17,7 @@ public class WindParticleUtil {
 		var player = client.player;
 		var world = client.world;
 
-		if (player == null || world == null || ModClient.getIsPlayerInInterior()) {
+		if (player == null || world == null || player.isSubmergedInWater() || ModClient.getIsPlayerInInterior()) {
 			return;
 		}
 
