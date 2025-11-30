@@ -17,6 +17,7 @@ import net.saint.acclimatize.data.wind.WindParticleUtil;
 import net.saint.acclimatize.networking.StateNetworkingPackets;
 import net.saint.acclimatize.networking.StateNetworkingPackets.TemperaturePacketTuple;
 import net.saint.acclimatize.sound.AmbienceSoundManager;
+import net.saint.acclimatize.sound.WeatherSoundManager;
 import net.saint.acclimatize.util.MathUtil;
 
 public class ModClient implements ClientModInitializer {
@@ -156,12 +157,14 @@ public class ModClient implements ClientModInitializer {
 
 			if (world == null || !world.isClient() || client.player == null) {
 				AmbienceSoundManager.tick(client, true);
+				WeatherSoundManager.tick(client, true);
 				return;
 			}
 
 			var isPaused = client.isInSingleplayer() && client.isPaused();
 
 			AmbienceSoundManager.tick(client, isPaused);
+			WeatherSoundManager.tick(client, isPaused);
 
 			ModClient.clientTickElapsed++;
 
