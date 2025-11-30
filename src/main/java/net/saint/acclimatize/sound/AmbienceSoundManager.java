@@ -53,7 +53,8 @@ public final class AmbienceSoundManager {
 		var windIntensity = Math.max(0.0, ModClient.getWindIntensity());
 		var targetVolume = volumeForIntensity(properties.level(), windIntensity);
 
-		targetVolume = applyVolumeForWindProperties(properties, targetVolume);
+		var volumeFactor = volumeFactorForWindProperties(properties);
+		targetVolume *= volumeFactor;
 
 		if (targetVolume <= 0.0f) {
 			fadeOutActiveSound();
@@ -100,6 +101,7 @@ public final class AmbienceSoundManager {
 
 	private static void fadeOutSound(AmbienceSoundInstance sound) {
 		sound.setTargetVolume(0.0f);
+
 		if (!fadingSounds.contains(sound)) {
 			fadingSounds.add(sound);
 		}
@@ -156,19 +158,19 @@ public final class AmbienceSoundManager {
 		return minVolume + (float) progress * (maxVolume - minVolume);
 	}
 
-	private static float applyVolumeForWindProperties(AmbienceStateProperties properties, float baseVolume) {
+	private static float volumeFactorForWindProperties(AmbienceStateProperties properties) {
 		if (properties.isInterior()) {
-			return baseVolume * INTERIOR_VOLUME_MULTIPLIER;
+			return INTERIOR_VOLUME_MULTIPLIER;
 		}
 
 		if (properties.isCave()) {
-			return baseVolume * CAVE_VOLUME_MULTIPLIER;
+			return CAVE_VOLUME_MULTIPLIER;
 		}
 
 		return switch (properties.biomeKind()) {
-		case PLAINS -> baseVolume;
-		case FOREST -> baseVolume * FOREST_VOLUME_MULTIPLIER;
-		case SNOW -> baseVolume * SNOW_VOLUME_MULTIPLIER;
+		case PLAINS -> 1.0f;
+		case FOREST -> FOREST_VOLUME_MULTIPLIER;
+		case SNOW -> SNOW_VOLUME_MULTIPLIER;
 		default -> 0.0f;
 		};
 	}
