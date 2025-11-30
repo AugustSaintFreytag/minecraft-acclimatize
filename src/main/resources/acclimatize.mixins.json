@@ -7,12 +7,14 @@
 	"client": [
 		"InGameHudMixin",
 		"PlayerStatusEffectsMixin",
+		"SoundSystemMixin",
 		"ParticleMixin",
 		"SuspendedParticleMixin",
 		"compat/fallingleaves/FallingLeafParticleMixin",
 		"compat/particlerain/RainParticleMixin",
 		"compat/dynamicsurroundings/CeilingScannerMixin",
-		"compat/dynamicsurroundings/SoundVolumeEvaluatorMixin"
+		"compat/dynamicsurroundings/SoundVolumeEvaluatorMixin",
+		"compat/ambientsounds/AmbientSoundEngineMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
