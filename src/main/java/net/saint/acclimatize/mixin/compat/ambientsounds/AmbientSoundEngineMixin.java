@@ -50,7 +50,7 @@ public abstract class AmbientSoundEngineMixin {
 			try {
 				for (SoundStream sound : sounds) {
 					var soundVolume = getEffectiveSoundVolume(sound);
-					var soundVolumeFactor = assumesInterior ? (float) Mod.CONFIG.interiorSoundSuppressionFactor : 1.0f;
+					var soundVolumeFactor = assumesInterior ? Mod.CONFIG.interiorSoundSuppressionFactor : 1.0f;
 					var modifiedSoundVolume = MathUtil.lerp(soundVolume, soundVolume * soundVolumeFactor, fadeTickProgress);
 
 					sound.generatedVoume = modifiedSoundVolume;

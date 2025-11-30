@@ -382,7 +382,7 @@ public class ModConfig implements ConfigData {
 
 	@ConfigEntry.Category("compatibility")
 	@Comment("The volume factor applied to mod ambient sounds when in an interior space. (Default: 0.2)")
-	public double interiorSoundSuppressionFactor = 0.2;
+	public float interiorSoundSuppressionFactor = 0.2f;
 
 	@ConfigEntry.Category("compatibility")
 	@Comment("The duration of smoothly transitioning from one volume level to another, in ticks. (Default: 40)")
