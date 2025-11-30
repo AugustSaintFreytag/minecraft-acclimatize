@@ -313,8 +313,16 @@ public class ModConfig implements ConfigData {
 	public boolean enableAmbientSounds = true;
 
 	@ConfigEntry.Category("sounds")
+	@Comment("Replaces vanilla rain sound playback with custom sounds. Required to fade rain sound playback in interiors. (Default: true)")
+	public boolean enableRainSounds = true;
+
+	@ConfigEntry.Category("sounds")
 	@Comment("The base volume for all added ambient sounds. (Default: 1.0)")
 	public float ambientSoundVolume = 1.0f;
+
+	@ConfigEntry.Category("sounds")
+	@Comment("The base volume for rain ambient sounds. Only used when enabled. (Default: 1.0)")
+	public float rainSoundVolume = 1.0f;
 
 	@ConfigEntry.Category("sounds")
 	@Comment("Scales how strongly wind intensity affects ambient sound volume. 1.0 produces a broad range, lower values soften the impact. (Default: 1.0)")
