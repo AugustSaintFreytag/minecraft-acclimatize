@@ -275,18 +275,6 @@ public class ModConfig implements ConfigData {
 	public boolean enableWind = true;
 
 	@ConfigEntry.Category("wind")
-	@Comment("Toggles wind ambient sounds based on biome, wind intensity, and exterior/interior state. (Default: true)")
-	public boolean enableWindSounds = true;
-
-	@ConfigEntry.Category("wind")
-	@Comment("The base volume for all wind ambient sounds. (Default: 1.0)")
-	public float windSoundVolume = 1.0f;
-
-	@ConfigEntry.Category("wind")
-	@Comment("Scales how strongly wind intensity affects volume. 1.0 produces a broad range, lower values soften the impact. (Default: 1.0)")
-	public double windSoundIntensityFactor = 1.0;
-
-	@ConfigEntry.Category("wind")
 	@Comment("The base number of ticks until wind direction is updated, plus randomization. (Default: 6000)")
 	public int windDirectionUpdateInterval = 6000;
 
@@ -317,6 +305,20 @@ public class ModConfig implements ConfigData {
 	@ConfigEntry.Category("wind")
 	@Comment("How many blocks long wind rays are. Increase for larger spaces. (Default: 8)")
 	public int windRayLength = 8;
+
+	// Sounds
+
+	@ConfigEntry.Category("sounds")
+	@Comment("Toggles wind ambient sounds based on biome, wind intensity, and exterior/interior state. (Default: true)")
+	public boolean enableAmbientSounds = true;
+
+	@ConfigEntry.Category("sounds")
+	@Comment("The base volume for all added ambient sounds. (Default: 1.0)")
+	public float ambientSoundVolume = 1.0f;
+
+	@ConfigEntry.Category("sounds")
+	@Comment("Scales how strongly wind intensity affects ambient sound volume. 1.0 produces a broad range, lower values soften the impact. (Default: 1.0)")
+	public double ambientSoundWindIntensityFactor = 1.0;
 
 	// Particles
 
@@ -381,6 +383,10 @@ public class ModConfig implements ConfigData {
 	@ConfigEntry.Category("compatibility")
 	@Comment("The volume factor applied to mod ambient sounds when in an interior space. (Default: 0.2)")
 	public double interiorSoundSuppressionFactor = 0.2;
+
+	@ConfigEntry.Category("compatibility")
+	@Comment("The duration of smoothly transitioning from one volume level to another, in ticks. (Default: 40)")
+	public int soundSuppressionTransitionTicks = 40;
 
 	// Developer
 

@@ -7,7 +7,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.saint.acclimatize.util.MathUtil;
 
-public class WindAmbienceSoundInstance extends MovingSoundInstance {
+public class AmbienceSoundInstance extends MovingSoundInstance {
 
 	// Configuration
 
@@ -23,7 +23,7 @@ public class WindAmbienceSoundInstance extends MovingSoundInstance {
 
 	// Init
 
-	protected WindAmbienceSoundInstance(MinecraftClient client, SoundEvent soundEvent) {
+	protected AmbienceSoundInstance(MinecraftClient client, SoundEvent soundEvent) {
 		super(soundEvent, SoundCategory.AMBIENT, SoundInstance.createRandom());
 
 		this.client = client;

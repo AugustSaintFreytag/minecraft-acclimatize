@@ -25,7 +25,7 @@ import net.saint.acclimatize.item.ThermometerItem;
 import net.saint.acclimatize.item.WoolClothItem;
 import net.saint.acclimatize.profiler.Profiler;
 import net.saint.acclimatize.recipe.LeatherArmorWoolRecipe;
-import net.saint.acclimatize.sound.WindSoundEvents;
+import net.saint.acclimatize.sound.AmbienceSoundEvents;
 
 public class Mod implements ModInitializer {
 	// Metadata
@@ -111,7 +111,7 @@ public class Mod implements ModInitializer {
 	}
 
 	private static void registerSoundEvents() {
-		WindSoundEvents.registerAll();
+		AmbienceSoundEvents.registerAll();
 	}
 
 	private static void registerItems() {
