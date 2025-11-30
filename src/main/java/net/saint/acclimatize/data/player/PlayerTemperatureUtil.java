@@ -44,7 +44,7 @@ public class PlayerTemperatureUtil {
 
 		// Shade Temperature
 
-		var sunShadeTemperature = SunShadeTemperatureUtil.sunShadeTemperatureDelta(player, isInInterior);
+		var sunShadeTemperature = SunShadeTemperatureUtil.sunShadeTemperatureDelta(player, biomeTemperature, isInInterior);
 		effectiveTemperature += sunShadeTemperature;
 
 		// Block Temperature (Heating & Cooling)
