@@ -70,5 +70,41 @@
 			}
 		],
 		"category": "ambient"
+	},
+	"wind_interior_rain_light": {
+		"sounds": [
+			{
+				"name": "acclimatize:wind/wind_interior_rain_light",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	},
+	"wind_interior_rain_strong": {
+		"sounds": [
+			{
+				"name": "acclimatize:wind/wind_interior_rain_strong",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	},
+	"wind_cave_light": {
+		"sounds": [
+			{
+				"name": "acclimatize:wind/wind_cave_light",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	},
+	"wind_cave_strong": {
+		"sounds": [
+			{
+				"name": "acclimatize:wind/wind_cave_strong",
+				"stream": true
+			}
+		],
+		"category": "ambient"
 	}
 }
