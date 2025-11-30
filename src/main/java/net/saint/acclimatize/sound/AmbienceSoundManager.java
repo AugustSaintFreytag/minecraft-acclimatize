@@ -18,7 +18,7 @@ public final class AmbienceSoundManager {
 	private static final double MAX_WIND_REFERENCE = 6.0;
 	private static final double HIGH_WIND_THRESHOLD = 1.75;
 
-	private static final float INTERIOR_VOLUME_MULTIPLIER = 0.85f;
+	private static final float INTERIOR_VOLUME_MULTIPLIER = 0.75f;
 	private static final float CAVE_VOLUME_MULTIPLIER = 0.85f;
 	private static final float FOREST_VOLUME_MULTIPLIER = 1.0f;
 	private static final float SNOW_VOLUME_MULTIPLIER = 1.0f;
