@@ -15,7 +15,6 @@ import net.saint.acclimatize.ModClient;
 public abstract class SoundVolumeEvaluatorMixin {
 
 	private static int FADE_IN_DELAY = 80; // 4 seconds
-	private static int FADE_IN_LENGTH = 60; // 3 seconds
 
 	@Inject(method = "getAdjustedVolume", at = @At("RETURN"), cancellable = true, remap = false)
 	private static void acclimatize$getAdjustedVolume(SoundInstance sound, CallbackInfoReturnable<Float> callbackInfo) {
@@ -34,8 +33,8 @@ public abstract class SoundVolumeEvaluatorMixin {
 	private static float volumeModifierForTick(long tick) {
 		if (tick <= FADE_IN_DELAY) {
 			return 0.0f;
-		} else if (tick <= FADE_IN_DELAY + FADE_IN_LENGTH) {
-			var progress = (float) (tick - FADE_IN_DELAY) / (float) FADE_IN_LENGTH;
+		} else if (tick <= FADE_IN_DELAY + Mod.CONFIG.soundSuppressionTransitionTicks) {
+			var progress = (float) (tick - FADE_IN_DELAY) / (float) Mod.CONFIG.soundSuppressionTransitionTicks;
 			return progress;
 		} else {
 			return 1.0f;

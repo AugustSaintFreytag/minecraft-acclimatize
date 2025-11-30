@@ -18,10 +18,6 @@ import team.creative.ambientsounds.sound.AmbientSoundEngine;
 @Mixin(AmbientSoundEngine.class)
 public abstract class AmbientSoundEngineMixin {
 
-	// Configuration
-
-	private static final int INTERIOR_TRANSITION_TICKS = 40; // 2 seconds
-
 	// Properties (Shadowed)
 
 	@Shadow
@@ -48,7 +44,7 @@ public abstract class AmbientSoundEngineMixin {
 			ticksSinceLastStateChange++;
 		}
 
-		var fadeTickProgress = MathUtil.clamp((float) ticksSinceLastStateChange / INTERIOR_TRANSITION_TICKS, 0.0f, 1.0f);
+		var fadeTickProgress = MathUtil.clamp((float) ticksSinceLastStateChange / Mod.CONFIG.soundSuppressionTransitionTicks, 0.0f, 1.0f);
 
 		synchronized (sounds) {
 			try {
@@ -59,7 +55,8 @@ public abstract class AmbientSoundEngineMixin {
 
 					sound.generatedVoume = modifiedSoundVolume;
 
-					if (Mod.CONFIG.enableLogging && soundVolume != modifiedSoundVolume && fadeTickProgress != 1.0f) {
+					if (Mod.CONFIG.enableLogging && soundVolume != modifiedSoundVolume && fadeTickProgress != 1.0f
+							&& ticksSinceLastStateChange % 20 == 0) {
 						Mod.LOGGER.info(
 								"Adjusted Ambient Sounds mod sound volume: originalVolume={}, adjustedVolume={}, isInterior={}, fadeTickProgress={}",
 								soundVolume, modifiedSoundVolume, assumesInterior, fadeTickProgress);
