@@ -374,6 +374,14 @@ public class ModConfig implements ConfigData {
 	@Comment("Forces Dynamic Surroundings to use Acclimatize interior detection. Only used if mod is installed. (Default: true)")
 	public boolean enableDynamicSurroundingsInterop = true;
 
+	@ConfigEntry.Category("compatibility")
+	@Comment("Fades Ambient Sounds sound volume when in interior spaces. Only used if mod is installed. (Default: true)")
+	public boolean enableAmbientSoundsInterop = true;
+
+	@ConfigEntry.Category("compatibility")
+	@Comment("The volume factor applied to mod ambient sounds when in an interior space. (Default: 0.2)")
+	public double interiorSoundSuppressionFactor = 0.2;
+
 	// Developer
 
 	@ConfigEntry.Category("developer")

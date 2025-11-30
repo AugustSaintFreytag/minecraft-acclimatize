@@ -23,15 +23,10 @@ public abstract class SoundVolumeEvaluatorMixin {
 			return;
 		}
 
-		// Modify volume
 		var volume = callbackInfo.getReturnValue();
 		var tick = ModClient.getClientTickElapsed();
 		var modifier = volumeModifierForTick(tick);
 		var modifiedVolume = volume * modifier;
-
-		if (Mod.CONFIG.enableLogging && modifiedVolume != volume) {
-			Mod.LOGGER.info("Adjusting Dynamic Surroundings sound volume from {} to {} at tick {}.", volume, modifiedVolume, tick);
-		}
 
 		callbackInfo.setReturnValue(modifiedVolume);
 	}

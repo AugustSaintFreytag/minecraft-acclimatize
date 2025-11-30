@@ -104,6 +104,8 @@
 	"text.autoconfig.acclimatize.option.enableParticleComplexInteractions": "Enable Particle Complex Interactions",
 	"text.autoconfig.acclimatize.option.enableParticleFunneling": "Enable Particle Funneling",
 	"text.autoconfig.acclimatize.option.enableDynamicSurroundingsInterop": "Enable Dynamic Surroundings Interop",
+	"text.autoconfig.acclimatize.option.enableAmbientSoundsInterop": "Enable Ambient Sounds Interop",
+	"text.autoconfig.acclimatize.option.interiorSoundSuppressionFactor": "Interior Sound Suppression Factor",
 	"text.autoconfig.acclimatize.option.enableLogging": "Enable Logging",
 	"text.autoconfig.acclimatize.option.enableCreativeModeTemperature": "Enable Temperature in Creative Mode",
 	"text.autoconfig.acclimatize.option.enableSunVectorDebug": "Enable Sun Vector Debug",
