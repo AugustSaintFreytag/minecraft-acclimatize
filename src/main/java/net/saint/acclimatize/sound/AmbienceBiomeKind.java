@@ -1,5 +1,5 @@
 package net.saint.acclimatize.sound;
 
-public enum WindBiomeKind {
+public enum AmbienceBiomeKind {
 	NONE, PLAINS, FOREST, SNOW
 }

@@ -13,12 +13,12 @@ public final class WindBiomeKindUtil {
 
 	// Kind
 
-	public static WindBiomeKind kindForPlayer(MinecraftClient client) {
+	public static AmbienceBiomeKind kindForPlayer(MinecraftClient client) {
 		var player = client.player;
 		var world = client.world;
 
 		if (player == null || world == null) {
-			return WindBiomeKind.PLAINS;
+			return AmbienceBiomeKind.PLAINS;
 		}
 
 		var position = player.getBlockPos();
@@ -27,18 +27,18 @@ public final class WindBiomeKindUtil {
 		return kindForBiome(biomeEntry, position);
 	}
 
-	private static WindBiomeKind kindForBiome(RegistryEntry<Biome> biomeEntry, BlockPos position) {
+	private static AmbienceBiomeKind kindForBiome(RegistryEntry<Biome> biomeEntry, BlockPos position) {
 		var biome = biomeEntry.value();
 
 		if (isSnowBiome(biomeEntry, biome, position)) {
-			return WindBiomeKind.SNOW;
+			return AmbienceBiomeKind.SNOW;
 		}
 
 		if (isForestBiome(biomeEntry)) {
-			return WindBiomeKind.FOREST;
+			return AmbienceBiomeKind.FOREST;
 		}
 
-		return WindBiomeKind.PLAINS;
+		return AmbienceBiomeKind.PLAINS;
 	}
 
 	private static boolean isSnowBiome(RegistryEntry<Biome> biomeEntry, Biome biome, BlockPos position) {
