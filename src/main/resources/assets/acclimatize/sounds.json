@@ -2,7 +2,7 @@
 	"wind_plains_light": {
 		"sounds": [
 			{
-				"name": "acclimatize:wind/wind_plains_light",
+				"name": "acclimatize:wind_plains_light",
 				"stream": true
 			}
 		],
@@ -11,7 +11,7 @@
 	"wind_plains_strong": {
 		"sounds": [
 			{
-				"name": "acclimatize:wind/wind_plains_strong",
+				"name": "acclimatize:wind_plains_strong",
 				"stream": true
 			}
 		],
@@ -20,7 +20,7 @@
 	"wind_forest_light": {
 		"sounds": [
 			{
-				"name": "acclimatize:wind/wind_forest_light",
+				"name": "acclimatize:wind_forest_light",
 				"stream": true
 			}
 		],
@@ -29,7 +29,7 @@
 	"wind_forest_strong": {
 		"sounds": [
 			{
-				"name": "acclimatize:wind/wind_forest_strong",
+				"name": "acclimatize:wind_forest_strong",
 				"stream": true
 			}
 		],
@@ -38,7 +38,7 @@
 	"wind_snow_light": {
 		"sounds": [
 			{
-				"name": "acclimatize:wind/wind_snow_light",
+				"name": "acclimatize:wind_snow_light",
 				"stream": true
 			}
 		],
@@ -47,7 +47,7 @@
 	"wind_snow_strong": {
 		"sounds": [
 			{
-				"name": "acclimatize:wind/wind_snow_strong",
+				"name": "acclimatize:wind_snow_strong",
 				"stream": true
 			}
 		],
@@ -56,7 +56,7 @@
 	"wind_interior_light": {
 		"sounds": [
 			{
-				"name": "acclimatize:wind/wind_interior_light",
+				"name": "acclimatize:wind_interior_light",
 				"stream": true
 			}
 		],
@@ -65,25 +65,7 @@
 	"wind_interior_strong": {
 		"sounds": [
 			{
-				"name": "acclimatize:wind/wind_interior_strong",
-				"stream": true
-			}
-		],
-		"category": "ambient"
-	},
-	"wind_interior_rain_light": {
-		"sounds": [
-			{
-				"name": "acclimatize:wind/wind_interior_rain_light",
-				"stream": true
-			}
-		],
-		"category": "ambient"
-	},
-	"wind_interior_rain_strong": {
-		"sounds": [
-			{
-				"name": "acclimatize:wind/wind_interior_rain_strong",
+				"name": "acclimatize:wind_interior_strong",
 				"stream": true
 			}
 		],
@@ -92,7 +74,7 @@
 	"wind_cave_light": {
 		"sounds": [
 			{
-				"name": "acclimatize:wind/wind_cave_light",
+				"name": "acclimatize:wind_cave_light",
 				"stream": true
 			}
 		],
@@ -101,10 +83,46 @@
 	"wind_cave_strong": {
 		"sounds": [
 			{
-				"name": "acclimatize:wind/wind_cave_strong",
+				"name": "acclimatize:wind_cave_strong",
 				"stream": true
 			}
 		],
 		"category": "ambient"
+	},
+	"rain_interior_light": {
+		"sounds": [
+			{
+				"name": "acclimatize:rain_interior_light",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	},
+	"rain_interior_strong": {
+		"sounds": [
+			{
+				"name": "acclimatize:rain_interior_strong",
+				"stream": true
+			}
+		],
+		"category": "ambient"
+	},
+	"rain_exterior_light": {
+		"sounds": [
+			{
+				"name": "acclimatize:rain_exterior_light",
+				"stream": true
+			}
+		],
+		"category": "weather"
+	},
+	"rain_exterior_strong": {
+		"sounds": [
+			{
+				"name": "acclimatize:rain_exterior_strong",
+				"stream": true
+			}
+		],
+		"category": "weather"
 	}
 }

@@ -19,8 +19,12 @@ public final class AmbienceSoundEvents {
 
 	public static final SoundEvent WIND_INTERIOR_LIGHT = SoundEvent.of(new Identifier(Mod.MOD_ID, "wind_interior_light"));
 	public static final SoundEvent WIND_INTERIOR_STRONG = SoundEvent.of(new Identifier(Mod.MOD_ID, "wind_interior_strong"));
-	public static final SoundEvent WIND_INTERIOR_RAIN_LIGHT = SoundEvent.of(new Identifier(Mod.MOD_ID, "wind_interior_rain_light"));
-	public static final SoundEvent WIND_INTERIOR_RAIN_STRONG = SoundEvent.of(new Identifier(Mod.MOD_ID, "wind_interior_rain_strong"));
+
+	public static final SoundEvent RAIN_INTERIOR_LIGHT = SoundEvent.of(new Identifier(Mod.MOD_ID, "rain_interior_light"));
+	public static final SoundEvent RAIN_INTERIOR_STRONG = SoundEvent.of(new Identifier(Mod.MOD_ID, "rain_interior_strong"));
+
+	public static final SoundEvent RAIN_EXTERIOR_LIGHT = SoundEvent.of(new Identifier(Mod.MOD_ID, "rain_exterior_light"));
+	public static final SoundEvent RAIN_EXTERIOR_STRONG = SoundEvent.of(new Identifier(Mod.MOD_ID, "rain_exterior_strong"));
 
 	public static final SoundEvent WIND_CAVE_LIGHT = SoundEvent.of(new Identifier(Mod.MOD_ID, "wind_cave_light"));
 	public static final SoundEvent WIND_CAVE_STRONG = SoundEvent.of(new Identifier(Mod.MOD_ID, "wind_cave_strong"));
@@ -34,12 +38,14 @@ public final class AmbienceSoundEvents {
 		register(WIND_FOREST_STRONG);
 		register(WIND_SNOW_LIGHT);
 		register(WIND_SNOW_STRONG);
-		register(WIND_INTERIOR_LIGHT);
-		register(WIND_INTERIOR_STRONG);
-		register(WIND_INTERIOR_RAIN_LIGHT);
-		register(WIND_INTERIOR_RAIN_STRONG);
 		register(WIND_CAVE_LIGHT);
 		register(WIND_CAVE_STRONG);
+		register(WIND_INTERIOR_LIGHT);
+		register(WIND_INTERIOR_STRONG);
+		register(RAIN_INTERIOR_LIGHT);
+		register(RAIN_INTERIOR_STRONG);
+		register(RAIN_EXTERIOR_LIGHT);
+		register(RAIN_EXTERIOR_STRONG);
 	}
 
 	private static void register(SoundEvent soundEvent) {
