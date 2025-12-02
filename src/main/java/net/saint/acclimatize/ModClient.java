@@ -3,21 +3,16 @@ package net.saint.acclimatize;
 import org.lwjgl.glfw.GLFW;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
 import net.saint.acclimatize.data.item.ItemTemperatureUtil;
-import net.saint.acclimatize.data.wind.WindParticleUtil;
 import net.saint.acclimatize.networking.StateNetworkingPackets;
 import net.saint.acclimatize.networking.StateNetworkingPackets.TemperaturePacketTuple;
-import net.saint.acclimatize.sound.AmbienceSoundManager;
-import net.saint.acclimatize.sound.WeatherSoundManager;
 import net.saint.acclimatize.util.MathUtil;
 
 public class ModClient implements ClientModInitializer {
@@ -52,14 +47,22 @@ public class ModClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		setUpKeybindings();
 		setUpNetworkingPacketRegistration();
-		setUpClientTickEventHandler();
 		setUpItemTooltipCallback();
+		setUpClientEvents();
 	}
 
 	// Access
 
 	public static long getClientTickElapsed() {
 		return clientTickElapsed;
+	}
+
+	public static void resetClientTickElapsed() {
+		clientTickElapsed = 0;
+	}
+
+	public static void incrementClientTickElapsed() {
+		clientTickElapsed++;
 	}
 
 	public static void updateTemperatureValues(TemperaturePacketTuple values) {
@@ -124,9 +127,9 @@ public class ModClient implements ClientModInitializer {
 		var world = getWorld();
 
 		if (world.isThundering()) {
-			return 5.0;
-		} else if (world.isRaining()) {
 			return 3.0;
+		} else if (world.isRaining()) {
+			return 2.0;
 		}
 
 		return 1.0;
@@ -147,36 +150,8 @@ public class ModClient implements ClientModInitializer {
 		StateNetworkingPackets.registerS2CPackets();
 	}
 
-	private static void setUpClientTickEventHandler() {
-		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-			ModClient.clientTickElapsed = 0;
-		});
-
-		ClientTickEvents.START_CLIENT_TICK.register(client -> {
-			var world = client.world;
-
-			if (world == null || !world.isClient() || client.player == null) {
-				AmbienceSoundManager.tick(client, true);
-				WeatherSoundManager.tick(client, true);
-				return;
-			}
-
-			var isPaused = client.isInSingleplayer() && client.isPaused();
-
-			AmbienceSoundManager.tick(client, isPaused);
-			WeatherSoundManager.tick(client, isPaused);
-
-			ModClient.clientTickElapsed++;
-
-			if (Mod.CONFIG.enableWindParticles && !isPaused) {
-				WindParticleUtil.renderWindParticles(client);
-			}
-
-			if (Mod.CONFIG.enableSkyAngleLogging && world.getTime() % 20 == 0) {
-				var skyAngle = world.getSkyAngle(1.0f);
-				client.player.sendMessage(Text.of("Current sky angle: " + skyAngle));
-			}
-		});
+	private static void setUpClientEvents() {
+		ModClientEvents.registerClientEvents();
 	}
 
 	private static void setUpItemTooltipCallback() {
