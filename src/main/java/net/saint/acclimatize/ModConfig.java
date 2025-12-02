@@ -140,8 +140,12 @@ public class ModConfig implements ConfigData {
 	public double endBiomeTemperature = 10;
 
 	@ConfigEntry.Category("world")
-	@Comment("The number of rays cast in a cone shape around the player to check for an interior space. Higher number means more precision but higher cost. (Default: 12)")
-	public int spaceNumberOfRays = 12;
+	@Comment("The number of rays cast in a cone shape around the player to check for an interior space. Higher values are more accurate but take longer to detect an interior. (Default: 10)")
+	public int spaceNumberOfRaysTotal = 10;
+
+	@ConfigEntry.Category("world")
+	@Comment("The number of rays cast per tick to check for an interior space. Higher values mean faster results but higher cost. Scales per player, done server-side. (Default: 2)")
+	public int spaceNumberOfRaysCastPerTick = 2;
 
 	@ConfigEntry.Category("world")
 	@Comment("The length of the rays cast around the player to check for an interior space. Higher means more coverage but higher cost. (Default: 32)")

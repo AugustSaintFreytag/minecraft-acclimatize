@@ -21,6 +21,10 @@ public class PlayerTemperatureUtil {
 			return;
 		}
 
+		if (Mod.CONFIG.enableLogging) {
+			Mod.LOGGER.info("Ticking temperature for player: {}", player.getName().getString());
+		}
+
 		tickPlayerTemperature(player, serverState, playerState);
 	}
 
@@ -70,7 +74,7 @@ public class PlayerTemperatureUtil {
 
 		// Acclimatization Rate
 
-		var acclimatizationRate = Mod.CONFIG.acclimatizationRate;
+		var acclimatizationRate = Mod.CONFIG.acclimatizationRate * (Mod.CONFIG.temperatureTickInterval / 20.0);
 
 		if (blockTemperatureDelta > Mod.CONFIG.blockTemperatureAcclimatizationBoostThreshold
 				|| blockTemperatureDelta < -Mod.CONFIG.blockTemperatureAcclimatizationBoostThreshold) {
