@@ -22,7 +22,7 @@ public class PlayerTemperatureUtil {
 		}
 
 		if (Mod.CONFIG.enableLogging) {
-			Mod.LOGGER.info("Ticking temperature for player: {}", player.getName().getString());
+			Mod.LOGGER.info("Ticking temperature for player: {} (tick {})", player.getName().getString(), world.getTimeOfDay());
 		}
 
 		tickPlayerTemperature(player, serverState, playerState);
