@@ -14,7 +14,17 @@ public final class WorldUtil {
 
 	// Configuration
 
+	private static final int CAVE_CEILING_SCAN_RANGE = 16;
+
 	private static final int CAVE_BLOCK_SCAN_RANGE = 5;
+
+	// State
+
+	private static BlockEnvironmentProperties lastProperties;
+
+	private static int lastCeilingThickness = -1;
+
+	private static long lastEvaluationTick = 0;
 
 	// Rain Detection
 
@@ -42,28 +52,43 @@ public final class WorldUtil {
 
 		var caveDepth = getApproximateCaveDepth(world, position);
 		var isBelowSurface = caveDepth > 1;
-		var isUnderThickCeiling = getCeilingThickness(world, position, 6) >= 3;
+		var isUnderThickCeiling = getCachedOrEvaluatedCeilingThickness(world, position) >= 12;
 
 		if (isBelowSurface && isUnderThickCeiling) {
 			return true;
 		}
 
-		var blockEnvironment = evaluateBlockEnvironment(world, player);
+		var blockEnvironment = getCachedOrEvaluatedBlockEnvironment(world, player);
 		var isCaveLikeEnvironment = blockEnvironment.caveBlockPercentage > 0.3 && blockEnvironment.skyExposedBlockPercentage < 0.05
 				&& blockEnvironment.averageBlockLightLevel < 5.0;
 
 		return isCaveLikeEnvironment;
 	}
 
+	// Cave Depth
+
 	public static int getApproximateCaveDepth(World world, BlockPos position) {
 		var surfaceY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, position.getX(), position.getZ());
 		return Math.max(0, surfaceY - position.getY());
 	}
 
-	private static int getCeilingThickness(World world, BlockPos startPos, int maxScan) {
+	// Cave Ceiling Check
+
+	private static int getCachedOrEvaluatedCeilingThickness(World world, BlockPos position) {
+		if (lastCeilingThickness != -1 && world.getTime() < lastEvaluationTick + Mod.CONFIG.temperatureTickInterval) {
+			return lastCeilingThickness;
+		}
+
+		lastCeilingThickness = evaluateCeilingThickness(world, position);
+		lastEvaluationTick = world.getTime();
+
+		return lastCeilingThickness;
+	}
+
+	private static int evaluateCeilingThickness(World world, BlockPos startPos) {
 		var thickness = 0;
 
-		for (var y = startPos.getY() + 1; y <= startPos.getY() + maxScan; y++) {
+		for (var y = startPos.getY() + 1; y <= startPos.getY() + CAVE_CEILING_SCAN_RANGE; y++) {
 			var pos = new BlockPos(startPos.getX(), y, startPos.getZ());
 
 			if (world.getBlockState(pos).isOpaqueFullCube(world, pos)) {
@@ -77,6 +102,19 @@ public final class WorldUtil {
 		}
 
 		return thickness;
+	}
+
+	// Block Environment Check
+
+	private static BlockEnvironmentProperties getCachedOrEvaluatedBlockEnvironment(World world, PlayerEntity player) {
+		if (lastProperties != null && world.getTime() < lastEvaluationTick + Mod.CONFIG.temperatureTickInterval) {
+			return lastProperties;
+		}
+
+		lastProperties = evaluateBlockEnvironment(world, player);
+		lastEvaluationTick = world.getTime();
+
+		return lastProperties;
 	}
 
 	private static BlockEnvironmentProperties evaluateBlockEnvironment(World world, PlayerEntity player) {
