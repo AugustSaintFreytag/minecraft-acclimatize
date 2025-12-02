@@ -93,6 +93,7 @@ public final class AmbienceSoundManager {
 
 			activeProperties = properties;
 			activeSound = new AmbienceSoundInstance(client, soundCategory, soundEvent);
+			activeSound.setTargetVolume(targetVolume * Mod.CONFIG.ambientSoundVolume);
 
 			client.getSoundManager().play(activeSound);
 
