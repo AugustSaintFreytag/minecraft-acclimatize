@@ -18,6 +18,10 @@ import net.saint.acclimatize.server.ServerStateUtil;
 public final class ModServerEvents {
 
 	public static void registerServerEvents() {
+		if (Mod.CONFIG.enableLogging) {
+			Mod.LOGGER.info("Registering server events.");
+		}
+
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			var serverState = ServerStateUtil.getServerState(server);
 
@@ -42,7 +46,7 @@ public final class ModServerEvents {
 			WindTemperatureUtil.cleanUpPlayerData(player);
 		});
 
-		ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			var serverState = ServerStateUtil.getServerState(server);
 			var serverWorld = server.getOverworld();
 
@@ -53,7 +57,7 @@ public final class ModServerEvents {
 			WindUtil.tickWindInSchedule(serverWorld, serverState);
 		});
 
-		ServerTickEvents.END_SERVER_TICK.register((server) -> {
+		ServerTickEvents.END_SERVER_TICK.register(server -> {
 			tickServerInSchedule(server);
 			tickAllPlayersInSchedule(server);
 		});
