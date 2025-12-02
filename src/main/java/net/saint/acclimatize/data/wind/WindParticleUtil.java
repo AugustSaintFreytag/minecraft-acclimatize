@@ -32,6 +32,10 @@ public class WindParticleUtil {
 
 		var effectiveRate = spawnRate * normalizedIntensity;
 
+		if (world.isRaining()) {
+			effectiveRate *= 1.5;
+		}
+
 		var spawnCount = (int) effectiveRate;
 		var fractional = effectiveRate - spawnCount;
 
