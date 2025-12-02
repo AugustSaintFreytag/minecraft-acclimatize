@@ -5,13 +5,12 @@ import net.minecraft.client.sound.MovingSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.saint.acclimatize.util.MathUtil;
 
 public final class WeatherSoundInstance extends MovingSoundInstance {
 
 	// Configuration
 
-	private static final float VOLUME_STEP = 0.02f;
+	private static final float VOLUME_STEP = 0.05f;
 
 	// References
 
@@ -54,7 +53,7 @@ public final class WeatherSoundInstance extends MovingSoundInstance {
 	}
 
 	public void setTargetVolume(float targetVolume) {
-		this.targetVolume = MathUtil.clamp(targetVolume, 0.0f, 1.0f);
+		this.targetVolume = Math.max(0.0f, targetVolume);
 	}
 
 	public float getCurrentVolume() {

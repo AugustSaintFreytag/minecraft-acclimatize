@@ -65,7 +65,7 @@ public final class WeatherSoundManager {
 
 		volume *= Mod.CONFIG.ambientSoundVolume;
 
-		return MathUtil.clamp(volume, 0.0f, 1.0f);
+		return MathUtil.clamp(volume, 0.0f, 4.0f);
 	}
 
 	private static void startOrUpdateSound(MinecraftClient client, float targetVolume) {
@@ -80,7 +80,7 @@ public final class WeatherSoundManager {
 
 		activeSound.setTargetVolume(targetVolume);
 
-		if (Mod.CONFIG.enableLogging && targetVolume > 0.0f && client.world.getTime() % 20 == 0) {
+		if (Mod.CONFIG.enableLogging && client.world.getTime() % 20 == 0) {
 			Mod.LOGGER.info("Rain Sound - Target Volume: {}, Current Volume: {}", targetVolume, activeSound.getCurrentVolume());
 		}
 	}
@@ -101,7 +101,7 @@ public final class WeatherSoundManager {
 
 		if (activeSound.isDone() || !isPlaying) {
 			if (Mod.CONFIG.enableLogging && !isPlaying && !activeSound.isDone()) {
-				Mod.LOGGER.info("Rain sound instance was not playing; clearing to restart.");
+				Mod.LOGGER.info("Rain sound instance was not playing, clearing to restart.");
 			}
 
 			activeSound = null;

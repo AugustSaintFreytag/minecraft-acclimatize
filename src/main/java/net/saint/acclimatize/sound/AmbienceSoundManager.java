@@ -5,6 +5,8 @@ import java.util.List;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.ModClient;
 import net.saint.acclimatize.data.world.WorldUtil;
@@ -18,9 +20,11 @@ public final class AmbienceSoundManager {
 	private static final double MAX_WIND_REFERENCE = 6.0;
 	private static final double HIGH_WIND_THRESHOLD = 1.75;
 
-	private static final float INTERIOR_VOLUME_MULTIPLIER = 0.75f;
+	private static final float INTERIOR_VOLUME_MULTIPLIER = 0.7f;
+	private static final float INTERIOR_RAIN_VOLUME_MULTIPLIER = 1.0f;
 	private static final float CAVE_VOLUME_MULTIPLIER = 0.85f;
-	private static final float FOREST_VOLUME_MULTIPLIER = 1.0f;
+	private static final float PLAINS_VOLUME_MULTIPLIER = 0.85f;
+	private static final float FOREST_VOLUME_MULTIPLIER = 0.95f;
 	private static final float SNOW_VOLUME_MULTIPLIER = 1.0f;
 
 	// References
@@ -48,6 +52,7 @@ public final class AmbienceSoundManager {
 
 		var player = client.player;
 		var world = client.world;
+		var position = player.getBlockPos();
 
 		var properties = getCurrentWindProperties(client);
 
@@ -57,10 +62,10 @@ public final class AmbienceSoundManager {
 		}
 
 		var windIntensity = Math.max(0.0, ModClient.getWindIntensity());
-		var targetVolume = volumeForIntensity(properties.level(), windIntensity);
+		var baseVolume = volumeForIntensity(properties.level(), windIntensity);
+		var volumeFactor = volumeFactorForWindProperties(world, position, properties);
 
-		var volumeFactor = volumeFactorForWindProperties(properties);
-		targetVolume *= volumeFactor;
+		var targetVolume = baseVolume * volumeFactor;
 
 		if (targetVolume <= 0.0f) {
 			fadeOutActiveSound();
@@ -168,17 +173,23 @@ public final class AmbienceSoundManager {
 		return minVolume + (float) progress * (maxVolume - minVolume);
 	}
 
-	private static float volumeFactorForWindProperties(AmbienceStateProperties properties) {
+	private static float volumeFactorForWindProperties(World world, BlockPos position, AmbienceStateProperties properties) {
+		if (properties.isCave()) {
+			var caveDepth = WorldUtil.getApproximateCaveDepth(world, position);
+			var caveDepthFactor = 1 - MathUtil.clamp((float) caveDepth / 36.0f, 0.0f, 1.0f);
+			return CAVE_VOLUME_MULTIPLIER * caveDepthFactor;
+		}
+
 		if (properties.isInterior()) {
+			if (properties.isRaining()) {
+				return INTERIOR_RAIN_VOLUME_MULTIPLIER;
+			}
+
 			return INTERIOR_VOLUME_MULTIPLIER;
 		}
 
-		if (properties.isCave()) {
-			return CAVE_VOLUME_MULTIPLIER;
-		}
-
 		return switch (properties.biomeKind()) {
-		case PLAINS -> 1.0f;
+		case PLAINS -> PLAINS_VOLUME_MULTIPLIER;
 		case FOREST -> FOREST_VOLUME_MULTIPLIER;
 		case SNOW -> SNOW_VOLUME_MULTIPLIER;
 		default -> 0.0f;
@@ -186,6 +197,14 @@ public final class AmbienceSoundManager {
 	}
 
 	private static SoundEvent soundEventForWindProperties(AmbienceStateProperties properties) {
+		if (properties.isInterior() && properties.isCave()) {
+			return switch (properties.level()) {
+			case LOW -> AmbienceSoundEvents.WIND_CAVE_LIGHT;
+			case HIGH -> AmbienceSoundEvents.WIND_CAVE_STRONG;
+			default -> null;
+			};
+		}
+
 		if (properties.isInterior() && !properties.isRaining()) {
 			return switch (properties.level()) {
 			case LOW -> AmbienceSoundEvents.WIND_INTERIOR_LIGHT;
