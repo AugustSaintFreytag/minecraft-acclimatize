@@ -2,6 +2,7 @@ package net.saint.acclimatize.mixin.compat.ambientsounds;
 
 import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -44,6 +45,7 @@ public abstract class AmbientSoundEngineMixin {
 			ticksSinceLastStateChange++;
 		}
 
+		var numberOfAdjustedSounds = new AtomicInteger(0);
 		var fadeTickProgress = MathUtil.clamp((float) ticksSinceLastStateChange / Mod.CONFIG.soundSuppressionTransitionTicks, 0.0f, 1.0f);
 
 		synchronized (sounds) {
@@ -54,16 +56,16 @@ public abstract class AmbientSoundEngineMixin {
 					var modifiedSoundVolume = MathUtil.lerp(soundVolume, soundVolume * soundVolumeFactor, fadeTickProgress);
 
 					sound.generatedVoume = modifiedSoundVolume;
-
-					if (Mod.CONFIG.enableLogging && fadeTickProgress != 1.0f) {
-						Mod.LOGGER.info(
-								"Adjusted Ambient Sounds mod sound volume: originalVolume={}, adjustedVolume={}, isInterior={}, fadeTickProgress={}",
-								soundVolume, modifiedSoundVolume, assumesInterior, fadeTickProgress);
-					}
+					numberOfAdjustedSounds.incrementAndGet();
 				}
 			} catch (ConcurrentModificationException e) {
 				Mod.LOGGER.warn("Concurrent modification detected when adjusting ambient sound volumes for interior suppression.", e);
 			}
+		}
+
+		if (Mod.CONFIG.enableLogging && fadeTickProgress != 1.0f) {
+			Mod.LOGGER.info("Adjusted volumes for {} ambient sound(s) (interior: {}, progress: {}).", numberOfAdjustedSounds.get(),
+					assumesInterior, fadeTickProgress);
 		}
 	}
 
