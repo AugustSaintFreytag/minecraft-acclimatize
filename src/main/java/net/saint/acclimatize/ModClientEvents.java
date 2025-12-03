@@ -10,10 +10,6 @@ import net.saint.acclimatize.sound.AmbienceSoundManager;
 
 public final class ModClientEvents {
 
-	// Configuration
-
-	private static int INITIAL_CLIENT_TICK_DELAY = 20;
-
 	// Events
 
 	public static void registerClientEvents() {
@@ -37,7 +33,7 @@ public final class ModClientEvents {
 
 			var isPaused = client.isInSingleplayer() && client.isPaused();
 
-			if (!isPaused && ModClient.getClientTickElapsed() >= INITIAL_CLIENT_TICK_DELAY) {
+			if (!isPaused) {
 				tickActiveClient(client, world);
 			}
 		});
