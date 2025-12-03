@@ -24,7 +24,7 @@ public final class WorldUtil {
 
 	private static int lastCeilingThickness = -1;
 
-	private static long lastEvaluationTick = 0;
+	private static long nextEvaluationTick = 0;
 
 	// Rain Detection
 
@@ -51,18 +51,13 @@ public final class WorldUtil {
 		}
 
 		var caveDepth = getApproximateCaveDepth(world, position);
-		var isBelowSurface = caveDepth > 1;
-		var isUnderThickCeiling = getCachedOrEvaluatedCeilingThickness(world, position) >= 12;
-
-		if (isBelowSurface && isUnderThickCeiling) {
-			return true;
-		}
+		var isBelowSurface = caveDepth > 8;
 
 		var blockEnvironment = getCachedOrEvaluatedBlockEnvironment(world, player);
-		var isCaveLikeEnvironment = blockEnvironment.caveBlockPercentage > 0.3 && blockEnvironment.skyExposedBlockPercentage < 0.05
+		var isCaveLikeEnvironment = blockEnvironment.caveBlockPercentage > 0.85 && blockEnvironment.skyExposedBlockPercentage < 0.05
 				&& blockEnvironment.averageBlockLightLevel < 5.0;
 
-		return isCaveLikeEnvironment;
+		return isBelowSurface && isCaveLikeEnvironment;
 	}
 
 	// Cave Depth
@@ -75,12 +70,12 @@ public final class WorldUtil {
 	// Cave Ceiling Check
 
 	private static int getCachedOrEvaluatedCeilingThickness(World world, BlockPos position) {
-		if (lastCeilingThickness != -1 && world.getTime() < lastEvaluationTick + Mod.CONFIG.temperatureTickInterval) {
+		if (lastCeilingThickness != -1 && world.getTime() < nextEvaluationTick) {
 			return lastCeilingThickness;
 		}
 
 		lastCeilingThickness = evaluateCeilingThickness(world, position);
-		lastEvaluationTick = world.getTime();
+		nextEvaluationTick = world.getTime() + Mod.CONFIG.temperatureTickInterval;
 
 		return lastCeilingThickness;
 	}
@@ -107,12 +102,12 @@ public final class WorldUtil {
 	// Block Environment Check
 
 	private static BlockEnvironmentProperties getCachedOrEvaluatedBlockEnvironment(World world, PlayerEntity player) {
-		if (lastProperties != null && world.getTime() < lastEvaluationTick + Mod.CONFIG.temperatureTickInterval) {
+		if (lastProperties != null && world.getTime() < nextEvaluationTick) {
 			return lastProperties;
 		}
 
 		lastProperties = evaluateBlockEnvironment(world, player);
-		lastEvaluationTick = world.getTime();
+		nextEvaluationTick = world.getTime() + Mod.CONFIG.temperatureTickInterval;
 
 		return lastProperties;
 	}
@@ -173,8 +168,8 @@ public final class WorldUtil {
 		if (Mod.CONFIG.enableLogging) {
 			Mod.LOGGER.info(
 					"Evaluated block environment for player '{}' at {}: Blocks = {}, Cave blocks = {}%, Sky-exposed blocks = {}%, Average light level = {}",
-					player.getName().getString(), position, numberOfBlocks, properties.caveBlockPercentage,
-					properties.skyExposedBlockPercentage, properties.averageBlockLightLevel);
+					player.getName().getString(), position, numberOfBlocks, properties.caveBlockPercentage * 100,
+					properties.skyExposedBlockPercentage * 100, properties.averageBlockLightLevel);
 		}
 
 		return properties;
