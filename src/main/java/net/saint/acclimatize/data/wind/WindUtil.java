@@ -10,6 +10,15 @@ public final class WindUtil {
 
 	private static final double WIND_INTERVAL_JITTER_FACTOR = 0.15;
 
+	// State
+
+	private static WindProperties lastWindProperties = null;
+
+	// Library
+
+	private static record WindProperties(boolean isRaining) {
+	}
+
 	// Wind Override
 
 	public static void overrideWind(ServerState serverState, double windDirection, double windIntensity) {
@@ -22,6 +31,8 @@ public final class WindUtil {
 	public static void tickWindInSchedule(ServerWorld world, ServerState serverState) {
 		var random = world.getRandom();
 		var serverTick = world.getTimeOfDay();
+
+		checkWindScheduleConditions(world, serverState);
 
 		if (serverTick > serverState.nextWindIntensityTick) {
 			tickWindIntensity(world, serverState);
@@ -73,14 +84,29 @@ public final class WindUtil {
 		var windIntensity = random.nextDouble() * (max - min) + min;
 
 		if (world.isThundering()) {
-			windIntensity *= 2.25;
+			windIntensity *= 1.85;
 		} else if (world.isRaining()) {
-			windIntensity *= 1.75;
+			windIntensity *= 1.3;
 		}
 
 		serverState.windIntensity = Math.max(0, windIntensity);
 		serverState.markDirty();
 	}
+
+	// Conditions Check
+
+	private static void checkWindScheduleConditions(ServerWorld world, ServerState serverState) {
+		var isRaining = world.isRaining();
+
+		if (lastWindProperties == null || lastWindProperties.isRaining() != isRaining) {
+			serverState.nextWindIntensityTick = world.getTimeOfDay();
+			serverState.markDirty();
+		}
+
+		lastWindProperties = new WindProperties(isRaining);
+	}
+
+	// Utility
 
 	private static double wrapRadians(double angle) {
 		var wrapped = angle % (Math.PI * 2.0);

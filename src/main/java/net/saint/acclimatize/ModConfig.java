@@ -317,7 +317,7 @@ public class ModConfig implements ConfigData {
 	public boolean enableAmbientSounds = true;
 
 	@ConfigEntry.Category("sounds")
-	@Comment("Replaces vanilla rain sound playback with custom sounds. Required to fade rain sound playback in interiors. (Default: true)")
+	@Comment("Replaces vanilla rain sound playback with custom sounds. Required to fade rain sound playback in interiors. Only affects exterior sounds. (Default: true)")
 	public boolean enableRainSounds = true;
 
 	@ConfigEntry.Category("sounds")

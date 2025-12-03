@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -18,10 +19,12 @@ public final class AmbienceSoundManager {
 
 	private static final double LOW_WIND_THRESHOLD = 0.01;
 	private static final double MAX_WIND_REFERENCE = 6.0;
-	private static final double HIGH_WIND_THRESHOLD = 1.75;
+	private static final double HIGH_WIND_THRESHOLD = 2.65;
+
+	private static final float INTERIOR_RAIN_VOLUME_MULTIPLIER = 1.0f;
+	private static final float EXTERIOR_RAIN_VOLUME_MULTIPLIER = 1.0f;
 
 	private static final float INTERIOR_VOLUME_MULTIPLIER = 0.7f;
-	private static final float INTERIOR_RAIN_VOLUME_MULTIPLIER = 1.0f;
 	private static final float CAVE_VOLUME_MULTIPLIER = 0.85f;
 	private static final float PLAINS_VOLUME_MULTIPLIER = 0.85f;
 	private static final float FOREST_VOLUME_MULTIPLIER = 0.95f;
@@ -54,25 +57,21 @@ public final class AmbienceSoundManager {
 		var world = client.world;
 		var position = player.getBlockPos();
 
-		var properties = getCurrentWindProperties(client);
+		var properties = evaluateAmbienceProperties(client);
 
 		if (player == null || world == null || properties.level() == WindLevel.NONE) {
 			fadeOutActiveSound();
 			return;
 		}
 
-		var windIntensity = Math.max(0.0, ModClient.getWindIntensity());
-		var baseVolume = volumeForIntensity(properties.level(), windIntensity);
-		var volumeFactor = volumeFactorForWindProperties(world, position, properties);
+		var volume = volumeForProperties(world, position, properties);
 
-		var targetVolume = baseVolume * volumeFactor;
-
-		if (targetVolume <= 0.0f) {
+		if (volume <= 0.0f) {
 			fadeOutActiveSound();
 			return;
 		}
 
-		startOrUpdateSound(client, properties, targetVolume);
+		startOrUpdateSound(client, properties, volume);
 	}
 
 	private static void startOrUpdateSound(MinecraftClient client, AmbienceStateProperties properties, float targetVolume) {
@@ -80,20 +79,25 @@ public final class AmbienceSoundManager {
 			Mod.LOGGER.info("Wind Ambience - Properties ({}), Target Volume: {}", properties.description(), targetVolume);
 		}
 
-		if (activeSound == null || !activeProperties.equals(properties) || activeSound.isDone()) {
+		var soundManager = client.getSoundManager();
+
+		if (activeSound == null || !activeProperties.equals(properties) || activeSound.isDone() || !soundManager.isPlaying(activeSound)) {
 			if (activeSound != null) {
 				fadeOutSound(activeSound);
 			}
 
-			var soundEvent = soundEventForWindProperties(properties);
+			var soundEvent = soundEventForProperties(properties);
+			var soundCategory = soundCategoryForEvent(soundEvent);
 
 			if (soundEvent == null) {
 				return;
 			}
 
 			activeProperties = properties;
-			activeSound = new AmbienceSoundInstance(client, soundEvent);
-			client.getSoundManager().play(activeSound);
+			activeSound = new AmbienceSoundInstance(client, soundCategory, soundEvent);
+			activeSound.setTargetVolume(targetVolume * Mod.CONFIG.ambientSoundVolume);
+
+			soundManager.play(activeSound);
 
 			return;
 		}
@@ -124,7 +128,7 @@ public final class AmbienceSoundManager {
 
 	// Utilities
 
-	private static AmbienceStateProperties getCurrentWindProperties(MinecraftClient client) {
+	private static AmbienceStateProperties evaluateAmbienceProperties(MinecraftClient client) {
 		var world = client.world;
 		var player = client.player;
 
@@ -136,9 +140,9 @@ public final class AmbienceSoundManager {
 		var windLevel = determineWindLevel(windIntensity);
 		var windBiomeKind = WindBiomeKindUtil.kindForPlayer(client);
 
+		var isRaining = WorldUtil.isRaining(world, player);
 		var isCave = WorldUtil.isInCave(world, player);
 		var isInterior = ModClient.getIsPlayerInInterior();
-		var isRaining = WorldUtil.isRaining(world, player);
 
 		var windProperties = new AmbienceStateProperties(windLevel, windBiomeKind, isRaining, isInterior, isCave);
 
@@ -157,27 +161,50 @@ public final class AmbienceSoundManager {
 		return WindLevel.HIGH;
 	}
 
-	private static float volumeForIntensity(WindLevel windLevel, double windIntensity) {
-		return switch (windLevel) {
-		case NONE -> 0.0f;
-		case LOW -> calculateScaledVolume(windIntensity, LOW_WIND_THRESHOLD, HIGH_WIND_THRESHOLD, 0.18f, 0.5f);
-		case HIGH -> calculateScaledVolume(windIntensity, HIGH_WIND_THRESHOLD, MAX_WIND_REFERENCE, 0.55f, 0.95f);
-		};
+	private static float volumeForProperties(World world, BlockPos position, AmbienceStateProperties properties) {
+		var windLevel = properties.level();
+		var windIntensity = ModClient.getWindIntensity();
+		var volumeScalingFactor = Mod.CONFIG.ambientSoundWindIntensityFactor;
+
+		if (Mod.CONFIG.enableRainSounds && properties.isRaining()) {
+			// Allow rain to be louder and less varied by wind intensity.
+			volumeScalingFactor *= 0.5;
+		}
+
+		var baseVolume = baseVolumeForWindLevel(windLevel, windIntensity, volumeScalingFactor);
+		var volumeFactor = volumeFactorForProperties(world, position, properties);
+
+		return baseVolume * volumeFactor;
 	}
 
-	private static float calculateScaledVolume(double value, double lowerBound, double upperBound, float minVolume, float maxVolume) {
-		var clampedValue = MathUtil.clamp(value, lowerBound, upperBound);
-		var progress = (clampedValue - lowerBound) / (upperBound - lowerBound);
-		progress *= MathUtil.clamp(Mod.CONFIG.ambientSoundWindIntensityFactor, 0.0, 1.0);
+	private static float baseVolumeForWindLevel(WindLevel windLevel, double windIntensity, double scalingFactor) {
+		if (windLevel == WindLevel.NONE) {
+			return 0.0f;
+		}
 
-		return minVolume + (float) progress * (maxVolume - minVolume);
+		return calculateScaledVolume(windIntensity, LOW_WIND_THRESHOLD, MAX_WIND_REFERENCE, 0.15f, 0.95f, scalingFactor);
 	}
 
-	private static float volumeFactorForWindProperties(World world, BlockPos position, AmbienceStateProperties properties) {
+	private static float calculateScaledVolume(double windIntensity, double lowerBound, double upperBound, float minVolume, float maxVolume,
+			double scalingFactor) {
+		var clampedIntensity = MathUtil.clamp(windIntensity, lowerBound, upperBound);
+		var normalizedIntensity = (clampedIntensity - lowerBound) / (upperBound - lowerBound);
+		var clampedScalingFactor = MathUtil.clamp(scalingFactor, 0.0, 1.0);
+
+		var volumeRange = maxVolume - minVolume;
+		var pivotNormalized = 0.75;
+		var adjustedNormalized = pivotNormalized + (normalizedIntensity - pivotNormalized) * clampedScalingFactor;
+		var clampedNormalized = MathUtil.clamp(adjustedNormalized, 0.0, 1.0);
+		var volume = minVolume + (float) (volumeRange * clampedNormalized);
+
+		return volume;
+	}
+
+	private static float volumeFactorForProperties(World world, BlockPos position, AmbienceStateProperties properties) {
 		if (properties.isCave()) {
 			var caveDepth = WorldUtil.getApproximateCaveDepth(world, position);
 			var caveDepthFactor = 1 - MathUtil.clamp((float) caveDepth / 36.0f, 0.0f, 1.0f);
-			return CAVE_VOLUME_MULTIPLIER * caveDepthFactor;
+			return Math.max(0.15f, CAVE_VOLUME_MULTIPLIER * caveDepthFactor);
 		}
 
 		if (properties.isInterior()) {
@@ -188,6 +215,10 @@ public final class AmbienceSoundManager {
 			return INTERIOR_VOLUME_MULTIPLIER;
 		}
 
+		if (Mod.CONFIG.enableRainSounds && properties.isRaining()) {
+			return EXTERIOR_RAIN_VOLUME_MULTIPLIER * Mod.CONFIG.rainSoundVolume;
+		}
+
 		return switch (properties.biomeKind()) {
 		case PLAINS -> PLAINS_VOLUME_MULTIPLIER;
 		case FOREST -> FOREST_VOLUME_MULTIPLIER;
@@ -196,7 +227,17 @@ public final class AmbienceSoundManager {
 		};
 	}
 
-	private static SoundEvent soundEventForWindProperties(AmbienceStateProperties properties) {
+	private static SoundCategory soundCategoryForEvent(SoundEvent soundEvent) {
+		if (soundEvent == AmbienceSoundEvents.RAIN_EXTERIOR_LIGHT || soundEvent == AmbienceSoundEvents.RAIN_EXTERIOR_STRONG) {
+			return SoundCategory.WEATHER;
+		}
+
+		return SoundCategory.AMBIENT;
+	}
+
+	private static SoundEvent soundEventForProperties(AmbienceStateProperties properties) {
+		// Interior / Cave
+
 		if (properties.isInterior() && properties.isCave()) {
 			return switch (properties.level()) {
 			case LOW -> AmbienceSoundEvents.WIND_CAVE_LIGHT;
@@ -204,6 +245,8 @@ public final class AmbienceSoundManager {
 			default -> null;
 			};
 		}
+
+		// Interior / Rain
 
 		if (properties.isInterior() && !properties.isRaining()) {
 			return switch (properties.level()) {
@@ -215,11 +258,23 @@ public final class AmbienceSoundManager {
 
 		if (properties.isInterior() && properties.isRaining()) {
 			return switch (properties.level()) {
-			case LOW -> AmbienceSoundEvents.WIND_INTERIOR_RAIN_LIGHT;
-			case HIGH -> AmbienceSoundEvents.WIND_INTERIOR_RAIN_STRONG;
+			case LOW -> AmbienceSoundEvents.RAIN_INTERIOR_LIGHT;
+			case HIGH -> AmbienceSoundEvents.RAIN_INTERIOR_STRONG;
 			default -> null;
 			};
 		}
+
+		// Exterior / Rain
+
+		if (Mod.CONFIG.enableRainSounds && properties.isRaining()) {
+			return switch (properties.level()) {
+			case LOW -> AmbienceSoundEvents.RAIN_EXTERIOR_LIGHT;
+			case HIGH -> AmbienceSoundEvents.RAIN_EXTERIOR_STRONG;
+			default -> null;
+			};
+		}
+
+		// Exterior / Biomes
 
 		return switch (properties.biomeKind()) {
 		case PLAINS -> switch (properties.level()) {

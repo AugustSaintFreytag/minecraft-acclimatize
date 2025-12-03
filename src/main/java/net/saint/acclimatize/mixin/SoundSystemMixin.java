@@ -10,18 +10,13 @@ import net.minecraft.client.sound.SoundSystem;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.saint.acclimatize.Mod;
-import net.saint.acclimatize.sound.WeatherSoundInstance;
 
 @Mixin(SoundSystem.class)
 public abstract class SoundSystemMixin {
 
 	@Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)V", at = @At("HEAD"), cancellable = true)
-	private void acclimatize$disableVanillaRain(SoundInstance soundInstance, CallbackInfo callbackInfo) {
+	private void acclimatize$play(SoundInstance soundInstance, CallbackInfo callbackInfo) {
 		if (!Mod.CONFIG.enableRainSounds) {
-			return;
-		}
-
-		if (soundInstance instanceof WeatherSoundInstance) {
 			return;
 		}
 

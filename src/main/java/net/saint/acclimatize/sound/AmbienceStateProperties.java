@@ -1,9 +1,9 @@
 package net.saint.acclimatize.sound;
 
-public record AmbienceStateProperties(WindLevel level, WindBiomeKind biomeKind, boolean isRaining, boolean isInterior, boolean isCave) {
+public record AmbienceStateProperties(WindLevel level, AmbienceBiomeKind biomeKind, boolean isRaining, boolean isInterior, boolean isCave) {
 
 	public static AmbienceStateProperties none() {
-		return new AmbienceStateProperties(WindLevel.NONE, WindBiomeKind.NONE, false, false, false);
+		return new AmbienceStateProperties(WindLevel.NONE, AmbienceBiomeKind.NONE, false, false, false);
 	}
 
 	public String description() {

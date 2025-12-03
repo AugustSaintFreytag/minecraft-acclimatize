@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+	"minecraft:stone",
+	"minecraft:deepslate",
+	"minecraft:calcite",
+	"minecraft:andesite",
+	"minecraft:diorite",
+	"minecraft:granite",
+	"minecraft:tuff",
+	"minecraft:dripstone_block",
+	"minecraft:gravel",
+    "minecraft:amethyst_block",
+    "minecraft:budding_amethyst",
+    "minecraft:cave_vines",
+    "minecraft:cave_vines_plant",
+    "minecraft:glow_lichen"
+  ]
+}

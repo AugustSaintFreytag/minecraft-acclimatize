@@ -7,11 +7,10 @@ import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import net.saint.acclimatize.data.wind.WindParticleUtil;
 import net.saint.acclimatize.sound.AmbienceSoundManager;
-import net.saint.acclimatize.sound.WeatherSoundManager;
 
 public final class ModClientEvents {
 
-	private static int INITIAL_CLIENT_TICK_DELAY = 20;
+	// Events
 
 	public static void registerClientEvents() {
 		if (Mod.CONFIG.enableLogging) {
@@ -27,7 +26,6 @@ public final class ModClientEvents {
 
 			if (world == null || !world.isClient() || client.player == null) {
 				AmbienceSoundManager.tick(client, true);
-				WeatherSoundManager.tick(client, true);
 				return;
 			}
 
@@ -35,15 +33,16 @@ public final class ModClientEvents {
 
 			var isPaused = client.isInSingleplayer() && client.isPaused();
 
-			if (!isPaused && ModClient.getClientTickElapsed() >= INITIAL_CLIENT_TICK_DELAY) {
+			if (!isPaused) {
 				tickActiveClient(client, world);
 			}
 		});
 	}
 
+	// Ticking
+
 	private static void tickActiveClient(MinecraftClient client, World world) {
 		AmbienceSoundManager.tick(client, false);
-		WeatherSoundManager.tick(client, false);
 
 		if (Mod.CONFIG.enableWindParticles) {
 			WindParticleUtil.renderWindParticles(client);

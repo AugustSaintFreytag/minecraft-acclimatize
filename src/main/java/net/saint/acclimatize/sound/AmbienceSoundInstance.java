@@ -10,7 +10,7 @@ public class AmbienceSoundInstance extends MovingSoundInstance {
 
 	// Configuration
 
-	private static final float VOLUME_STEP = 0.02f;
+	private static final float VOLUME_STEP = 0.04f;
 
 	// References
 
@@ -22,8 +22,8 @@ public class AmbienceSoundInstance extends MovingSoundInstance {
 
 	// Init
 
-	protected AmbienceSoundInstance(MinecraftClient client, SoundEvent soundEvent) {
-		super(soundEvent, SoundCategory.AMBIENT, SoundInstance.createRandom());
+	protected AmbienceSoundInstance(MinecraftClient client, SoundCategory soundCategory, SoundEvent soundEvent) {
+		super(soundEvent, soundCategory, SoundInstance.createRandom());
 
 		this.client = client;
 		this.repeat = true;
@@ -60,7 +60,7 @@ public class AmbienceSoundInstance extends MovingSoundInstance {
 		if (volume < targetVolume) {
 			volume = Math.min(targetVolume, volume + VOLUME_STEP);
 		} else if (volume > targetVolume) {
-			volume = Math.max(targetVolume, volume - VOLUME_STEP);
+			volume = Math.max(targetVolume, volume - VOLUME_STEP / 2.0f);
 		}
 
 		if (targetVolume == 0.0f && volume == 0.0f) {
