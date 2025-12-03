@@ -79,7 +79,9 @@ public final class AmbienceSoundManager {
 			Mod.LOGGER.info("Wind Ambience - Properties ({}), Target Volume: {}", properties.description(), targetVolume);
 		}
 
-		if (activeSound == null || !activeProperties.equals(properties) || activeSound.isDone()) {
+		var soundManager = client.getSoundManager();
+
+		if (activeSound == null || !activeProperties.equals(properties) || activeSound.isDone() || !soundManager.isPlaying(activeSound)) {
 			if (activeSound != null) {
 				fadeOutSound(activeSound);
 			}
@@ -95,7 +97,7 @@ public final class AmbienceSoundManager {
 			activeSound = new AmbienceSoundInstance(client, soundCategory, soundEvent);
 			activeSound.setTargetVolume(targetVolume * Mod.CONFIG.ambientSoundVolume);
 
-			client.getSoundManager().play(activeSound);
+			soundManager.play(activeSound);
 
 			return;
 		}
@@ -176,27 +178,33 @@ public final class AmbienceSoundManager {
 	}
 
 	private static float baseVolumeForWindLevel(WindLevel windLevel, double windIntensity, double scalingFactor) {
-		return switch (windLevel) {
-		case NONE -> 0.0f;
-		case LOW -> calculateScaledVolume(windIntensity, LOW_WIND_THRESHOLD, HIGH_WIND_THRESHOLD, 0.18f, 0.5f, scalingFactor);
-		case HIGH -> calculateScaledVolume(windIntensity, HIGH_WIND_THRESHOLD, MAX_WIND_REFERENCE, 0.55f, 0.95f, scalingFactor);
-		};
+		if (windLevel == WindLevel.NONE) {
+			return 0.0f;
+		}
+
+		return calculateScaledVolume(windIntensity, LOW_WIND_THRESHOLD, MAX_WIND_REFERENCE, 0.15f, 0.95f, scalingFactor);
 	}
 
 	private static float calculateScaledVolume(double windIntensity, double lowerBound, double upperBound, float minVolume, float maxVolume,
 			double scalingFactor) {
-		var clampedValue = MathUtil.clamp(windIntensity, lowerBound, upperBound);
-		var progress = (clampedValue - lowerBound) / (upperBound - lowerBound);
-		progress *= MathUtil.clamp(scalingFactor, 0.0, 1.0);
+		var clampedIntensity = MathUtil.clamp(windIntensity, lowerBound, upperBound);
+		var normalizedIntensity = (clampedIntensity - lowerBound) / (upperBound - lowerBound);
+		var clampedScalingFactor = MathUtil.clamp(scalingFactor, 0.0, 1.0);
 
-		return minVolume + (float) progress * (maxVolume - minVolume);
+		var volumeRange = maxVolume - minVolume;
+		var pivotNormalized = 0.75;
+		var adjustedNormalized = pivotNormalized + (normalizedIntensity - pivotNormalized) * clampedScalingFactor;
+		var clampedNormalized = MathUtil.clamp(adjustedNormalized, 0.0, 1.0);
+		var volume = minVolume + (float) (volumeRange * clampedNormalized);
+
+		return volume;
 	}
 
 	private static float volumeFactorForProperties(World world, BlockPos position, AmbienceStateProperties properties) {
 		if (properties.isCave()) {
 			var caveDepth = WorldUtil.getApproximateCaveDepth(world, position);
 			var caveDepthFactor = 1 - MathUtil.clamp((float) caveDepth / 36.0f, 0.0f, 1.0f);
-			return CAVE_VOLUME_MULTIPLIER * caveDepthFactor;
+			return Math.max(0.15f, CAVE_VOLUME_MULTIPLIER * caveDepthFactor);
 		}
 
 		if (properties.isInterior()) {
@@ -208,7 +216,7 @@ public final class AmbienceSoundManager {
 		}
 
 		if (Mod.CONFIG.enableRainSounds && properties.isRaining()) {
-			return EXTERIOR_RAIN_VOLUME_MULTIPLIER;
+			return EXTERIOR_RAIN_VOLUME_MULTIPLIER * Mod.CONFIG.rainSoundVolume;
 		}
 
 		return switch (properties.biomeKind()) {
