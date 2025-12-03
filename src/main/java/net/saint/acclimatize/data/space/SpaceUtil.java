@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
@@ -12,6 +11,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.saint.acclimatize.Mod;
+import net.saint.acclimatize.ModTags;
 import net.saint.acclimatize.util.MathUtil;
 
 public final class SpaceUtil {
@@ -147,11 +147,10 @@ public final class SpaceUtil {
 		}
 
 		var hitPosition = BlockPos.ofFloored(hitResult.getPos());
-		var hitBlock = world.getBlockState(hitPosition).getBlock();
-		var hitBlockId = Registries.BLOCK.getId(hitBlock).toString();
+		var hitBlockState = world.getBlockState(hitPosition);
 
 		// Check if hit block is leaves or other outdoors block.
-		if (hitBlockId.contains("leaves") || hitBlockId.contains("grass") || hitBlockId.contains("crop") || hitBlockId.contains("sugar")) {
+		if (hitBlockState.isIn(ModTags.OUTDOOR_BLOCKS)) {
 			// Hit a block that is outdoors, return true (presume hit sky)
 			return true;
 		}
