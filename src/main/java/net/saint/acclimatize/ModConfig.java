@@ -148,8 +148,8 @@ public class ModConfig implements ConfigData {
 	public int spaceNumberOfRaysCastPerTick = 2;
 
 	@ConfigEntry.Category("world")
-	@Comment("The length of the rays cast around the player to check for an interior space. Higher means more coverage but higher cost. (Default: 32)")
-	public int spaceRayLength = 32;
+	@Comment("The length of the rays cast around the player to check for an interior space. Higher means more coverage but higher cost. (Default: 36)")
+	public int spaceRayLength = 36;
 
 	// Blocks
 
