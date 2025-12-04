@@ -14,7 +14,9 @@
 		"compat/particlerain/RainParticleMixin",
 		"compat/dynamicsurroundings/CeilingScannerMixin",
 		"compat/dynamicsurroundings/SoundVolumeEvaluatorMixin",
-		"compat/ambientsounds/AmbientSoundEngineMixin"
+		"compat/ambientsounds/AmbientSoundEngineMixin",
+		"compat/atmosfera/AtmosphericSoundHandlerMixin",
+		"compat/atmosfera/AtmosphericSoundInstanceAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1
