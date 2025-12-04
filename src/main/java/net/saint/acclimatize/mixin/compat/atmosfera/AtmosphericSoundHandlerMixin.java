@@ -18,6 +18,7 @@ import dev.hephaestus.atmosfera.client.sound.AtmosphericSoundInstance;
 import net.minecraft.client.MinecraftClient;
 import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.ModClient;
+import net.saint.acclimatize.mixin.AbstractSoundInstanceAccessor;
 import net.saint.acclimatize.util.MathUtil;
 
 @Mixin(AtmosphericSoundHandler.class)

@@ -30,8 +30,6 @@ public final class ModMixinPlugin implements IMixinConfigPlugin {
 					() -> FabricLoader.getInstance().isModLoaded("ambientsounds"))
 			.put("net.saint.acclimatize.mixin.compat.atmosfera.AtmosphericSoundHandlerMixin",
 					() -> FabricLoader.getInstance().isModLoaded("atmosfera"))
-			.put("net.saint.acclimatize.mixin.compat.atmosfera.AtmosphericSoundInstanceAccessor",
-					() -> FabricLoader.getInstance().isModLoaded("atmosfera"))
 			.build();
 
 	@Override

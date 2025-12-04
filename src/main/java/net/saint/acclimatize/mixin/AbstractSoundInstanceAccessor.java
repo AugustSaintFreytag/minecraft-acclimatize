@@ -1,4 +1,4 @@
-package net.saint.acclimatize.mixin.compat.atmosfera;
+package net.saint.acclimatize.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
