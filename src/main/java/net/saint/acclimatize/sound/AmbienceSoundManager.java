@@ -238,7 +238,7 @@ public final class AmbienceSoundManager {
 	private static SoundEvent soundEventForProperties(AmbienceStateProperties properties) {
 		// Interior / Cave
 
-		if (properties.isInterior() && properties.isCave()) {
+		if (properties.isCave()) {
 			return switch (properties.level()) {
 			case LOW -> AmbienceSoundEvents.WIND_CAVE_LIGHT;
 			case HIGH -> AmbienceSoundEvents.WIND_CAVE_STRONG;
