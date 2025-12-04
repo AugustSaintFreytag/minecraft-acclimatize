@@ -74,7 +74,7 @@ public abstract class AtmosphericSoundHandlerMixin {
 			var soundVolume = sound.getVolume(world);
 			var modifiedSoundVolume = MathUtil.lerp(soundVolume, soundVolume * soundVolumeFactor, fadeTickProgress);
 
-			((AtmosphericSoundInstanceAccessor) soundInstance).acclimatize$setVolume(modifiedSoundVolume);
+			((AbstractSoundInstanceAccessor) soundInstance).acclimatize$setVolume(modifiedSoundVolume);
 			numberOfAdjustedSounds.incrementAndGet();
 		});
 
