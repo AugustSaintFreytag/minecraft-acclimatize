@@ -54,10 +54,10 @@ public final class WorldUtil {
 		var isBelowSurface = caveDepth > 8;
 
 		var blockEnvironment = getCachedOrEvaluatedBlockEnvironment(world, player);
-		var isCaveLikeEnvironment = blockEnvironment.caveBlockPercentage > 0.85 && blockEnvironment.skyExposedBlockPercentage < 0.05
-				&& blockEnvironment.averageBlockLightLevel < 5.0;
+		var isAirOnlyEnvironment = blockEnvironment.airBlockPercentage > 0.90;
+		var isCaveLikeEnvironment = blockEnvironment.caveBlockPercentage > 0.80 && blockEnvironment.skyExposedBlockPercentage < 0.05;
 
-		return isBelowSurface && isCaveLikeEnvironment;
+		return isBelowSurface && (isAirOnlyEnvironment || isCaveLikeEnvironment);
 	}
 
 	// Cave Depth
@@ -159,11 +159,13 @@ public final class WorldUtil {
 			}
 		}
 
-		var caveBlockPercentage = (double) numberOfCaveBlocks / (double) numberOfSolidBlocks;
-		var skyExposedBlocksPercentage = (double) numberOfSkyExposedBlocks / (double) numberOfSolidBlocks;
-		var averageLightLevel = (double) totalLightValue / (double) numberOfAirBlocks;
+		var airBlockPercentage = (double) numberOfAirBlocks / (double) numberOfBlocks;
+		var caveBlockPercentage = numberOfSolidBlocks > 0 ? (double) numberOfCaveBlocks / (double) numberOfSolidBlocks : 0.0;
+		var skyExposedBlocksPercentage = numberOfSolidBlocks > 0 ? (double) numberOfSkyExposedBlocks / (double) numberOfSolidBlocks : 0.0;
+		var averageLightLevel = numberOfAirBlocks > 0 ? (double) totalLightValue / (double) numberOfAirBlocks : 0.0;
 
-		var properties = new BlockEnvironmentProperties(caveBlockPercentage, skyExposedBlocksPercentage, averageLightLevel);
+		var properties = new BlockEnvironmentProperties(airBlockPercentage, caveBlockPercentage, skyExposedBlocksPercentage,
+				averageLightLevel);
 
 		if (Mod.CONFIG.enableLogging) {
 			Mod.LOGGER.info(
@@ -175,7 +177,8 @@ public final class WorldUtil {
 		return properties;
 	}
 
-	private record BlockEnvironmentProperties(double caveBlockPercentage, double skyExposedBlockPercentage, double averageBlockLightLevel) {
+	private record BlockEnvironmentProperties(double airBlockPercentage, double caveBlockPercentage, double skyExposedBlockPercentage,
+			double averageBlockLightLevel) {
 	};
 
 }
