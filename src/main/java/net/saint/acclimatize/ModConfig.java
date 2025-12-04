@@ -140,12 +140,16 @@ public class ModConfig implements ConfigData {
 	public double endBiomeTemperature = 10;
 
 	@ConfigEntry.Category("world")
-	@Comment("The number of rays cast in a cone shape around the player to check for an interior space. Higher number means more precision but higher cost. (Default: 12)")
-	public int spaceNumberOfRays = 12;
+	@Comment("The number of rays cast in a cone shape around the player to check for an interior space. Higher values are more accurate but take longer to detect an interior. (Default: 10)")
+	public int spaceNumberOfRaysTotal = 10;
 
 	@ConfigEntry.Category("world")
-	@Comment("The length of the rays cast around the player to check for an interior space. Higher means more coverage but higher cost. (Default: 32)")
-	public int spaceRayLength = 32;
+	@Comment("The number of rays cast per tick to check for an interior space. Higher values mean faster results but higher cost. Scales per player, done server-side. (Default: 2)")
+	public int spaceNumberOfRaysCastPerTick = 2;
+
+	@ConfigEntry.Category("world")
+	@Comment("The length of the rays cast around the player to check for an interior space. Higher means more coverage but higher cost. (Default: 36)")
+	public int spaceRayLength = 36;
 
 	// Blocks
 
@@ -275,18 +279,6 @@ public class ModConfig implements ConfigData {
 	public boolean enableWind = true;
 
 	@ConfigEntry.Category("wind")
-	@Comment("Toggles wind ambient sounds based on biome, wind intensity, and exterior/interior state. (Default: true)")
-	public boolean enableWindSounds = true;
-
-	@ConfigEntry.Category("wind")
-	@Comment("The base volume for all wind ambient sounds. (Default: 1.0)")
-	public float windSoundVolume = 1.0f;
-
-	@ConfigEntry.Category("wind")
-	@Comment("Scales how strongly wind intensity affects volume. 1.0 produces a broad range, lower values soften the impact. (Default: 1.0)")
-	public double windSoundIntensityFactor = 1.0;
-
-	@ConfigEntry.Category("wind")
 	@Comment("The base number of ticks until wind direction is updated, plus randomization. (Default: 6000)")
 	public int windDirectionUpdateInterval = 6000;
 
@@ -317,6 +309,28 @@ public class ModConfig implements ConfigData {
 	@ConfigEntry.Category("wind")
 	@Comment("How many blocks long wind rays are. Increase for larger spaces. (Default: 8)")
 	public int windRayLength = 8;
+
+	// Sounds
+
+	@ConfigEntry.Category("sounds")
+	@Comment("Toggles wind ambient sounds based on biome, wind intensity, and exterior/interior state. (Default: true)")
+	public boolean enableAmbientSounds = true;
+
+	@ConfigEntry.Category("sounds")
+	@Comment("Replaces vanilla rain sound playback with custom sounds. Required to fade rain sound playback in interiors. Only affects exterior sounds. (Default: true)")
+	public boolean enableRainSounds = true;
+
+	@ConfigEntry.Category("sounds")
+	@Comment("The base volume for all added ambient sounds. (Default: 1.0)")
+	public float ambientSoundVolume = 1.0f;
+
+	@ConfigEntry.Category("sounds")
+	@Comment("The base volume for rain ambient sounds. Only used when enabled. (Default: 1.0)")
+	public float rainSoundVolume = 1.0f;
+
+	@ConfigEntry.Category("sounds")
+	@Comment("Scales how strongly wind intensity affects ambient sound volume. 1.0 produces a broad range, lower values soften the impact. (Default: 1.0)")
+	public double ambientSoundWindIntensityFactor = 1.0;
 
 	// Particles
 
@@ -379,8 +393,16 @@ public class ModConfig implements ConfigData {
 	public boolean enableAmbientSoundsInterop = true;
 
 	@ConfigEntry.Category("compatibility")
+	@Comment("Fades Atmosfera sound volume when in interior spaces. Only used if mod is installed. (Default: true)")
+	public boolean enableAtmosferaInterop = true;
+
+	@ConfigEntry.Category("compatibility")
 	@Comment("The volume factor applied to mod ambient sounds when in an interior space. (Default: 0.2)")
-	public double interiorSoundSuppressionFactor = 0.2;
+	public float interiorSoundSuppressionFactor = 0.2f;
+
+	@ConfigEntry.Category("compatibility")
+	@Comment("The duration of smoothly transitioning from one volume level to another, in ticks. (Default: 40)")
+	public int soundSuppressionTransitionTicks = 40;
 
 	// Developer
 

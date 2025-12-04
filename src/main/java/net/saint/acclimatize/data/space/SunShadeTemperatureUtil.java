@@ -6,18 +6,15 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.saint.acclimatize.Mod;
-import net.saint.acclimatize.data.biome.BiomeTemperatureUtil;
 
 public final class SunShadeTemperatureUtil {
 
-	public static double sunShadeTemperatureDelta(ServerPlayerEntity player, boolean isInInterior) {
+	public static double sunShadeTemperatureDelta(ServerPlayerEntity player, double biomeBaseTemperature, boolean isInInterior) {
 		// If player is in interior or not exposed to sun, return 0.
 		if (!isInInterior && playerIsExposedToSun(player)) {
 			return 0.0;
 		}
 
-		var world = player.getWorld();
-		var biomeBaseTemperature = BiomeTemperatureUtil.biomeTemperatureForPosition(world, player.getBlockPos());
 		var biomeTemperatureFactor = (1 + biomeBaseTemperature / 100) * Mod.CONFIG.sunShadeBiomeTemperatureFactor;
 		var sunShadeTemperatureDelta = Mod.CONFIG.sunShadeTemperatureDelta * biomeTemperatureFactor;
 

@@ -17,7 +17,7 @@ public class WindParticleUtil {
 		var player = client.player;
 		var world = client.world;
 
-		if (player == null || world == null || ModClient.getIsPlayerInInterior()) {
+		if (player == null || world == null || player.isSubmergedInWater() || ModClient.getIsPlayerInInterior()) {
 			return;
 		}
 
@@ -31,6 +31,10 @@ public class WindParticleUtil {
 				: 1.0;
 
 		var effectiveRate = spawnRate * normalizedIntensity;
+
+		if (world.isRaining()) {
+			effectiveRate *= 1.5;
+		}
 
 		var spawnCount = (int) effectiveRate;
 		var fractional = effectiveRate - spawnCount;

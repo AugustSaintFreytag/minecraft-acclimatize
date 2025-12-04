@@ -2,6 +2,7 @@ package net.saint.acclimatize.mixin.compat.ambientsounds;
 
 import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,10 +18,6 @@ import team.creative.ambientsounds.sound.AmbientSoundEngine;
 
 @Mixin(AmbientSoundEngine.class)
 public abstract class AmbientSoundEngineMixin {
-
-	// Configuration
-
-	private static final int INTERIOR_TRANSITION_TICKS = 40; // 2 seconds
 
 	// Properties (Shadowed)
 
@@ -48,26 +45,27 @@ public abstract class AmbientSoundEngineMixin {
 			ticksSinceLastStateChange++;
 		}
 
-		var fadeTickProgress = MathUtil.clamp((float) ticksSinceLastStateChange / INTERIOR_TRANSITION_TICKS, 0.0f, 1.0f);
+		var fadeTickProgress = MathUtil.clamp((float) ticksSinceLastStateChange / Mod.CONFIG.soundSuppressionTransitionTicks, 0.0f, 1.0f);
+		var soundVolumeFactor = assumesInterior ? Mod.CONFIG.interiorSoundSuppressionFactor : 1.0f;
+		var numberOfAdjustedSounds = new AtomicInteger(0);
 
 		synchronized (sounds) {
 			try {
 				for (SoundStream sound : sounds) {
 					var soundVolume = getEffectiveSoundVolume(sound);
-					var soundVolumeFactor = assumesInterior ? (float) Mod.CONFIG.interiorSoundSuppressionFactor : 1.0f;
 					var modifiedSoundVolume = MathUtil.lerp(soundVolume, soundVolume * soundVolumeFactor, fadeTickProgress);
 
 					sound.generatedVoume = modifiedSoundVolume;
-
-					if (Mod.CONFIG.enableLogging && soundVolume != modifiedSoundVolume && fadeTickProgress != 1.0f) {
-						Mod.LOGGER.info(
-								"Adjusted Ambient Sounds mod sound volume: originalVolume={}, adjustedVolume={}, isInterior={}, fadeTickProgress={}",
-								soundVolume, modifiedSoundVolume, assumesInterior, fadeTickProgress);
-					}
+					numberOfAdjustedSounds.incrementAndGet();
 				}
 			} catch (ConcurrentModificationException e) {
 				Mod.LOGGER.warn("Concurrent modification detected when adjusting ambient sound volumes for interior suppression.", e);
 			}
+		}
+
+		if (Mod.CONFIG.enableLogging && fadeTickProgress != 1.0f && ticksSinceLastStateChange % 10 == 0) {
+			Mod.LOGGER.info("Transitioning volumes for {} ambient sound(s) (interior: {}, progress: {}).", numberOfAdjustedSounds.get(),
+					assumesInterior, fadeTickProgress);
 		}
 	}
 
