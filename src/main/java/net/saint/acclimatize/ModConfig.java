@@ -393,6 +393,10 @@ public class ModConfig implements ConfigData {
 	public boolean enableAmbientSoundsInterop = true;
 
 	@ConfigEntry.Category("compatibility")
+	@Comment("Fades Atmosfera sound volume when in interior spaces. Only used if mod is installed. (Default: true)")
+	public boolean enableAtmosferaInterop = true;
+
+	@ConfigEntry.Category("compatibility")
 	@Comment("The volume factor applied to mod ambient sounds when in an interior space. (Default: 0.2)")
 	public float interiorSoundSuppressionFactor = 0.2f;
 

@@ -17,19 +17,20 @@ public final class ModMixinPlugin implements IMixinConfigPlugin {
 
 	private static final Supplier<Boolean> TRUE = () -> true;
 
-	private static final Map<String, Supplier<Boolean>> CONDITIONS = ImmutableMap.of(
-			"net.saint.acclimatize.mixin.compat.fallingleaves.FallingLeafParticleMixin",
-			() -> FabricLoader.getInstance().isModLoaded("fallingleaves"),
-			"net.saint.acclimatize.mixin.compat.particlerain.RainParticleMixin",
-			() -> FabricLoader.getInstance().isModLoaded("particlerain"),
-			"net.saint.acclimatize.mixin.compat.dynamicsurroundings.CeilingScannerMixin",
-			() -> FabricLoader.getInstance().isModLoaded("dsurround"),
-			"net.saint.acclimatize.mixin.compat.dynamicsurroundings.SoundVolumeEvaluatorMixin",
-			() -> FabricLoader.getInstance().isModLoaded("dsurround"),
-			"net.saint.acclimatize.mixin.compat.ambientsounds.AmbientSoundEngineMixin",
-			() -> FabricLoader.getInstance().isModLoaded("ambientsounds")
-
-	);
+	private static final Map<String, Supplier<Boolean>> CONDITIONS = ImmutableMap.<String, Supplier<Boolean>>builder()
+			.put("net.saint.acclimatize.mixin.compat.fallingleaves.FallingLeafParticleMixin",
+					() -> FabricLoader.getInstance().isModLoaded("fallingleaves"))
+			.put("net.saint.acclimatize.mixin.compat.particlerain.RainParticleMixin",
+					() -> FabricLoader.getInstance().isModLoaded("particlerain"))
+			.put("net.saint.acclimatize.mixin.compat.dynamicsurroundings.CeilingScannerMixin",
+					() -> FabricLoader.getInstance().isModLoaded("dsurround"))
+			.put("net.saint.acclimatize.mixin.compat.dynamicsurroundings.SoundVolumeEvaluatorMixin",
+					() -> FabricLoader.getInstance().isModLoaded("dsurround"))
+			.put("net.saint.acclimatize.mixin.compat.ambientsounds.AmbientSoundEngineMixin",
+					() -> FabricLoader.getInstance().isModLoaded("ambientsounds"))
+			.put("net.saint.acclimatize.mixin.compat.atmosfera.AtmosphericSoundHandlerMixin",
+					() -> FabricLoader.getInstance().isModLoaded("atmosfera"))
+			.build();
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {

@@ -45,14 +45,14 @@ public abstract class AmbientSoundEngineMixin {
 			ticksSinceLastStateChange++;
 		}
 
-		var numberOfAdjustedSounds = new AtomicInteger(0);
 		var fadeTickProgress = MathUtil.clamp((float) ticksSinceLastStateChange / Mod.CONFIG.soundSuppressionTransitionTicks, 0.0f, 1.0f);
+		var soundVolumeFactor = assumesInterior ? Mod.CONFIG.interiorSoundSuppressionFactor : 1.0f;
+		var numberOfAdjustedSounds = new AtomicInteger(0);
 
 		synchronized (sounds) {
 			try {
 				for (SoundStream sound : sounds) {
 					var soundVolume = getEffectiveSoundVolume(sound);
-					var soundVolumeFactor = assumesInterior ? Mod.CONFIG.interiorSoundSuppressionFactor : 1.0f;
 					var modifiedSoundVolume = MathUtil.lerp(soundVolume, soundVolume * soundVolumeFactor, fadeTickProgress);
 
 					sound.generatedVoume = modifiedSoundVolume;
@@ -63,8 +63,8 @@ public abstract class AmbientSoundEngineMixin {
 			}
 		}
 
-		if (Mod.CONFIG.enableLogging && fadeTickProgress != 1.0f) {
-			Mod.LOGGER.info("Adjusted volumes for {} ambient sound(s) (interior: {}, progress: {}).", numberOfAdjustedSounds.get(),
+		if (Mod.CONFIG.enableLogging && fadeTickProgress != 1.0f && ticksSinceLastStateChange % 10 == 0) {
+			Mod.LOGGER.info("Transitioning volumes for {} ambient sound(s) (interior: {}, progress: {}).", numberOfAdjustedSounds.get(),
 					assumesInterior, fadeTickProgress);
 		}
 	}

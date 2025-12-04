@@ -92,6 +92,12 @@ dependencies {
 		transitive = false
 	}
 
+	// Atmosfera
+
+	modImplementation("maven.modrinth:atmosfera:${project.atmosfera_version}") {
+		transitive = false
+	}
+
 }
 
 processResources {
