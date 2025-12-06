@@ -50,8 +50,13 @@ public final class WorldUtil {
 			return false;
 		}
 
-		var caveDepth = getApproximateCaveDepth(world, position);
-		var isBelowSurface = caveDepth > 8;
+		var caveDepth = getApproximateAbsoluteCaveDepth(world, position);
+		var isBelowSurface = caveDepth > 2;
+		var isDeepBelowSurface = caveDepth > 38;
+
+		if (isDeepBelowSurface) {
+			return true;
+		}
 
 		var blockEnvironment = getCachedOrEvaluatedBlockEnvironment(world, player);
 		var isAirOnlyEnvironment = blockEnvironment.airBlockPercentage > 0.90;
@@ -62,9 +67,13 @@ public final class WorldUtil {
 
 	// Cave Depth
 
-	public static int getApproximateCaveDepth(World world, BlockPos position) {
+	public static int getApproximateRelativeCaveDepth(World world, BlockPos position) {
 		var surfaceY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, position.getX(), position.getZ());
 		return Math.max(0, surfaceY - position.getY());
+	}
+
+	public static int getApproximateAbsoluteCaveDepth(World world, BlockPos position) {
+		return Math.max(0, world.getSeaLevel() - position.getY());
 	}
 
 	// Cave Ceiling Check
