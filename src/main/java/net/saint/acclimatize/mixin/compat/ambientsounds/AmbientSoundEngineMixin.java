@@ -51,18 +51,15 @@ public abstract class AmbientSoundEngineMixin {
 		var world = client.world;
 		var player = client.player;
 
+		var isInCave = WorldUtil.isInCave(world, player);
+
 		var fadeTickProgress = MathUtil.clamp((float) ticksSinceLastStateChange / Mod.CONFIG.soundSuppressionTransitionTicks, 0.0f, 1.0f);
-		var soundVolumeFactor = assumesInterior ? Mod.CONFIG.interiorSoundSuppressionFactor : 1.0f;
+		var soundVolumeFactor = assumesInterior && !isInCave ? Mod.CONFIG.interiorSoundSuppressionFactor : 1.0f;
 		var numberOfAdjustedSounds = new AtomicInteger(0);
 
 		synchronized (sounds) {
 			try {
 				for (SoundStream sound : sounds) {
-					if (WorldUtil.isInCave(world, player)) {
-						// Allow full ambient sounds in caves, assume reliable detection.
-						continue;
-					}
-
 					var soundVolume = getEffectiveSoundVolume(sound);
 					var modifiedSoundVolume = MathUtil.lerp(soundVolume, soundVolume * soundVolumeFactor, fadeTickProgress);
 
@@ -70,8 +67,8 @@ public abstract class AmbientSoundEngineMixin {
 					numberOfAdjustedSounds.incrementAndGet();
 
 					if (Mod.CONFIG.enableLogging && fadeTickProgress != 1.0f) {
-						Mod.LOGGER.info("Transitioning volumes for ambient sound '{}' (interior: {}, progress: {}).", description,
-								assumesInterior, fadeTickProgress);
+						Mod.LOGGER.info("Transitioning volumes for ambient sound (interior: {}, cave: {}, progress: {}).", assumesInterior,
+								isInCave, fadeTickProgress);
 					}
 				}
 			} catch (ConcurrentModificationException e) {
