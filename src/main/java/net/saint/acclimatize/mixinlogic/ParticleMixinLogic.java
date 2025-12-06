@@ -2,6 +2,7 @@ package net.saint.acclimatize.mixinlogic;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.AshParticle;
 import net.minecraft.client.particle.LargeFireSmokeParticle;
 import net.minecraft.client.particle.RainSplashParticle;
@@ -18,6 +19,7 @@ import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.ModClient;
 import net.saint.acclimatize.compat.FallingLeafParticleCompat;
 import net.saint.acclimatize.compat.ParticleRainParticleCompat;
+import net.saint.acclimatize.data.world.WorldUtil;
 import net.saint.acclimatize.util.MathUtil;
 
 public interface ParticleMixinLogic {
@@ -29,6 +31,8 @@ public interface ParticleMixinLogic {
 	public void setPosition(Vec3d position);
 
 	Box getBoundingBox();
+
+	MinecraftClient getClient();
 
 	ClientWorld getWorld();
 
@@ -87,7 +91,14 @@ public interface ParticleMixinLogic {
 			return 1.0;
 		}
 
+		var client = getClient();
 		var world = getWorld();
+		var player = client.player;
+
+		if (WorldUtil.isInCave(world, player)) {
+			// In cave, no wind influence.
+			return 1.0;
+		}
 
 		// Define how far back in wind origin direction we should check.
 		var range = 4;
