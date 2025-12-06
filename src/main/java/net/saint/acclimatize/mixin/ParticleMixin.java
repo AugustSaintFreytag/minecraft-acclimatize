@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.Vec3d;
@@ -74,6 +75,11 @@ public abstract class ParticleMixin implements ParticleMixinLogic, ParticleAcces
 		this.x = position.getX();
 		this.y = position.getY();
 		this.z = position.getZ();
+	}
+
+	@Override
+	public MinecraftClient getClient() {
+		return MinecraftClient.getInstance();
 	}
 
 	@Override
