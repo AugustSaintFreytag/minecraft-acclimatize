@@ -18,6 +18,8 @@ public final class WorldUtil {
 
 	private static final int CAVE_BLOCK_SCAN_RANGE = 5;
 
+	private static final int RAIN_DETECTION_SCAN_OFFSET = 8;
+
 	// State
 
 	private static BlockEnvironmentProperties lastProperties;
@@ -29,15 +31,28 @@ public final class WorldUtil {
 	// Rain Detection
 
 	public static boolean isRaining(World world, PlayerEntity player) {
-		var position = player.getBlockPos();
+		// Perform check in 4 surrounding positions to account for rain drift.
+		// Check player position plus each cardinal direction, offset by scan offset.
+
+		var origin = player.getBlockPos();
+		var positions = new BlockPos[] { origin, origin.add(RAIN_DETECTION_SCAN_OFFSET, 0, 0),
+				origin.add(-RAIN_DETECTION_SCAN_OFFSET, 0, 0), origin.add(0, 0, RAIN_DETECTION_SCAN_OFFSET),
+				origin.add(0, 0, -RAIN_DETECTION_SCAN_OFFSET) };
+
+		for (var pos : positions) {
+			if (isRainingAtPosition(world, pos)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static boolean isRainingAtPosition(World world, BlockPos position) {
 		var biome = world.getBiome(position);
 		var precipitation = biome.value().getPrecipitation(position);
 
-		if (precipitation == Precipitation.SNOW) {
-			return false;
-		}
-
-		return world.isRaining();
+		return world.isRaining() && precipitation == Precipitation.RAIN;
 	}
 
 	// Cave Detection
