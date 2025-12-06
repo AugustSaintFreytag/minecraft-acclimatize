@@ -202,7 +202,7 @@ public final class AmbienceSoundManager {
 
 	private static float volumeFactorForProperties(World world, BlockPos position, AmbienceStateProperties properties) {
 		if (properties.isCave()) {
-			var caveDepth = WorldUtil.getApproximateCaveDepth(world, position);
+			var caveDepth = WorldUtil.getApproximateRelativeCaveDepth(world, position);
 			var caveDepthFactor = 1 - MathUtil.clamp((float) caveDepth / 36.0f, 0.0f, 1.0f);
 			return Math.max(0.15f, CAVE_VOLUME_MULTIPLIER * caveDepthFactor);
 		}

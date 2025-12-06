@@ -79,7 +79,7 @@ public abstract class AtmosphericSoundHandlerMixin {
 			numberOfAdjustedSounds.incrementAndGet();
 		});
 
-		if (Mod.CONFIG.enableLogging && fadeTickProgress != 1.0f && ticksSinceLastStateChange % 10 == 0) {
+		if (Mod.CONFIG.enableLogging && fadeTickProgress != 1.0f) {
 			Mod.LOGGER.info("Transitioning volumes for {} atmosfera sound(s) (interior: {}, progress: {}).", numberOfAdjustedSounds.get(),
 					assumesInterior, fadeTickProgress);
 		}
