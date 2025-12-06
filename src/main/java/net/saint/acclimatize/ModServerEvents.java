@@ -17,7 +17,15 @@ import net.saint.acclimatize.server.ServerStateUtil;
 
 public final class ModServerEvents {
 
+	private static boolean didRegisterServerEvents = false;
+
 	public static void registerServerEvents() {
+		if (didRegisterServerEvents) {
+			return;
+		}
+
+		didRegisterServerEvents = true;
+
 		if (Mod.CONFIG.enableLogging) {
 			Mod.LOGGER.info("Registering server events.");
 		}
