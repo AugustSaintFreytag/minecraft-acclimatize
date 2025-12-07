@@ -6,6 +6,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.world.ClientWorld;
@@ -49,6 +50,16 @@ public class ModClient implements ClientModInitializer {
 		setUpNetworkingPacketRegistration();
 		setUpItemTooltipCallback();
 		setUpClientEvents();
+	}
+
+	// Globals
+
+	public static MinecraftClient getClient() {
+		return MinecraftClient.getInstance();
+	}
+
+	public static ClientPlayerEntity getPlayer() {
+		return getClient().player;
 	}
 
 	// Access

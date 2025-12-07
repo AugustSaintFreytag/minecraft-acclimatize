@@ -78,12 +78,30 @@ public interface ParticleMixinLogic {
 		var particleDirection = new Vec3d(MathUtil.cos(direction), 0, MathUtil.sin(direction));
 
 		var baseFactor = windInfluenceFactorForUnblockedOppositeDirection(particlePosition, particleDirection);
+		var spaceFactor = windInfluenceForCurrentSpace();
 		var typeFactor = windInfluenceFactorForParticleType();
 
-		return baseFactor * typeFactor * Mod.CONFIG.particleWindEffectFactor;
+		return baseFactor * spaceFactor * typeFactor * Mod.CONFIG.particleWindEffectFactor;
 	}
 
 	// Calculation Details
+
+	private double windInfluenceForCurrentSpace() {
+		var player = ModClient.getPlayer();
+		var world = getWorld();
+
+		if (WorldUtil.isInCave(world, player)) {
+			// In cave, no wind influence.
+			return 0.0;
+		}
+
+		if (ModClient.getIsPlayerInInterior()) {
+			// Player is in interior, minor wind influence.
+			return 0.25;
+		}
+
+		return 1.0;
+	}
 
 	private double windInfluenceFactorForUnblockedOppositeDirection(Vec3d particlePosition, Vec3d windDirection) {
 		if (!Mod.CONFIG.enableParticleBlockChecks) {
@@ -91,14 +109,7 @@ public interface ParticleMixinLogic {
 			return 1.0;
 		}
 
-		var client = getClient();
 		var world = getWorld();
-		var player = client.player;
-
-		if (WorldUtil.isInCave(world, player)) {
-			// In cave, no wind influence.
-			return 1.0;
-		}
 
 		// Define how far back in wind origin direction we should check.
 		var range = 4;
