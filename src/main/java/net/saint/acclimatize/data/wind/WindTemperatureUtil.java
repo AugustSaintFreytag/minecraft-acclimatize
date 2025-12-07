@@ -25,6 +25,7 @@ public final class WindTemperatureUtil {
 	// Configuration
 
 	private static final double WIND_RAY_TURBULENCE = Math.toRadians(35);
+	private static final int WIND_LOW_ELEVATION_CUTOFF = 20;
 
 	// State
 
@@ -50,13 +51,23 @@ public final class WindTemperatureUtil {
 			return 0.0;
 		}
 
+		if (player.getBlockPos().getY() <= WIND_LOW_ELEVATION_CUTOFF) {
+			cleanUpPlayerData(player);
+			return 0.0;
+		}
+
 		// Base Wind Temperature
 
 		var windTemperature = serverState.windIntensity * Mod.CONFIG.windChillFactor;
 
+		// Elevation Wind Factor
+
+		var elevationWindFactor = elevationWindFactorForPlayer(player);
+		windTemperature *= elevationWindFactor;
+
 		// Precipitation Wind Chill
 
-		var precipitationWindFactor = precipitationTemperatureFactorForPlayer(serverState, player);
+		var precipitationWindFactor = precipitationWindFactorForPlayer(serverState, player);
 		windTemperature *= precipitationWindFactor;
 
 		// Wind Raycast Hit Factor
@@ -70,7 +81,25 @@ public final class WindTemperatureUtil {
 		return windTemperature;
 	}
 
-	private static double precipitationTemperatureFactorForPlayer(ServerState serverState, ServerPlayerEntity player) {
+	private static double elevationWindFactorForPlayer(ServerPlayerEntity player) {
+		var positionY = player.getBlockPos().getY();
+
+		if (positionY <= 20) {
+			return 0.0;
+		}
+
+		if (positionY <= 60) {
+			return (positionY - 20) / 40.0;
+		}
+
+		if (positionY <= 100) {
+			return 1.0 + (positionY - 60) / 80.0;
+		}
+
+		return 1.5;
+	}
+
+	private static double precipitationWindFactorForPlayer(ServerState serverState, ServerPlayerEntity player) {
 		var world = player.getWorld();
 		var position = player.getBlockPos();
 		var biome = world.getBiome(position).value();
