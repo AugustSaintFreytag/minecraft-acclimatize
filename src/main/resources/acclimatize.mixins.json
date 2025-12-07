@@ -11,12 +11,12 @@
 		"PlayerStatusEffectsMixin",
 		"SoundSystemMixin",
 		"SuspendedParticleMixin",
-		"compat/fallingleaves/FallingLeafParticleMixin",
-		"compat/particlerain/RainParticleMixin",
-		"compat/dynamicsurroundings/CeilingScannerMixin",
-		"compat/dynamicsurroundings/SoundVolumeEvaluatorMixin",
-		"compat/ambientsounds/AmbientSoundEngineMixin",
-		"compat/atmosfera/AtmosphericSoundHandlerMixin"
+		"compat.fallingleaves.FallingLeafParticleMixin",
+		"compat.particlerain.RainParticleMixin",
+		"compat.dynamicsurroundings.CeilingScannerMixin",
+		"compat.dynamicsurroundings.SoundVolumeEvaluatorMixin",
+		"compat.ambientsounds.AmbientSoundEngineMixin",
+		"compat.atmosfera.AtmosphericSoundHandlerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
