@@ -73,9 +73,11 @@ public final class SpaceUtil {
 	}
 
 	private static boolean performStandaloneRaycastForPositionInInterior(World world, ServerPlayerEntity player) {
-		var origin = player.getPos();
 		var rayLength = Mod.CONFIG.spaceRayLength;
 		var direction = new Vec3d(0, 1, 0);
+
+		// Define origin as slightly above player position to avoid self or vehicle collision.
+		var origin = player.getPos().add(direction);
 		var target = origin.add(direction.multiply(rayLength));
 
 		var hitResult = world
