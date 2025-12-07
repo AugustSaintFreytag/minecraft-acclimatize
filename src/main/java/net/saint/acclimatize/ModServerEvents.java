@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.World;
 import net.saint.acclimatize.data.player.PlayerEffectsUtil;
 import net.saint.acclimatize.data.player.PlayerTemperatureUtil;
 import net.saint.acclimatize.data.space.SpaceUtil;
@@ -17,7 +18,11 @@ import net.saint.acclimatize.server.ServerStateUtil;
 
 public final class ModServerEvents {
 
+	// State
+
 	private static boolean didRegisterServerEvents = false;
+
+	// Logic
 
 	public static void registerServerEvents() {
 		if (didRegisterServerEvents) {
@@ -65,7 +70,15 @@ public final class ModServerEvents {
 			WindUtil.tickWindInSchedule(serverWorld, serverState);
 		});
 
-		ServerTickEvents.END_SERVER_TICK.register(server -> {
+		ServerTickEvents.END_WORLD_TICK.register(world -> {
+			var server = world.getServer();
+
+			if (world.getRegistryKey() != World.OVERWORLD) {
+				// All end tick callbacks are called thrice by default.
+				// Filter out ticks for non-overworld dimensions.
+				return;
+			}
+
 			tickServerInSchedule(server);
 			tickAllPlayersInSchedule(server);
 		});
@@ -83,6 +96,7 @@ public final class ModServerEvents {
 
 		for (var player : server.getPlayerManager().getPlayerList()) {
 			var playerState = ServerStateUtil.getPlayerState(player);
+
 			tickPlayerInSchedule(serverState, playerState, player);
 
 			if (serverState.isDirty() || playerState.isDirty()) {
