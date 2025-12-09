@@ -34,9 +34,9 @@ public final class SpaceUtil {
 		var world = player.getWorld();
 
 		// Pre-check by raycasting once straight up from player position.
-		var preCheckIsInInterior = performStandaloneRaycastForPositionInInterior(world, player);
+		var preCheckRaycastIsInInterior = performStandaloneRaycastForPositionInInterior(world, player);
 
-		if (!preCheckIsInInterior) {
+		if (!preCheckRaycastIsInInterior) {
 			// Pre-check raycast hit did not hit blocks, assume exterior.
 			// Having a single block above your head does not make an interior
 			// but having no block above your head definitively makes an exterior.
@@ -70,6 +70,15 @@ public final class SpaceUtil {
 		}
 
 		return true;
+	}
+
+	private static boolean checkPlayerStandingOnNonExteriorBlock(ServerPlayerEntity player) {
+		var world = player.getWorld();
+		var playerPos = BlockPos.ofFloored(player.getPos());
+		var blockBelowPos = playerPos.down();
+		var blockBelowState = world.getBlockState(blockBelowPos);
+
+		return !blockBelowState.isIn(ModTags.OUTDOOR_BLOCKS);
 	}
 
 	private static boolean performStandaloneRaycastForPositionInInterior(World world, ServerPlayerEntity player) {
@@ -120,9 +129,9 @@ public final class SpaceUtil {
 		playerSpaceIndices.put(playerId, currentIndex);
 
 		// Count rays that hit sky - any hit means we're outside
-		for (boolean hitSky : buffer) {
-			if (hitSky) {
-				// Found a ray that hit sky, player is outdoors
+		for (var didHitVoid : buffer) {
+			if (didHitVoid) {
+				// Found a ray that hit sky, assume exterior space
 				return false;
 			}
 		}
