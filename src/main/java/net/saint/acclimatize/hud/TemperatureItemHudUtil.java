@@ -5,6 +5,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.ModClient;
+import net.saint.acclimatize.ModItems;
 
 public class TemperatureItemHudUtil {
 
@@ -18,7 +19,7 @@ public class TemperatureItemHudUtil {
 		var offHand = player.getOffHandStack();
 
 		if (!Mod.CONFIG.enableThermometerTemperatureDisplay
-				|| (!mainHand.isOf(Mod.THERMOMETER_ITEM) && !offHand.isOf(Mod.THERMOMETER_ITEM))) {
+				|| (!mainHand.isOf(ModItems.THERMOMETER_ITEM) && !offHand.isOf(ModItems.THERMOMETER_ITEM))) {
 			return;
 		}
 

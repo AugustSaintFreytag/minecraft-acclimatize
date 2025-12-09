@@ -5,7 +5,6 @@ import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.data.biome.BiomeTemperatureUtil;
 import net.saint.acclimatize.data.block.BlockTemperatureUtil;
 import net.saint.acclimatize.data.item.ItemTemperatureUtil;
-import net.saint.acclimatize.data.space.SpaceUtil;
 import net.saint.acclimatize.data.space.SunShadeTemperatureUtil;
 import net.saint.acclimatize.data.wind.WindTemperatureUtil;
 import net.saint.acclimatize.player.PlayerState;
@@ -31,8 +30,10 @@ public class PlayerTemperatureUtil {
 	public static void tickPlayerTemperature(ServerPlayerEntity player, ServerState serverState, PlayerState playerState) {
 		// Prerequisites
 
+		Mod.PLAYER_SPACE_MANAGER.getManagerForPlayer(player).tick(player);
+
 		var bodyTemperature = playerState.bodyTemperature;
-		var isInInterior = SpaceUtil.checkPlayerIsInInterior(player);
+		var isInInterior = Mod.PLAYER_SPACE_MANAGER.getManagerForPlayer(player).isPlayerInInterior();
 
 		if ((player.isSpectator() || player.isCreative()) && !Mod.CONFIG.enableCreativeModeTemperature) {
 			playerState.isInInterior = isInInterior;

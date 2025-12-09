@@ -12,11 +12,20 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
 import net.saint.acclimatize.data.item.ItemTemperatureUtil;
+import net.saint.acclimatize.data.space.SpaceManager;
 import net.saint.acclimatize.networking.StateNetworkingPackets;
 import net.saint.acclimatize.networking.StateNetworkingPackets.TemperaturePacketTuple;
+import net.saint.acclimatize.sound.AmbienceSoundManager;
 import net.saint.acclimatize.util.MathUtil;
 
 public class ModClient implements ClientModInitializer {
+
+	// References
+
+	public static SpaceManager SPACE_MANAGER;
+	public static AmbienceSoundManager AMBIENCE_SOUND_MANAGER;
+
+	private static KeyBinding HUD_KEYBINDING;
 
 	// State
 
@@ -28,19 +37,9 @@ public class ModClient implements ClientModInitializer {
 	private static double lastWindIntensity = 0;
 	private static double lastWindDirection = 0;
 
-	private static boolean playerIsInInterior = false;
-
-	// References
-
-	private static KeyBinding enableHUDKeyBinding;
-
 	// Properties
 
 	public static boolean enableHUD = true;
-
-	private static ClientWorld getWorld() {
-		return MinecraftClient.getInstance().world;
-	}
 
 	// Init
 
@@ -50,12 +49,18 @@ public class ModClient implements ClientModInitializer {
 		setUpNetworkingPacketRegistration();
 		setUpItemTooltipCallback();
 		setUpClientEvents();
+		setUpAmbienceSoundManager();
+		setUpClientSpaceManager();
 	}
 
 	// Globals
 
 	public static MinecraftClient getClient() {
 		return MinecraftClient.getInstance();
+	}
+
+	private static ClientWorld getWorld() {
+		return getClient().world;
 	}
 
 	public static ClientPlayerEntity getPlayer() {
@@ -76,13 +81,12 @@ public class ModClient implements ClientModInitializer {
 		clientTickElapsed++;
 	}
 
-	public static void updateTemperatureValues(TemperaturePacketTuple values) {
+	public static void updateTemperatureValuesFromPacket(TemperaturePacketTuple values) {
 		var world = MinecraftClient.getInstance().world;
 		var serverTick = world.getTimeOfDay();
 		var previousValues = cachedTemperatureValues;
 
 		cachedTemperatureValues = values;
-		playerIsInInterior = values.isInInterior;
 
 		if (previousValues.windDirection != values.windDirection) {
 			lastWindDirection = previousValues.windDirection;
@@ -116,7 +120,7 @@ public class ModClient implements ClientModInitializer {
 	}
 
 	public static boolean getIsPlayerInInterior() {
-		return playerIsInInterior;
+		return SPACE_MANAGER.isPlayerInInterior();
 	}
 
 	public static double getWindIntensity() {
@@ -149,10 +153,10 @@ public class ModClient implements ClientModInitializer {
 	// Set-Up
 
 	private static void setUpKeybindings() {
-		enableHUDKeyBinding = KeyBindingHelper
+		HUD_KEYBINDING = KeyBindingHelper
 				.registerKeyBinding(new KeyBinding("Toggle Temperature GUI", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "Acclimatize"));
 
-		if (enableHUDKeyBinding.wasPressed()) {
+		if (HUD_KEYBINDING.wasPressed()) {
 			enableHUD = !enableHUD;
 		}
 	}
@@ -182,6 +186,25 @@ public class ModClient implements ClientModInitializer {
 
 			tooltip.add(Text.literal(prefix + temperature + " Temperature"));
 		});
+	}
+
+	// Space
+
+	public static void resetClientSpaceManager() {
+		SPACE_MANAGER.clearBuffer();
+	}
+
+	private static void setUpAmbienceSoundManager() {
+		AMBIENCE_SOUND_MANAGER = new AmbienceSoundManager();
+	}
+
+	private static void setUpClientSpaceManager() {
+		var spaceTickInterval = Mod.CONFIG.temperatureTickInterval / Math.max(1, Mod.CONFIG.clientTickFactor);
+		var spaceNumberOfRaysTotal = Mod.CONFIG.spaceNumberOfRaysTotal * Mod.CONFIG.clientRayCastFactor;
+		var spaceNumberOfRaysCastPerTick = Mod.CONFIG.spaceNumberOfRaysCastPerTick * Mod.CONFIG.clientTickFactor;
+		var spaceRayLength = Mod.CONFIG.spaceRayLength;
+
+		SPACE_MANAGER = new SpaceManager(spaceTickInterval, spaceNumberOfRaysTotal, spaceNumberOfRaysCastPerTick, spaceRayLength, true);
 	}
 
 }
