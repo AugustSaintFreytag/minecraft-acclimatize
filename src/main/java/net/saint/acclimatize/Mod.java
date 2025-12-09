@@ -30,6 +30,8 @@ public class Mod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Profiler PROFILER = Profiler.getProfiler(MOD_ID);
 
+	public static final PlayerSpaceProbeManager PLAYER_SPACE_PROBE_MANAGER = new PlayerSpaceProbeManager();
+
 	// Init
 
 	@Override

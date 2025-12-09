@@ -1,10 +1,6 @@
 package net.saint.acclimatize.data.space;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -14,7 +10,7 @@ import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.ModTags;
 import net.saint.acclimatize.util.MathUtil;
 
-public final class SpaceUtil {
+public final class SpaceProbeManager {
 
 	// Configuration
 
@@ -24,12 +20,13 @@ public final class SpaceUtil {
 
 	// State
 
-	private static final Map<UUID, boolean[]> playerSpaceBuffers = new HashMap<>();
-	private static final Map<UUID, Integer> playerSpaceIndices = new HashMap<>();
+	private boolean[] spaceBuffer = new boolean[Mod.CONFIG.spaceNumberOfRaysTotal];
+
+	private int spaceIndex = 0;
 
 	// Checks
 
-	public static boolean checkPlayerIsInInterior(ServerPlayerEntity player) {
+	public boolean checkPlayerIsInInterior(PlayerEntity player) {
 		var profile = Mod.PROFILER.begin("space_check");
 		var world = player.getWorld();
 
@@ -40,7 +37,7 @@ public final class SpaceUtil {
 			// Pre-check raycast hit did not hit blocks, assume exterior.
 			// Having a single block above your head does not make an interior
 			// but having no block above your head definitively makes an exterior.
-			cleanUpPlayerData(player);
+			clearBuffer();
 			profile.end();
 
 			if (Mod.CONFIG.enableLogging) {
@@ -72,7 +69,7 @@ public final class SpaceUtil {
 		return true;
 	}
 
-	private static boolean checkPlayerStandingOnNonExteriorBlock(ServerPlayerEntity player) {
+	private boolean checkPlayerStandingOnNonExteriorBlock(PlayerEntity player) {
 		var world = player.getWorld();
 		var playerPos = BlockPos.ofFloored(player.getPos());
 		var blockBelowPos = playerPos.down();
@@ -81,7 +78,7 @@ public final class SpaceUtil {
 		return !blockBelowState.isIn(ModTags.OUTDOOR_BLOCKS);
 	}
 
-	private static boolean performStandaloneRaycastForPositionInInterior(World world, ServerPlayerEntity player) {
+	private boolean performStandaloneRaycastForPositionInInterior(World world, PlayerEntity player) {
 		var rayLength = Mod.CONFIG.spaceRayLength;
 		var direction = new Vec3d(0, 1, 0);
 
@@ -95,7 +92,7 @@ public final class SpaceUtil {
 		return !raycastResultHitVoid(world, hitResult);
 	}
 
-	private static boolean performAccumulativeRaycastsForPositionInInterior(World world, ServerPlayerEntity player) {
+	private boolean performAccumulativeRaycastsForPositionInInterior(World world, PlayerEntity player) {
 		var raysPerTick = Mod.CONFIG.spaceNumberOfRaysCastPerTick;
 		var lastResult = false;
 
@@ -106,30 +103,17 @@ public final class SpaceUtil {
 		return lastResult;
 	}
 
-	private static boolean performNextAccumulativeRaycastForPositionInInterior(World world, ServerPlayerEntity player) {
-		var playerId = player.getUuid();
-
-		// Initialize buffer for this player if needed
-		if (!playerSpaceBuffers.containsKey(playerId)) {
-			playerSpaceBuffers.put(playerId, new boolean[Mod.CONFIG.spaceNumberOfRaysTotal]);
-			playerSpaceIndices.put(playerId, 0);
-		}
-
-		var buffer = playerSpaceBuffers.get(playerId);
-		var currentIndex = playerSpaceIndices.get(playerId);
-
+	private boolean performNextAccumulativeRaycastForPositionInInterior(World world, PlayerEntity player) {
 		// Calculate ray offset for this check
-		var rayOffset = currentIndex % Mod.CONFIG.spaceNumberOfRaysTotal;
+		var rayOffset = spaceIndex % Mod.CONFIG.spaceNumberOfRaysTotal;
 
 		// Perform single raycast and store result (true = ray hit sky)
-		buffer[currentIndex] = performSingleSpaceRaycast(world, player, rayOffset);
-
+		spaceBuffer[spaceIndex] = performSingleSpaceRaycast(world, player, rayOffset);
 		// Update index for next call
-		currentIndex = (currentIndex + 1) % Mod.CONFIG.spaceNumberOfRaysTotal;
-		playerSpaceIndices.put(playerId, currentIndex);
+		spaceIndex = (spaceIndex + 1) % Mod.CONFIG.spaceNumberOfRaysTotal;
 
 		// Count rays that hit sky - any hit means we're outside
-		for (var didHitVoid : buffer) {
+		for (var didHitVoid : spaceBuffer) {
 			if (didHitVoid) {
 				// Found a ray that hit sky, assume exterior space
 				return false;
@@ -140,7 +124,7 @@ public final class SpaceUtil {
 		return true;
 	}
 
-	private static boolean performSingleSpaceRaycast(World world, ServerPlayerEntity player, int offset) {
+	private boolean performSingleSpaceRaycast(World world, PlayerEntity player, int offset) {
 		var origin = player.getPos();
 		var theta = 2 * Math.PI * offset / Mod.CONFIG.spaceNumberOfRaysTotal;
 		var direction = new Vec3d(BASE_SIN_ANGLE * MathUtil.cos(theta), BASE_COS_ANGLE, BASE_SIN_ANGLE * MathUtil.sin(theta));
@@ -152,7 +136,7 @@ public final class SpaceUtil {
 		return raycastResultHitVoid(world, hitResult);
 	}
 
-	private static boolean raycastResultHitVoid(World world, HitResult hitResult) {
+	private boolean raycastResultHitVoid(World world, HitResult hitResult) {
 		if (hitResult.getType() == HitResult.Type.MISS) {
 			return true;
 		}
@@ -169,13 +153,8 @@ public final class SpaceUtil {
 		return false;
 	}
 
-	// Buffer
-
-	public static void cleanUpPlayerData(ServerPlayerEntity player) {
-		var playerId = player.getUuid();
-
-		playerSpaceBuffers.remove(playerId);
-		playerSpaceIndices.remove(playerId);
+	private void clearBuffer() {
+		spaceBuffer = new boolean[Mod.CONFIG.spaceNumberOfRaysTotal];
 	}
 
 }
