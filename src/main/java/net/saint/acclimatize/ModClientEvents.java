@@ -6,7 +6,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import net.saint.acclimatize.data.wind.WindParticleUtil;
-import net.saint.acclimatize.sound.AmbienceSoundManager;
 
 public final class ModClientEvents {
 
@@ -19,6 +18,7 @@ public final class ModClientEvents {
 
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
 			ModClient.resetClientTickElapsed();
+			ModClient.resetClientSpaceManager();
 		});
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -43,6 +43,7 @@ public final class ModClientEvents {
 
 	private static void tickActiveClient(MinecraftClient client, World world) {
 		AmbienceSoundManager.tick(client, false);
+		ModClient.SPACE_MANAGER.tickIfScheduled(client.player);
 
 		if (Mod.CONFIG.enableWindParticles) {
 			WindParticleUtil.renderWindParticles(client);
