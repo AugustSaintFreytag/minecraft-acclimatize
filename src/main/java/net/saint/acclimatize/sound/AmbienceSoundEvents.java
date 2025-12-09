@@ -31,7 +31,7 @@ public final class AmbienceSoundEvents {
 
 	// Registration
 
-	public static void registerAll() {
+	public static void registerSoundEvents() {
 		register(WIND_PLAINS_LIGHT);
 		register(WIND_PLAINS_STRONG);
 		register(WIND_FOREST_LIGHT);

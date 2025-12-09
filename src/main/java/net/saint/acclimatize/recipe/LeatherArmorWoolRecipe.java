@@ -10,7 +10,8 @@ import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import net.saint.acclimatize.Mod;
+import net.saint.acclimatize.ModItems;
+import net.saint.acclimatize.ModRecipeSerializers;
 
 public class LeatherArmorWoolRecipe extends SpecialCraftingRecipe {
 
@@ -25,7 +26,7 @@ public class LeatherArmorWoolRecipe extends SpecialCraftingRecipe {
 
 		for (int j = 0; j < recipeInputInventory.size(); j++) {
 			ItemStack itemStack = recipeInputInventory.getStack(j);
-			wools += (byte) (itemStack.isOf(Mod.WOOL_CLOTH_ITEM) ? 1 : 0);
+			wools += (byte) (itemStack.isOf(ModItems.WOOL_CLOTH_ITEM) ? 1 : 0);
 			armors += (byte) (itemStack.isOf(Items.LEATHER_HELMET) || itemStack.isOf(Items.LEATHER_CHESTPLATE)
 					|| itemStack.isOf(Items.LEATHER_LEGGINGS) || itemStack.isOf(Items.LEATHER_BOOTS) ? 1 : 0);
 		}
@@ -70,6 +71,6 @@ public class LeatherArmorWoolRecipe extends SpecialCraftingRecipe {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return Mod.LEATHER_ARMOR_WOOL_RECIPE_SERIALIZER;
+		return ModRecipeSerializers.LEATHER_ARMOR_WOOL_RECIPE_SERIALIZER;
 	}
 }
