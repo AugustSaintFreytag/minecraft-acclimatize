@@ -6,19 +6,19 @@ import java.util.UUID;
 
 import net.minecraft.entity.player.PlayerEntity;
 
-public final class PlayerSpaceProbeManager {
+public final class PlayerSpaceManager {
 
 	// State
 
-	private final Map<UUID, SpaceProbeManager> spaceProbeByPlayer = new HashMap<>();
+	private final Map<UUID, SpaceManager> spaceProbeByPlayer = new HashMap<>();
 
 	// Access
 
-	public SpaceProbeManager getManagerForPlayer(UUID playerUuid) {
-		return spaceProbeByPlayer.computeIfAbsent(playerUuid, uuid -> new SpaceProbeManager());
+	public SpaceManager getManagerForPlayer(UUID playerUuid) {
+		return spaceProbeByPlayer.computeIfAbsent(playerUuid, uuid -> new SpaceManager());
 	}
 
-	public SpaceProbeManager getManagerForPlayer(PlayerEntity player) {
+	public SpaceManager getManagerForPlayer(PlayerEntity player) {
 		return getManagerForPlayer(player.getUuid());
 	}
 

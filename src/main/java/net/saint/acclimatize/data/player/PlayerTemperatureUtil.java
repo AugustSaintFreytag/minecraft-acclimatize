@@ -31,7 +31,7 @@ public class PlayerTemperatureUtil {
 		// Prerequisites
 
 		var bodyTemperature = playerState.bodyTemperature;
-		var isInInterior = Mod.PLAYER_SPACE_PROBE_MANAGER.getManagerForPlayer(player).checkPlayerIsInInterior(player);
+		var isInInterior = Mod.PLAYER_SPACE_MANAGER.getManagerForPlayer(player).checkPlayerIsInInterior(player);
 
 		if ((player.isSpectator() || player.isCreative()) && !Mod.CONFIG.enableCreativeModeTemperature) {
 			playerState.isInInterior = isInInterior;

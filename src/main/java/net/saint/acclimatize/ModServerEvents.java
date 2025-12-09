@@ -44,7 +44,7 @@ public final class ModServerEvents {
 		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
 			var player = handler.player;
 
-			Mod.PLAYER_SPACE_PROBE_MANAGER.clearManagerForPlayer(player);
+			Mod.PLAYER_SPACE_MANAGER.clearManagerForPlayer(player);
 
 			WindTemperatureUtil.cleanUpPlayerData(player);
 		});

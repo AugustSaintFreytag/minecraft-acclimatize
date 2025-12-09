@@ -10,7 +10,7 @@ import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.ModTags;
 import net.saint.acclimatize.util.MathUtil;
 
-public final class SpaceProbeManager {
+public final class SpaceManager {
 
 	// Configuration
 

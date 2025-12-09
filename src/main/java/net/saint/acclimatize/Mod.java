@@ -9,7 +9,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.saint.acclimatize.data.block.BlockTemperatureUtil;
 import net.saint.acclimatize.data.item.ItemTemperatureUtil;
-import net.saint.acclimatize.data.space.PlayerSpaceProbeManager;
+import net.saint.acclimatize.data.space.PlayerSpaceManager;
 import net.saint.acclimatize.data.wind.WindTemperatureUtil;
 import net.saint.acclimatize.profiler.Profiler;
 import net.saint.acclimatize.sound.AmbienceSoundEvents;
@@ -30,7 +30,7 @@ public class Mod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Profiler PROFILER = Profiler.getProfiler(MOD_ID);
 
-	public static final PlayerSpaceProbeManager PLAYER_SPACE_PROBE_MANAGER = new PlayerSpaceProbeManager();
+	public static final PlayerSpaceManager PLAYER_SPACE_MANAGER = new PlayerSpaceManager();
 
 	// Init
 
