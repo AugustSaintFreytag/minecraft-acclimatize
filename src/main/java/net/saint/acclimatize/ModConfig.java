@@ -9,82 +9,6 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 @Config.Gui.Background("minecraft:textures/block/ice.png")
 public class ModConfig implements ConfigData {
 
-	// HUD
-
-	@ConfigEntry.Category("hud")
-	@Comment("Horizontal offset of the temperature HUD element. (Default: 0)")
-	public int temperatureXOffset = 0;
-
-	@ConfigEntry.Category("hud")
-	@Comment("Vertical offset of the temperature HUD element. (Default: 0)")
-	public int temperatureYOffset = 0;
-
-	@ConfigEntry.Category("hud")
-	@Comment("Horizontal offset of the thermometer HUD element. (Default: 0)")
-	public int thermometerXOffset = 0;
-
-	@ConfigEntry.Category("hud")
-	@Comment("Vertical offset of the thermometer HUD element. (Default: 0)")
-	public int thermometerYOffset = 0;
-
-	@ConfigEntry.Category("hud")
-	@Comment("Different styles for the temperature display. (options: gauge, glass_thermometer)")
-	public String temperatureDisplayType = "glass_thermometer";
-
-	@ConfigEntry.Category("hud")
-	@Comment("Automatically hides the temperature while in a vehicle (e.g. horses, boats, aircraft). (Default: true)")
-	public boolean hideTemperatureWhileInVehicle = true;
-
-	@ConfigEntry.Category("hud")
-	@Comment("Whether or not temperature damage decreases your saturation. Beware disabling this makes it really easy to bypass temperature damage just by eating. (Default: true)")
-	public boolean temperatureDamageDecreasesSaturation = true;
-
-	@ConfigEntry.Category("hud")
-	@Comment("When enabled, being cold enough causes a blue outline effect. And being hot enough causes an orange one. (Default: true)")
-	public boolean enableTemperatureVignette = true;
-
-	@ConfigEntry.Category("hud")
-	@Comment("The opacity value used when rendering the temperature vignette. Can be used to fade or intensify the effect. (Default: 0.7)")
-	public double temperatureVignetteAlpha = 0.7;
-
-	@ConfigEntry.Category("hud")
-	@Comment("The duration of the transition to show and hide the vignette overlay (in milliseconds). (Default: 1500)")
-	public int temperatureVignetteTransitionDuration = 1500;
-
-	@ConfigEntry.Category("hud")
-	@Comment("When enabled, holding a thermometer will show the exact measured ambient temperature. (Default: false)")
-	public boolean enableThermometerTemperatureDisplay = false;
-
-	// Player
-
-	@ConfigEntry.Category("player")
-	@Comment("The rate by which body temperature adapts to ambient temperatures. (Default: 0.0075)")
-	public double acclimatizationRate = 0.0075;
-
-	@ConfigEntry.Category("player")
-	@Comment("The lowest possible value for player acclimatization after all factors have been applied. (Default: 0.001)")
-	public double acclimatizationRateMinimum = 0.001;
-
-	@ConfigEntry.Category("player")
-	@Comment("The factor by which player acclimatization rate is boosted when wet. (Default: 2.5)")
-	public double wetAcclimatizationRateBoostFactor = 2.5;
-
-	@ConfigEntry.Category("player")
-	@Comment("First threshold for hypothermia, being below this you will start to freeze (Default: 30.0)")
-	public double hypothermiaThresholdMinor = 30.0;
-
-	@ConfigEntry.Category("player")
-	@Comment("Second threshold for hypothermia, being below this you will freeze faster. (Default: 15.0)")
-	public double hypothermiaThresholdMajor = 15.0;
-
-	@ConfigEntry.Category("player")
-	@Comment("First threshold for hyperthermia, being above this you will start to burn (Default: 70.0)")
-	public double hyperthermiaThresholdMinor = 70.0;
-
-	@ConfigEntry.Category("player")
-	@Comment("Second threshold for hyperthermia, being above this you will burn faster (Default: 85.0)")
-	public double hyperthermiaThresholdMajor = 85.0;
-
 	// World
 
 	@ConfigEntry.Category("world")
@@ -144,12 +68,50 @@ public class ModConfig implements ConfigData {
 	public int spaceNumberOfRaysTotal = 10;
 
 	@ConfigEntry.Category("world")
-	@Comment("The number of rays cast per tick to check for an interior space. Higher values mean faster results but higher cost. Scales per player, done server-side. (Default: 2)")
-	public int spaceNumberOfRaysCastPerTick = 2;
+	@Comment("The number of rays cast per tick to check for an interior space. Higher values mean faster results but higher cost. Scales per player, done server-side. (Default: 1)")
+	public int spaceNumberOfRaysCastPerTick = 1;
 
 	@ConfigEntry.Category("world")
 	@Comment("The length of the rays cast around the player to check for an interior space. Higher means more coverage but higher cost. (Default: 36)")
 	public int spaceRayLength = 36;
+
+	// Player
+
+	@ConfigEntry.Category("player")
+	@Comment("The rate by which body temperature adapts to ambient temperatures. (Default: 0.0075)")
+	public double acclimatizationRate = 0.0075;
+
+	@ConfigEntry.Category("player")
+	@Comment("The lowest possible value for player acclimatization after all factors have been applied. (Default: 0.001)")
+	public double acclimatizationRateMinimum = 0.001;
+
+	@ConfigEntry.Category("player")
+	@Comment("The factor by which player acclimatization rate is boosted when wet. (Default: 2.5)")
+	public double wetAcclimatizationRateBoostFactor = 2.5;
+
+	@ConfigEntry.Category("player")
+	@Comment("First threshold for hypothermia, being below this you will start to freeze (Default: 30.0)")
+	public double hypothermiaThresholdMinor = 30.0;
+
+	@ConfigEntry.Category("player")
+	@Comment("Second threshold for hypothermia, being below this you will freeze faster. (Default: 15.0)")
+	public double hypothermiaThresholdMajor = 15.0;
+
+	@ConfigEntry.Category("player")
+	@Comment("First threshold for hyperthermia, being above this you will start to burn (Default: 70.0)")
+	public double hyperthermiaThresholdMinor = 70.0;
+
+	@ConfigEntry.Category("player")
+	@Comment("Second threshold for hyperthermia, being above this you will burn faster (Default: 85.0)")
+	public double hyperthermiaThresholdMajor = 85.0;
+
+	@ConfigEntry.Category("player")
+	@Comment("The factor applied to server tick rate for client-side updates. (Default: 3)")
+	public int clientTickFactor = 3;
+
+	@ConfigEntry.Category("player")
+	@Comment("The factor applied to server raycast checks for client-side updates. (Default: 1)")
+	public int clientRayCastFactor = 1;
 
 	// Blocks
 
@@ -381,6 +343,52 @@ public class ModConfig implements ConfigData {
 	@ConfigEntry.Category("particles")
 	@Comment("Toggles complex wind simulation to allow particles to be funelled through gaps in obstacles. (Performance impact: high) (Default: false)")
 	public boolean enableParticleFunneling = false;
+
+	// HUD
+
+	@ConfigEntry.Category("hud")
+	@Comment("Horizontal offset of the temperature HUD element. (Default: 0)")
+	public int temperatureXOffset = 0;
+
+	@ConfigEntry.Category("hud")
+	@Comment("Vertical offset of the temperature HUD element. (Default: 0)")
+	public int temperatureYOffset = 0;
+
+	@ConfigEntry.Category("hud")
+	@Comment("Horizontal offset of the thermometer HUD element. (Default: 0)")
+	public int thermometerXOffset = 0;
+
+	@ConfigEntry.Category("hud")
+	@Comment("Vertical offset of the thermometer HUD element. (Default: 0)")
+	public int thermometerYOffset = 0;
+
+	@ConfigEntry.Category("hud")
+	@Comment("Different styles for the temperature display. (options: gauge, glass_thermometer)")
+	public String temperatureDisplayType = "glass_thermometer";
+
+	@ConfigEntry.Category("hud")
+	@Comment("Automatically hides the temperature while in a vehicle (e.g. horses, boats, aircraft). (Default: true)")
+	public boolean hideTemperatureWhileInVehicle = true;
+
+	@ConfigEntry.Category("hud")
+	@Comment("Whether or not temperature damage decreases your saturation. Beware disabling this makes it really easy to bypass temperature damage just by eating. (Default: true)")
+	public boolean temperatureDamageDecreasesSaturation = true;
+
+	@ConfigEntry.Category("hud")
+	@Comment("When enabled, being cold enough causes a blue outline effect. And being hot enough causes an orange one. (Default: true)")
+	public boolean enableTemperatureVignette = true;
+
+	@ConfigEntry.Category("hud")
+	@Comment("The opacity value used when rendering the temperature vignette. Can be used to fade or intensify the effect. (Default: 0.7)")
+	public double temperatureVignetteAlpha = 0.7;
+
+	@ConfigEntry.Category("hud")
+	@Comment("The duration of the transition to show and hide the vignette overlay (in milliseconds). (Default: 1500)")
+	public int temperatureVignetteTransitionDuration = 1500;
+
+	@ConfigEntry.Category("hud")
+	@Comment("When enabled, holding a thermometer will show the exact measured ambient temperature. (Default: false)")
+	public boolean enableThermometerTemperatureDisplay = false;
 
 	// Compatibility
 
