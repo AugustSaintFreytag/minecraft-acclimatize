@@ -71,7 +71,7 @@ public class StateNetworkingPackets {
 			var receivedValues = TemperaturePacketTuple.valuesFromBuffer(buffer);
 
 			client.execute(() -> {
-				ModClient.updateTemperatureValues(receivedValues);
+				ModClient.updateTemperatureValuesFromPacket(receivedValues);
 
 				// Debugging
 

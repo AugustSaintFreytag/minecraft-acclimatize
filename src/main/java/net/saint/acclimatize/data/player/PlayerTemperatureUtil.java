@@ -30,8 +30,10 @@ public class PlayerTemperatureUtil {
 	public static void tickPlayerTemperature(ServerPlayerEntity player, ServerState serverState, PlayerState playerState) {
 		// Prerequisites
 
+		Mod.PLAYER_SPACE_MANAGER.getManagerForPlayer(player).tick(player);
+
 		var bodyTemperature = playerState.bodyTemperature;
-		var isInInterior = Mod.PLAYER_SPACE_MANAGER.getManagerForPlayer(player).checkPlayerIsInInterior(player);
+		var isInInterior = Mod.PLAYER_SPACE_MANAGER.getManagerForPlayer(player).isPlayerInInterior();
 
 		if ((player.isSpectator() || player.isCreative()) && !Mod.CONFIG.enableCreativeModeTemperature) {
 			playerState.isInInterior = isInInterior;

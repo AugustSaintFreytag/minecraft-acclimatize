@@ -21,13 +21,69 @@ public final class SpaceManager {
 
 	// State
 
-	private final RingBuffer<Boolean> spaceBuffer = new RingBuffer<Boolean>(Mod.CONFIG.spaceNumberOfRaysTotal);
+	private final RingBuffer<Boolean> spaceBuffer;
 
-	private final Integer spaceIndex = 0;
+	private final int spaceNumberOfRaysTotal;
+	private final int spaceNumberOfRaysCastPerTick;
+	private final int spaceRayLength;
+	private final int spaceTickInterval;
+
+	private final boolean advanceRayOffset;
+
+	private int spaceIndex = 0;
+
+	private long lastSpaceCheckTick = 0;
+	private boolean lastSpaceCheckIsInInterior = false;
+
+	// Init
+
+	public SpaceManager() {
+		this(Mod.CONFIG.temperatureTickInterval, Mod.CONFIG.spaceNumberOfRaysTotal, Mod.CONFIG.spaceNumberOfRaysCastPerTick,
+				Mod.CONFIG.spaceRayLength, false);
+	}
+
+	public SpaceManager(int spaceTickInterval, int spaceNumberOfRaysTotal, int spaceNumberOfRaysCastPerTick, int spaceRayLength) {
+		this(spaceTickInterval, spaceNumberOfRaysTotal, spaceNumberOfRaysCastPerTick, spaceRayLength, false);
+	}
+
+	public SpaceManager(int spaceTickInterval, int spaceNumberOfRaysTotal, int spaceNumberOfRaysCastPerTick, int spaceRayLength,
+			boolean advanceRayOffset) {
+		this.spaceTickInterval = Math.max(1, spaceTickInterval);
+		this.spaceNumberOfRaysTotal = Math.max(1, spaceNumberOfRaysTotal);
+		this.spaceNumberOfRaysCastPerTick = Math.max(1, spaceNumberOfRaysCastPerTick);
+		this.spaceRayLength = Math.max(1, spaceRayLength);
+		this.advanceRayOffset = advanceRayOffset;
+		this.spaceBuffer = new RingBuffer<Boolean>(this.spaceNumberOfRaysTotal);
+	}
+
+	// Tick
+
+	public void tickIfScheduled(PlayerEntity player) {
+		var world = player.getWorld();
+		var currentTick = world.getTime();
+
+		if (currentTick - lastSpaceCheckTick < spaceTickInterval) {
+			return;
+		}
+
+		this.tick(player);
+	}
+
+	public void tick(PlayerEntity player) {
+		var world = player.getWorld();
+		var currentTick = world.getTime();
+
+		lastSpaceCheckTick = currentTick;
+		lastSpaceCheckIsInInterior = checkPlayerIsInInterior(player);
+	}
 
 	// Checks
 
-	public boolean checkPlayerIsInInterior(PlayerEntity player) {
+	public boolean isPlayerInInterior() {
+		return lastSpaceCheckIsInInterior;
+	}
+
+	private boolean checkPlayerIsInInterior(PlayerEntity player) {
 		var profile = Mod.PROFILER.begin("space_check");
 		var world = player.getWorld();
 
@@ -53,8 +109,8 @@ public final class SpaceManager {
 			profile.end();
 
 			if (Mod.CONFIG.enableLogging) {
-				Mod.LOGGER.info("Space check raycast (cast " + Mod.CONFIG.spaceNumberOfRaysCastPerTick
-						+ " rays, hit sky, extended check), duration: " + profile.getDescription());
+				Mod.LOGGER.info("Space check raycast (cast " + spaceNumberOfRaysCastPerTick + " rays, hit sky, extended check), duration: "
+						+ profile.getDescription());
 			}
 
 			return false;
@@ -63,8 +119,8 @@ public final class SpaceManager {
 		profile.end();
 
 		if (Mod.CONFIG.enableLogging) {
-			Mod.LOGGER.info("Space check raycast (cast " + Mod.CONFIG.spaceNumberOfRaysCastPerTick
-					+ " rays, hit block, extended check), duration: " + profile.getDescription());
+			Mod.LOGGER.info("Space check raycast (cast " + spaceNumberOfRaysCastPerTick + " rays, hit block, extended check), duration: "
+					+ profile.getDescription());
 		}
 
 		return true;
@@ -80,7 +136,7 @@ public final class SpaceManager {
 	}
 
 	private boolean performStandaloneRaycastForPositionInInterior(World world, PlayerEntity player) {
-		var rayLength = Mod.CONFIG.spaceRayLength;
+		var rayLength = spaceRayLength;
 		var direction = new Vec3d(0, 1, 0);
 
 		// Define origin as slightly above player position to avoid self or vehicle collision.
@@ -94,7 +150,7 @@ public final class SpaceManager {
 	}
 
 	private boolean performAccumulativeRaycastsForPositionInInterior(World world, PlayerEntity player) {
-		var raysPerTick = Mod.CONFIG.spaceNumberOfRaysCastPerTick;
+		var raysPerTick = spaceNumberOfRaysCastPerTick;
 		var lastResult = false;
 
 		for (int i = 0; i < raysPerTick; i++) {
@@ -106,7 +162,11 @@ public final class SpaceManager {
 
 	private boolean performNextAccumulativeRaycastForPositionInInterior(World world, PlayerEntity player) {
 		// Calculate ray offset for this check
-		var rayOffset = spaceIndex % Mod.CONFIG.spaceNumberOfRaysTotal;
+		var rayOffset = spaceIndex % spaceNumberOfRaysTotal;
+
+		if (advanceRayOffset) {
+			spaceIndex++;
+		}
 
 		// Perform single raycast and store result (true = ray hit sky)
 		spaceBuffer.enqueue(performSingleSpaceRaycast(world, player, rayOffset));
@@ -125,9 +185,9 @@ public final class SpaceManager {
 
 	private boolean performSingleSpaceRaycast(World world, PlayerEntity player, int offset) {
 		var origin = player.getPos();
-		var theta = 2 * Math.PI * offset / Mod.CONFIG.spaceNumberOfRaysTotal;
+		var theta = 2 * Math.PI * offset / spaceNumberOfRaysTotal;
 		var direction = new Vec3d(BASE_SIN_ANGLE * MathUtil.cos(theta), BASE_COS_ANGLE, BASE_SIN_ANGLE * MathUtil.sin(theta));
-		var target = origin.add(direction.multiply(Mod.CONFIG.spaceRayLength));
+		var target = origin.add(direction.multiply(spaceRayLength));
 
 		var hitResult = world
 				.raycast(new RaycastContext(origin, target, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, player));
@@ -152,7 +212,7 @@ public final class SpaceManager {
 		return false;
 	}
 
-	private void clearBuffer() {
+	public void clearBuffer() {
 		spaceBuffer.clear();
 	}
 
