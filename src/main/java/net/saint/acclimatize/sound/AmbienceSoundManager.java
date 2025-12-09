@@ -32,20 +32,20 @@ public final class AmbienceSoundManager {
 
 	// References
 
-	private static AmbienceStateProperties activeProperties = AmbienceStateProperties.none();
+	private AmbienceStateProperties activeProperties = AmbienceStateProperties.none();
 
-	private static AmbienceSoundInstance activeSound;
-	private static final List<AmbienceSoundInstance> fadingSounds = new ArrayList<>();
+	private AmbienceSoundInstance activeSound;
+	private final List<AmbienceSoundInstance> fadingSounds = new ArrayList<>();
 
 	// Access
 
-	public static AmbienceStateProperties getActiveSoundProperties() {
+	public AmbienceStateProperties getActiveSoundProperties() {
 		return activeProperties;
 	}
 
 	// Tick
 
-	public static void tick(MinecraftClient client, boolean isPaused) {
+	public void tick(MinecraftClient client, boolean isPaused) {
 		cleanUpFadingSounds();
 
 		if (isPaused || !Mod.CONFIG.enableWind || !Mod.CONFIG.enableAmbientSounds) {
@@ -74,7 +74,7 @@ public final class AmbienceSoundManager {
 		startOrUpdateSound(client, properties, volume);
 	}
 
-	private static void startOrUpdateSound(MinecraftClient client, AmbienceStateProperties properties, float targetVolume) {
+	private void startOrUpdateSound(MinecraftClient client, AmbienceStateProperties properties, float targetVolume) {
 		if (Mod.CONFIG.enableLogging && client.world.getTime() % 20 == 0) {
 			Mod.LOGGER.info("Wind Ambience - Properties ({}), Target Volume: {}", properties.description(), targetVolume);
 		}
@@ -105,7 +105,7 @@ public final class AmbienceSoundManager {
 		activeSound.setTargetVolume(targetVolume * Mod.CONFIG.ambientSoundVolume);
 	}
 
-	private static void fadeOutActiveSound() {
+	private void fadeOutActiveSound() {
 		if (activeSound != null) {
 			fadeOutSound(activeSound);
 			activeSound = null;
@@ -114,7 +114,7 @@ public final class AmbienceSoundManager {
 		activeProperties = AmbienceStateProperties.none();
 	}
 
-	private static void fadeOutSound(AmbienceSoundInstance sound) {
+	private void fadeOutSound(AmbienceSoundInstance sound) {
 		sound.setTargetVolume(0.0f);
 
 		if (!fadingSounds.contains(sound)) {
@@ -122,13 +122,13 @@ public final class AmbienceSoundManager {
 		}
 	}
 
-	private static void cleanUpFadingSounds() {
+	private void cleanUpFadingSounds() {
 		fadingSounds.removeIf(AmbienceSoundInstance::isDone);
 	}
 
 	// Utilities
 
-	private static AmbienceStateProperties evaluateAmbienceProperties(MinecraftClient client) {
+	private AmbienceStateProperties evaluateAmbienceProperties(MinecraftClient client) {
 		var world = client.world;
 		var player = client.player;
 
@@ -149,7 +149,7 @@ public final class AmbienceSoundManager {
 		return windProperties;
 	}
 
-	private static WindLevel determineWindLevel(double windIntensity) {
+	private WindLevel determineWindLevel(double windIntensity) {
 		if (windIntensity < LOW_WIND_THRESHOLD) {
 			return WindLevel.NONE;
 		}
@@ -161,7 +161,7 @@ public final class AmbienceSoundManager {
 		return WindLevel.HIGH;
 	}
 
-	private static float volumeForProperties(World world, BlockPos position, AmbienceStateProperties properties) {
+	private float volumeForProperties(World world, BlockPos position, AmbienceStateProperties properties) {
 		var windLevel = properties.level();
 		var windIntensity = ModClient.getWindIntensity();
 		var volumeScalingFactor = Mod.CONFIG.ambientSoundWindIntensityFactor;
@@ -177,7 +177,7 @@ public final class AmbienceSoundManager {
 		return baseVolume * volumeFactor;
 	}
 
-	private static float baseVolumeForWindLevel(WindLevel windLevel, double windIntensity, double scalingFactor) {
+	private float baseVolumeForWindLevel(WindLevel windLevel, double windIntensity, double scalingFactor) {
 		if (windLevel == WindLevel.NONE) {
 			return 0.0f;
 		}
@@ -185,7 +185,7 @@ public final class AmbienceSoundManager {
 		return calculateScaledVolume(windIntensity, LOW_WIND_THRESHOLD, MAX_WIND_REFERENCE, 0.15f, 0.95f, scalingFactor);
 	}
 
-	private static float calculateScaledVolume(double windIntensity, double lowerBound, double upperBound, float minVolume, float maxVolume,
+	private float calculateScaledVolume(double windIntensity, double lowerBound, double upperBound, float minVolume, float maxVolume,
 			double scalingFactor) {
 		var clampedIntensity = MathUtil.clamp(windIntensity, lowerBound, upperBound);
 		var normalizedIntensity = (clampedIntensity - lowerBound) / (upperBound - lowerBound);
@@ -200,7 +200,7 @@ public final class AmbienceSoundManager {
 		return volume;
 	}
 
-	private static float volumeFactorForProperties(World world, BlockPos position, AmbienceStateProperties properties) {
+	private float volumeFactorForProperties(World world, BlockPos position, AmbienceStateProperties properties) {
 		if (properties.isCave()) {
 			var caveDepth = WorldUtil.getApproximateRelativeCaveDepth(world, position);
 			var caveDepthFactor = 1 - MathUtil.clamp((float) caveDepth / 36.0f, 0.0f, 1.0f);
@@ -227,7 +227,7 @@ public final class AmbienceSoundManager {
 		};
 	}
 
-	private static SoundCategory soundCategoryForEvent(SoundEvent soundEvent) {
+	private SoundCategory soundCategoryForEvent(SoundEvent soundEvent) {
 		if (soundEvent == AmbienceSoundEvents.RAIN_EXTERIOR_LIGHT || soundEvent == AmbienceSoundEvents.RAIN_EXTERIOR_STRONG) {
 			return SoundCategory.WEATHER;
 		}
@@ -235,7 +235,7 @@ public final class AmbienceSoundManager {
 		return SoundCategory.AMBIENT;
 	}
 
-	private static SoundEvent soundEventForProperties(AmbienceStateProperties properties) {
+	private SoundEvent soundEventForProperties(AmbienceStateProperties properties) {
 		// Interior / Cave
 
 		if (properties.isCave()) {

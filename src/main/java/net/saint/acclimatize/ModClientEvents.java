@@ -25,7 +25,7 @@ public final class ModClientEvents {
 			var world = client.world;
 
 			if (world == null || !world.isClient() || client.player == null) {
-				AmbienceSoundManager.tick(client, true);
+				ModClient.AMBIENCE_SOUND_MANAGER.tick(client, true);
 				return;
 			}
 
@@ -42,8 +42,8 @@ public final class ModClientEvents {
 	// Ticking
 
 	private static void tickActiveClient(MinecraftClient client, World world) {
-		AmbienceSoundManager.tick(client, false);
 		ModClient.SPACE_MANAGER.tickIfScheduled(client.player);
+		ModClient.AMBIENCE_SOUND_MANAGER.tick(client, false);
 
 		if (Mod.CONFIG.enableWindParticles) {
 			WindParticleUtil.renderWindParticles(client);
