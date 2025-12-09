@@ -8,7 +8,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.saint.acclimatize.data.player.PlayerEffectsUtil;
 import net.saint.acclimatize.data.player.PlayerTemperatureUtil;
-import net.saint.acclimatize.data.wind.WindTemperatureUtil;
 import net.saint.acclimatize.data.wind.WindUtil;
 import net.saint.acclimatize.networking.StateNetworkingPackets;
 import net.saint.acclimatize.player.PlayerState;
@@ -46,7 +45,7 @@ public final class ModServerEvents {
 
 			Mod.PLAYER_SPACE_MANAGER.clearManagerForPlayer(player);
 
-			WindTemperatureUtil.cleanUpPlayerData(player);
+			Mod.PLAYER_WIND_MANAGER.clearManagerForPlayer(player);
 		});
 
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {

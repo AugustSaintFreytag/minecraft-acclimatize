@@ -10,7 +10,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.saint.acclimatize.data.block.BlockTemperatureUtil;
 import net.saint.acclimatize.data.item.ItemTemperatureUtil;
 import net.saint.acclimatize.data.space.PlayerSpaceManager;
-import net.saint.acclimatize.data.wind.WindTemperatureUtil;
+import net.saint.acclimatize.data.wind.PlayerWindManager;
+import net.saint.acclimatize.data.wind.WindManager;
 import net.saint.acclimatize.profiler.Profiler;
 import net.saint.acclimatize.sound.AmbienceSoundEvents;
 
@@ -31,6 +32,7 @@ public class Mod implements ModInitializer {
 	public static final Profiler PROFILER = Profiler.getProfiler(MOD_ID);
 
 	public static final PlayerSpaceManager PLAYER_SPACE_MANAGER = new PlayerSpaceManager();
+	public static final PlayerWindManager PLAYER_WIND_MANAGER = new PlayerWindManager();
 
 	// Init
 
@@ -52,8 +54,7 @@ public class Mod implements ModInitializer {
 		AutoConfig.getConfigHolder(ModConfig.class).registerSaveListener((config, data) -> {
 			ItemTemperatureUtil.reloadItems();
 			BlockTemperatureUtil.reloadBlocks();
-			WindTemperatureUtil.reloadBlocks();
-			WindTemperatureUtil.cleanUpAllPlayerData();
+			WindManager.reloadBlocks();
 
 			return null;
 		});
@@ -71,6 +72,6 @@ public class Mod implements ModInitializer {
 
 		ItemTemperatureUtil.reloadItems();
 		BlockTemperatureUtil.reloadBlocks();
-		WindTemperatureUtil.reloadBlocks();
+		WindManager.reloadBlocks();
 	}
 }
