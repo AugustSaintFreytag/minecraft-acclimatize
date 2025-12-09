@@ -8,6 +8,7 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.ModTags;
+import net.saint.acclimatize.library.common.RingBuffer;
 import net.saint.acclimatize.util.MathUtil;
 
 public final class SpaceManager {
@@ -20,9 +21,9 @@ public final class SpaceManager {
 
 	// State
 
-	private boolean[] spaceBuffer = new boolean[Mod.CONFIG.spaceNumberOfRaysTotal];
+	private final RingBuffer<Boolean> spaceBuffer = new RingBuffer<Boolean>(Mod.CONFIG.spaceNumberOfRaysTotal);
 
-	private int spaceIndex = 0;
+	private final Integer spaceIndex = 0;
 
 	// Checks
 
@@ -108,9 +109,7 @@ public final class SpaceManager {
 		var rayOffset = spaceIndex % Mod.CONFIG.spaceNumberOfRaysTotal;
 
 		// Perform single raycast and store result (true = ray hit sky)
-		spaceBuffer[spaceIndex] = performSingleSpaceRaycast(world, player, rayOffset);
-		// Update index for next call
-		spaceIndex = (spaceIndex + 1) % Mod.CONFIG.spaceNumberOfRaysTotal;
+		spaceBuffer.enqueue(performSingleSpaceRaycast(world, player, rayOffset));
 
 		// Count rays that hit sky - any hit means we're outside
 		for (var didHitVoid : spaceBuffer) {
@@ -154,7 +153,7 @@ public final class SpaceManager {
 	}
 
 	private void clearBuffer() {
-		spaceBuffer = new boolean[Mod.CONFIG.spaceNumberOfRaysTotal];
+		spaceBuffer.clear();
 	}
 
 }
