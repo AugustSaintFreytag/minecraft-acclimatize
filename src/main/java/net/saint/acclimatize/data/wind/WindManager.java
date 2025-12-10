@@ -22,24 +22,39 @@ public final class WindManager {
 
 	private static final double WIND_RAY_TURBULENCE = Math.toRadians(35);
 
-	// State
-
 	private static Set<String> windPermeableBlocks = new HashSet<String>();
 
+	// State
+
 	private RingBuffer<Boolean> windSamples;
+
 	private int numberOfRaysFired;
 
-	public WindManager() {
-		resetSamples();
-	}
+	// Reload
 
 	public static void reloadBlocks() {
 		windPermeableBlocks = SetConfigCodingUtil.decodeStringValueSetFromRaw(Mod.CONFIG.windPermeableBlocks);
 	}
 
-	// Init
+	// Access
 
-	public int getUnblockedWindRaysForPlayer(ServerState serverState, ServerPlayerEntity player) {
+	public int getNumberOfRaysFired() {
+		return numberOfRaysFired;
+	}
+
+	// Wind
+
+	public double getWindIntensityFactorForPlayer(ServerState serverState, ServerPlayerEntity player) {
+		var unblockedRays = getUnblockedWindRaysForPlayer(serverState, player);
+
+		if (numberOfRaysFired == 0) {
+			return 0.0;
+		}
+
+		return (double) unblockedRays / (double) numberOfRaysFired;
+	}
+
+	private int getUnblockedWindRaysForPlayer(ServerState serverState, ServerPlayerEntity player) {
 		// Profile Start Time
 		var profile = Mod.PROFILER.begin("wind");
 
@@ -66,10 +81,6 @@ public final class WindManager {
 		}
 
 		return numberOfUnblockedRays;
-	}
-
-	public int getNumberOfRaysFired() {
-		return numberOfRaysFired;
 	}
 
 	private static RingBuffer<Boolean> makeEmptyWindSampleBuffer() {
