@@ -10,6 +10,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import net.minecraft.world.biome.Biome;
 import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.config.SetConfigCodingUtil;
 import net.saint.acclimatize.library.common.RingBuffer;
@@ -26,9 +27,11 @@ public final class WindManager {
 
 	// State
 
-	private RingBuffer<Boolean> windSamples;
+	private RingBuffer<Boolean> windSamples = makeEmptyWindSampleBuffer();
 
 	private int numberOfRaysFired;
+
+	private double windIntensity = 0.0;
 
 	// Reload
 
@@ -38,14 +41,60 @@ public final class WindManager {
 
 	// Access
 
+	public double getWindIntensity() {
+		return windIntensity;
+	}
+
 	public int getNumberOfRaysFired() {
 		return numberOfRaysFired;
 	}
 
-	// Wind
+	// Ticking
+
+	public void tick(ServerState serverState, ServerPlayerEntity player) {
+		windIntensity = getWindIntensityFactorForPlayer(serverState, player);
+	}
+
+	// Wind (Aggregate)
 
 	public double getWindIntensityFactorForPlayer(ServerState serverState, ServerPlayerEntity player) {
-		var unblockedRays = getUnblockedWindRaysForPlayer(serverState, player);
+		var baseWindIntensity = serverState.windIntensity;
+		var positionalWindFactor = BiomeWindUtil.positionalWindFactorForPlayer(player);
+		var precipitationWindFactor = getPrecipitationWindFactorForPlayer(player);
+		var unblockedWindFactor = getUnblockedWindFactorForPlayer(player, serverState.windDirection);
+
+		return baseWindIntensity * positionalWindFactor * precipitationWindFactor * unblockedWindFactor;
+	}
+
+	// Wind (Weather)
+
+	private static double getPrecipitationWindFactorForPlayer(ServerPlayerEntity player) {
+		var world = player.getWorld();
+		var position = player.getBlockPos();
+		var biome = world.getBiome(position).value();
+		var precipitation = biome.getPrecipitation(position);
+
+		if (precipitation == Biome.Precipitation.RAIN) {
+			if (world.isThundering()) {
+				return 1.4;
+			}
+
+			if (world.isRaining()) {
+				return 1.2;
+			}
+		} else if (precipitation == Biome.Precipitation.SNOW) {
+			if (world.isRaining()) {
+				return 1.1;
+			}
+		}
+
+		return 1.0;
+	}
+
+	// Wind (Blocking/Raycasting)
+
+	private double getUnblockedWindFactorForPlayer(ServerPlayerEntity player, double windDirection) {
+		var unblockedRays = processUnblockedWindRaysForPlayer(player, windDirection);
 
 		if (numberOfRaysFired == 0) {
 			return 0.0;
@@ -54,12 +103,12 @@ public final class WindManager {
 		return (double) unblockedRays / (double) numberOfRaysFired;
 	}
 
-	private int getUnblockedWindRaysForPlayer(ServerState serverState, ServerPlayerEntity player) {
+	private int processUnblockedWindRaysForPlayer(ServerPlayerEntity player, double windDirection) {
 		// Profile Start Time
 		var profile = Mod.PROFILER.begin("wind");
 
 		// Perform only a single raycast and store the result
-		var windRaycastIsUnblocked = performSingleWindRaycast(serverState, player);
+		var windRaycastIsUnblocked = performSingleWindRaycast(player, windDirection);
 		windSamples.enqueue(windRaycastIsUnblocked);
 
 		// Update number of rays fired
@@ -83,20 +132,10 @@ public final class WindManager {
 		return numberOfUnblockedRays;
 	}
 
-	private static RingBuffer<Boolean> makeEmptyWindSampleBuffer() {
-		var buffer = new RingBuffer<Boolean>(Mod.CONFIG.windRayCount);
-
-		// Fill with false to indicate all rays are blocked initially
-		buffer.fill(false);
-
-		return buffer;
-	}
-
-	private boolean performSingleWindRaycast(ServerState serverState, ServerPlayerEntity player) {
+	private boolean performSingleWindRaycast(ServerPlayerEntity player, double windDirection) {
 		var world = player.getWorld();
 		var random = world.getRandom();
 
-		var windDirection = serverState.windDirection;
 		var turbulentAngle = windDirection + Math.PI + random.nextTriangular(0, WIND_RAY_TURBULENCE);
 		var directionVector = new Vec3d(MathUtil.sin(turbulentAngle), 0, MathUtil.cos(turbulentAngle));
 
@@ -123,6 +162,15 @@ public final class WindManager {
 	}
 
 	// Buffer
+
+	private static RingBuffer<Boolean> makeEmptyWindSampleBuffer() {
+		var buffer = new RingBuffer<Boolean>(Mod.CONFIG.windRayCount);
+
+		// Fill with false to indicate all rays are blocked initially
+		buffer.fill(false);
+
+		return buffer;
+	}
 
 	private void resetSamples() {
 		windSamples = makeEmptyWindSampleBuffer();

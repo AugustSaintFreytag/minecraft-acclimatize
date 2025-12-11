@@ -13,12 +13,12 @@ import net.saint.acclimatize.util.MathUtil;
 
 public final class BiomeTemperatureUtil {
 
+	// Configuration
+
 	private static final Vec3i NORTH_VECTOR = new Vec3i(0, 0, -1);
 	private static final Vec3i SOUTH_VECTOR = new Vec3i(0, 0, 1);
 	private static final Vec3i EAST_VECTOR = new Vec3i(1, 0, 0);
 	private static final Vec3i WEST_VECTOR = new Vec3i(-1, 0, 0);
-
-	// Configuration
 
 	private static final HashMap<String, Double> biomeRawTemperatureOverrides = new HashMap<String, Double>() {
 		{

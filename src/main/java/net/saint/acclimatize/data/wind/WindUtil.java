@@ -84,7 +84,7 @@ public final class WindUtil {
 		var windIntensity = random.nextDouble() * (max - min) + min;
 
 		if (world.isThundering()) {
-			windIntensity *= 1.85;
+			windIntensity *= 1.8;
 		} else if (world.isRaining()) {
 			windIntensity *= 1.3;
 		}
