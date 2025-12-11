@@ -13,5 +13,6 @@ public final class PlayerStateNBTKeys {
 	public static final String windTemperature = "windTemperature";
 	public static final String blockTemperature = "blockTemperature";
 	public static final String itemTemperature = "itemTemperature";
+	public static final String windIntensity = "windIntensity";
 
 }

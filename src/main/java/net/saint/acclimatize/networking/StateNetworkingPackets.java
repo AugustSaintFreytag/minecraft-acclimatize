@@ -21,8 +21,8 @@ public class StateNetworkingPackets {
 		public double bodyTemperature;
 		public double ambientTemperature;
 		public double windTemperature;
-		public double windDirection;
 		public double windIntensity;
+		public double windDirection;
 		public boolean isInInterior;
 
 		public TemperaturePacketTuple() {
@@ -30,8 +30,8 @@ public class StateNetworkingPackets {
 			this.bodyTemperature = 0;
 			this.ambientTemperature = 0;
 			this.windTemperature = 0;
-			this.windDirection = 0;
 			this.windIntensity = 0;
+			this.windDirection = 0;
 			this.isInInterior = false;
 		}
 
@@ -40,8 +40,8 @@ public class StateNetworkingPackets {
 			buffer.writeDouble(bodyTemperature);
 			buffer.writeDouble(ambientTemperature);
 			buffer.writeDouble(windTemperature);
-			buffer.writeDouble(windDirection);
 			buffer.writeDouble(windIntensity);
+			buffer.writeDouble(windDirection);
 			buffer.writeBoolean(isInInterior);
 		}
 
@@ -52,8 +52,8 @@ public class StateNetworkingPackets {
 			tuple.bodyTemperature = buffer.readDouble();
 			tuple.ambientTemperature = buffer.readDouble();
 			tuple.windTemperature = buffer.readDouble();
-			tuple.windDirection = buffer.readDouble();
 			tuple.windIntensity = buffer.readDouble();
+			tuple.windDirection = buffer.readDouble();
 			tuple.isInInterior = buffer.readBoolean();
 
 			return tuple;
@@ -94,8 +94,8 @@ public class StateNetworkingPackets {
 		tuple.bodyTemperature = playerState.bodyTemperature;
 		tuple.ambientTemperature = playerState.ambientTemperature;
 		tuple.windTemperature = playerState.windTemperature;
+		tuple.windIntensity = playerState.windIntensity;
 		tuple.windDirection = serverState.windDirection;
-		tuple.windIntensity = serverState.windIntensity;
 		tuple.isInInterior = playerState.isInInterior;
 
 		var outgoingBuffer = PacketByteBufs.create();
