@@ -458,15 +458,15 @@ public interface ParticleMixinLogic {
 
 	private double windInfluenceFactorForParticleType() {
 		if (this instanceof SnowflakeParticle) {
-			return 1.75;
+			return 1.5;
 		}
 
 		if (this instanceof RainSplashParticle) {
-			return 0.25;
+			return 0.1;
 		}
 
 		if (this instanceof AshParticle || this instanceof WhiteAshParticle) {
-			return 2.0;
+			return 1.5;
 		}
 
 		if (ParticleRainParticleCompat.isRainParticle(this)) {

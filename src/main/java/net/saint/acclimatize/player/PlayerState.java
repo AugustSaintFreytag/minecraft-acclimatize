@@ -19,6 +19,8 @@ public class PlayerState extends PersistentState {
 	public double blockTemperature = 0;
 	public double itemTemperature = 0;
 
+	public double windIntensity = 0;
+
 	// NBT
 
 	@Override
@@ -34,6 +36,8 @@ public class PlayerState extends PersistentState {
 		nbt.putDouble(PlayerStateNBTKeys.windTemperature, windTemperature);
 		nbt.putDouble(PlayerStateNBTKeys.blockTemperature, blockTemperature);
 		nbt.putDouble(PlayerStateNBTKeys.itemTemperature, itemTemperature);
+
+		nbt.putDouble(PlayerStateNBTKeys.windIntensity, windIntensity);
 
 		return nbt;
 	}
@@ -52,6 +56,8 @@ public class PlayerState extends PersistentState {
 		playerState.windTemperature = nbt.getDouble(PlayerStateNBTKeys.windTemperature);
 		playerState.blockTemperature = nbt.getDouble(PlayerStateNBTKeys.blockTemperature);
 		playerState.itemTemperature = nbt.getDouble(PlayerStateNBTKeys.itemTemperature);
+
+		playerState.windIntensity = nbt.getDouble(PlayerStateNBTKeys.windIntensity);
 
 		return playerState;
 	}

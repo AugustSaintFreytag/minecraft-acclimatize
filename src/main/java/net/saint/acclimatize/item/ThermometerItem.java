@@ -33,15 +33,16 @@ public class ThermometerItem extends Item {
 		var skyAngle = world.getSkyAngle(0.0f);
 		var dayNightProgression = BiomeTemperatureUtil.phaseValueFromSkyAngle(skyAngle) / (2 * Math.PI);
 
-		player.sendMessage(Text.of("♜ Body: " + formattedValue(playerState.bodyTemperature) + " (↕ Acclim "
-				+ formattedValue(playerState.acclimatizationRate) + ", "
-				+ TemperatureEstimationUtil.estimateTicksToExtremeTemperatureForPlayer(playerState).description() + ") \n(♯ Ambient "
-				+ formattedValue(playerState.ambientTemperature) + " at " + formattedValue(dayNightProgression) + " day/night"
-				+ ", ♣ Biome " + formattedValue(playerState.biomeTemperature) + ", ☼ Sun/Shade "
-				+ formattedValue(playerState.sunShadeTemperature) + ", ☰ Wind " + formattedValue(playerState.windTemperature) + " from "
-				+ Math.floor(Math.toDegrees(serverState.windDirection)) + "° at " + formattedValue(serverState.windIntensity)
-				+ ", ♢ Blocks " + formattedValue(playerState.blockTemperature) + ", ☍ Items " + formattedValue(playerState.itemTemperature)
-				+ ", ☈ Interior " + formattedValue(playerState.isInInterior) + ")"));
+		player.sendMessage(Text.of(
+				"♜ Body: " + formattedValue(playerState.bodyTemperature) + " (↕ Acclim " + formattedValue(playerState.acclimatizationRate)
+						+ ", " + TemperatureEstimationUtil.estimateTicksToExtremeTemperatureForPlayer(playerState).description()
+						+ ") \n(♯ Ambient " + formattedValue(playerState.ambientTemperature) + " at " + formattedValue(dayNightProgression)
+						+ " day/night" + ", ♣ Biome " + formattedValue(playerState.biomeTemperature) + ", ☼ Sun/Shade "
+						+ formattedValue(playerState.sunShadeTemperature) + ", ☰ Wind " + formattedValue(playerState.windTemperature)
+						+ " from " + Math.floor(Math.toDegrees(serverState.windDirection)) + "° at "
+						+ formattedValue(playerState.windIntensity) + " (baseline " + formattedValue(serverState.windIntensity)
+						+ "), ♢ Blocks " + formattedValue(playerState.blockTemperature) + ", ☍ Items "
+						+ formattedValue(playerState.itemTemperature) + ", ☈ Interior " + formattedValue(playerState.isInInterior) + ")"));
 
 		return TypedActionResult.success(itemStack);
 	}

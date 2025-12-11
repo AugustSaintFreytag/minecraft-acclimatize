@@ -30,7 +30,11 @@ public class PlayerTemperatureUtil {
 	public static void tickPlayerTemperature(ServerPlayerEntity player, ServerState serverState, PlayerState playerState) {
 		// Prerequisites
 
-		Mod.PLAYER_SPACE_MANAGER.getManagerForPlayer(player).tick(player);
+		var spaceManager = Mod.PLAYER_SPACE_MANAGER.getManagerForPlayer(player);
+		var windManager = Mod.PLAYER_WIND_MANAGER.getManagerForPlayer(player);
+
+		spaceManager.tick(player);
+		windManager.tick(serverState, player);
 
 		var bodyTemperature = playerState.bodyTemperature;
 		var isInInterior = Mod.PLAYER_SPACE_MANAGER.getManagerForPlayer(player).isPlayerInInterior();
@@ -59,6 +63,7 @@ public class PlayerTemperatureUtil {
 
 		// Wind
 
+		var windIntensity = windManager.getWindIntensity();
 		var windTemperatureDelta = WindTemperatureUtil.windTemperatureForEnvironment(serverState, player, isInInterior);
 		effectiveTemperature += windTemperatureDelta;
 
@@ -108,6 +113,7 @@ public class PlayerTemperatureUtil {
 		playerState.windTemperature = windTemperatureDelta;
 		playerState.blockTemperature = blockTemperatureDelta;
 		playerState.itemTemperature = itemTemperatureDelta;
+		playerState.windIntensity = windIntensity;
 
 		playerState.markDirty();
 	}

@@ -92,6 +92,8 @@
 	"text.autoconfig.acclimatize.option.windTransitionInterval": "Wind Transition Interval",
 	"text.autoconfig.acclimatize.option.windIntensityMin": "Minimum Wind Intensity",
 	"text.autoconfig.acclimatize.option.windIntensityMax": "Maximum Wind Intensity",
+	"text.autoconfig.acclimatize.option.windAltitudeMax": "Wind Altitude Max",
+	"text.autoconfig.acclimatize.option.windAltitudeFactor": "Wind Altitude Factor",
 	"text.autoconfig.acclimatize.option.windChillFactor": "Wind Chill Factor",
 	"text.autoconfig.acclimatize.option.windRayCount": "Wind Ray Count",
 	"text.autoconfig.acclimatize.option.windRayLength": "Wind Ray Length",

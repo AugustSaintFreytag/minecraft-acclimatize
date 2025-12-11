@@ -182,7 +182,7 @@ public final class AmbienceSoundManager {
 			return 0.0f;
 		}
 
-		return calculateScaledVolume(windIntensity, LOW_WIND_THRESHOLD, MAX_WIND_REFERENCE, 0.15f, 0.95f, scalingFactor);
+		return calculateScaledVolume(windIntensity, LOW_WIND_THRESHOLD, MAX_WIND_REFERENCE, 0.2f, 1.0f, scalingFactor);
 	}
 
 	private float calculateScaledVolume(double windIntensity, double lowerBound, double upperBound, float minVolume, float maxVolume,

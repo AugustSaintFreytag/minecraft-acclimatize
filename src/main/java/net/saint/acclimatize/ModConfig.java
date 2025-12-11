@@ -261,6 +261,14 @@ public class ModConfig implements ConfigData {
 	public double windIntensityMax = 5.0;
 
 	@ConfigEntry.Category("wind")
+	@Comment("The altitude at which altitude-based wind factor reaches its maximum value (in blocks). (Default: 196)")
+	public int windAltitudeMax = 196;
+
+	@ConfigEntry.Category("world")
+	@Comment("The applied coefficient for player-local altitude-based wind factor. (Default: 1.25)")
+	public double windAltitudeFactor = 1.25;
+
+	@ConfigEntry.Category("wind")
 	@Comment("The factor for how much wind affects ambient temperature when fully exposed. (Default: -1.25)")
 	public double windChillFactor = -1.25;
 
