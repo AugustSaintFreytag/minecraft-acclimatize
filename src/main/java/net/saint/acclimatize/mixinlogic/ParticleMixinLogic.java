@@ -74,7 +74,7 @@ public interface ParticleMixinLogic {
 	}
 
 	private double motionFactorForParticle(Vec3d particlePosition) {
-		var direction = ModClient.getWindDirection();
+		var direction = ModClient.getLocalWindDirection();
 		var particleDirection = new Vec3d(MathUtil.cos(direction), 0, MathUtil.sin(direction));
 
 		var baseFactor = windInfluenceFactorForUnblockedOppositeDirection(particlePosition, particleDirection);
@@ -190,8 +190,8 @@ public interface ParticleMixinLogic {
 			return new Vec3d(0, 0, 0);
 		}
 
-		var windDirection = ModClient.getWindDirection();
-		var windIntensity = ModClient.getWindIntensity();
+		var windDirection = ModClient.getLocalWindDirection();
+		var windIntensity = ModClient.getEffectiveWindIntensity();
 
 		var windX = Math.cos(windDirection) * windIntensity * 0.01;
 		var windZ = Math.sin(windDirection) * windIntensity * 0.01;

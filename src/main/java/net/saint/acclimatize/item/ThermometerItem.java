@@ -40,7 +40,7 @@ public class ThermometerItem extends Item {
 						+ " day/night" + ", ♣ Biome " + formattedValue(playerState.biomeTemperature) + ", ☼ Sun/Shade "
 						+ formattedValue(playerState.sunShadeTemperature) + ", ☰ Wind " + formattedValue(playerState.windTemperature)
 						+ " from " + Math.floor(Math.toDegrees(serverState.windDirection)) + "° at "
-						+ formattedValue(playerState.windIntensity) + " (baseline " + formattedValue(serverState.windIntensity)
+						+ formattedValue(playerState.effectiveWindIntensity) + " (baseline " + formattedValue(serverState.windIntensity)
 						+ "), ♢ Blocks " + formattedValue(playerState.blockTemperature) + ", ☍ Items "
 						+ formattedValue(playerState.itemTemperature) + ", ☈ Interior " + formattedValue(playerState.isInInterior) + ")"));
 

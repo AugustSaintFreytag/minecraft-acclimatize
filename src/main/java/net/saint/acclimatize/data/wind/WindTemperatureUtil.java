@@ -29,7 +29,7 @@ public final class WindTemperatureUtil {
 		// Wind Temperature
 
 		var windManager = Mod.PLAYER_WIND_MANAGER.getManagerForPlayer(player);
-		var windIntensity = windManager.getWindIntensity();
+		var windIntensity = windManager.getEffectiveWindIntensity();
 		var windTemperature = windIntensity * Mod.CONFIG.windChillFactor;
 
 		// Finalize
