@@ -43,6 +43,8 @@ public final class TemperatureHudUtil {
 	private static final Identifier THERMOMETER_FLAME_TEXTURE = textureIdentifierForThermometer("flame_icon_8x8.png");
 	private static final Identifier THERMOMETER_STILL_TEXTURE = textureIdentifierForThermometer("temperate_icon.png");
 
+	private static final Identifier THERMOMETER_OVERLAY_SHIELDED = textureIdentifierForGlassStyle("overlay_shielded.png");
+
 	private static final HashMap<TEMPERATURE_LEVEL, Identifier> THERMOMETER_FILL_TEXTURES = new HashMap<>() {
 		{
 			put(TEMPERATURE_LEVEL.EXTREMELY_COLD, textureIdentifierForGlassStyle("fill_extremely_cold.png"));
@@ -82,6 +84,9 @@ public final class TemperatureHudUtil {
 		var bodyTemperature = ModClient.getBodyTemperature();
 		var ambientTemperature = ModClient.getAmbientTemperature();
 		var acclimatizationRate = ModClient.getAcclimatizationRate();
+		var localWindIntensity = ModClient.getLocalWindIntensity();
+		var effectiveWindIntensity = ModClient.getEffectiveWindIntensity();
+		var isShieldedFromWind = ModClient.getIsPlayerInInterior() || effectiveWindIntensity < localWindIntensity * 0.15;
 
 		if (bodyTemperature == 0.0) {
 			return;
@@ -95,12 +100,12 @@ public final class TemperatureHudUtil {
 			var positionX = x + offset.x;
 			var positionY = y + offset.y;
 
-			if (glassTexture != null) {
-				context.drawTexture(glassTexture, positionX - 8, positionY - 10, 0, 0, 16, 21, 16, 21);
-			}
+			context.drawTexture(glassTexture, positionX - 8, positionY - 10, 0, 0, 16, 21, 16, 21);
+			context.drawTexture(outlineTexture, positionX - 8, positionY - 10, 0, 0, 16, 21, 16, 21);
 
-			if (outlineTexture != null) {
-				context.drawTexture(outlineTexture, positionX - 8, positionY - 10, 0, 0, 16, 21, 16, 21);
+			if (isShieldedFromWind) {
+				var overlayTexture = THERMOMETER_OVERLAY_SHIELDED;
+				context.drawTexture(overlayTexture, positionX - 8, positionY - 10, 0, 0, 16, 21, 16, 21);
 			}
 		}
 	}
