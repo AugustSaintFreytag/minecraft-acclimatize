@@ -7,8 +7,6 @@ public class PlayerState extends PersistentState {
 
 	// Properties
 
-	public boolean isInInterior = false;
-
 	public double bodyTemperature = 0;
 	public double acclimatizationRate = 0;
 	public double ambientTemperature = 0;
@@ -19,14 +17,15 @@ public class PlayerState extends PersistentState {
 	public double blockTemperature = 0;
 	public double itemTemperature = 0;
 
-	public double windIntensity = 0;
+	public double effectiveWindIntensity = 0;
+	public double localWindIntensity = 0;
+
+	public boolean isInInterior = false;
 
 	// NBT
 
 	@Override
 	public NbtCompound writeNbt(NbtCompound nbt) {
-		nbt.putBoolean(PlayerStateNBTKeys.isInInterior, isInInterior);
-
 		nbt.putDouble(PlayerStateNBTKeys.bodyTemperature, bodyTemperature);
 		nbt.putDouble(PlayerStateNBTKeys.acclimatizationRate, acclimatizationRate);
 		nbt.putDouble(PlayerStateNBTKeys.ambientTemperature, ambientTemperature);
@@ -37,15 +36,16 @@ public class PlayerState extends PersistentState {
 		nbt.putDouble(PlayerStateNBTKeys.blockTemperature, blockTemperature);
 		nbt.putDouble(PlayerStateNBTKeys.itemTemperature, itemTemperature);
 
-		nbt.putDouble(PlayerStateNBTKeys.windIntensity, windIntensity);
+		nbt.putDouble(PlayerStateNBTKeys.effectiveWindIntensity, effectiveWindIntensity);
+		nbt.putDouble(PlayerStateNBTKeys.localWindIntensity, localWindIntensity);
+
+		nbt.putBoolean(PlayerStateNBTKeys.isInInterior, isInInterior);
 
 		return nbt;
 	}
 
 	public static PlayerState fromNbt(NbtCompound nbt) {
 		PlayerState playerState = new PlayerState();
-
-		playerState.isInInterior = nbt.getBoolean(PlayerStateNBTKeys.isInInterior);
 
 		playerState.bodyTemperature = nbt.getDouble(PlayerStateNBTKeys.bodyTemperature);
 		playerState.acclimatizationRate = nbt.getDouble(PlayerStateNBTKeys.acclimatizationRate);
@@ -57,7 +57,10 @@ public class PlayerState extends PersistentState {
 		playerState.blockTemperature = nbt.getDouble(PlayerStateNBTKeys.blockTemperature);
 		playerState.itemTemperature = nbt.getDouble(PlayerStateNBTKeys.itemTemperature);
 
-		playerState.windIntensity = nbt.getDouble(PlayerStateNBTKeys.windIntensity);
+		playerState.effectiveWindIntensity = nbt.getDouble(PlayerStateNBTKeys.effectiveWindIntensity);
+		playerState.localWindIntensity = nbt.getDouble(PlayerStateNBTKeys.localWindIntensity);
+
+		playerState.isInInterior = nbt.getBoolean(PlayerStateNBTKeys.isInInterior);
 
 		return playerState;
 	}

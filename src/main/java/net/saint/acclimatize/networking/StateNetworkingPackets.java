@@ -17,44 +17,43 @@ import net.saint.acclimatize.server.ServerStateUtil;
 public class StateNetworkingPackets {
 
 	public static class TemperaturePacketTuple {
-		public double acclimatizationRate;
-		public double bodyTemperature;
-		public double ambientTemperature;
-		public double windTemperature;
-		public double windIntensity;
-		public double windDirection;
-		public boolean isInInterior;
+		public double playerAcclimatizationRate;
+		public double playerBodyTemperature;
+		public double playerAmbientTemperature;
+		public double playerWindTemperature;
+		public double playerWindIntensity;
+		public double localWindIntensity;
+		public double localWindDirection;
 
 		public TemperaturePacketTuple() {
-			this.acclimatizationRate = 0;
-			this.bodyTemperature = 0;
-			this.ambientTemperature = 0;
-			this.windTemperature = 0;
-			this.windIntensity = 0;
-			this.windDirection = 0;
-			this.isInInterior = false;
+			this.playerAcclimatizationRate = 0;
+			this.playerBodyTemperature = 0;
+			this.playerAmbientTemperature = 0;
+			this.playerWindTemperature = 0;
+			this.playerWindIntensity = 0;
+			this.localWindDirection = 0;
 		}
 
 		public void encodeValuesToBuffer(PacketByteBuf buffer) {
-			buffer.writeDouble(acclimatizationRate);
-			buffer.writeDouble(bodyTemperature);
-			buffer.writeDouble(ambientTemperature);
-			buffer.writeDouble(windTemperature);
-			buffer.writeDouble(windIntensity);
-			buffer.writeDouble(windDirection);
-			buffer.writeBoolean(isInInterior);
+			buffer.writeDouble(playerAcclimatizationRate);
+			buffer.writeDouble(playerBodyTemperature);
+			buffer.writeDouble(playerAmbientTemperature);
+			buffer.writeDouble(playerWindTemperature);
+			buffer.writeDouble(playerWindIntensity);
+			buffer.writeDouble(localWindIntensity);
+			buffer.writeDouble(localWindDirection);
 		}
 
 		public static TemperaturePacketTuple valuesFromBuffer(PacketByteBuf buffer) {
 			var tuple = new TemperaturePacketTuple();
 
-			tuple.acclimatizationRate = buffer.readDouble();
-			tuple.bodyTemperature = buffer.readDouble();
-			tuple.ambientTemperature = buffer.readDouble();
-			tuple.windTemperature = buffer.readDouble();
-			tuple.windIntensity = buffer.readDouble();
-			tuple.windDirection = buffer.readDouble();
-			tuple.isInInterior = buffer.readBoolean();
+			tuple.playerAcclimatizationRate = buffer.readDouble();
+			tuple.playerBodyTemperature = buffer.readDouble();
+			tuple.playerAmbientTemperature = buffer.readDouble();
+			tuple.playerWindTemperature = buffer.readDouble();
+			tuple.playerWindIntensity = buffer.readDouble();
+			tuple.localWindIntensity = buffer.readDouble();
+			tuple.localWindDirection = buffer.readDouble();
 
 			return tuple;
 		}
@@ -90,13 +89,13 @@ public class StateNetworkingPackets {
 
 		var tuple = new TemperaturePacketTuple();
 
-		tuple.acclimatizationRate = playerState.acclimatizationRate;
-		tuple.bodyTemperature = playerState.bodyTemperature;
-		tuple.ambientTemperature = playerState.ambientTemperature;
-		tuple.windTemperature = playerState.windTemperature;
-		tuple.windIntensity = playerState.windIntensity;
-		tuple.windDirection = serverState.windDirection;
-		tuple.isInInterior = playerState.isInInterior;
+		tuple.playerAcclimatizationRate = playerState.acclimatizationRate;
+		tuple.playerBodyTemperature = playerState.bodyTemperature;
+		tuple.playerAmbientTemperature = playerState.ambientTemperature;
+		tuple.playerWindTemperature = playerState.windTemperature;
+		tuple.playerWindIntensity = playerState.effectiveWindIntensity;
+		tuple.localWindIntensity = playerState.localWindIntensity;
+		tuple.localWindDirection = serverState.windDirection;
 
 		var outgoingBuffer = PacketByteBufs.create();
 		tuple.encodeValuesToBuffer(outgoingBuffer);

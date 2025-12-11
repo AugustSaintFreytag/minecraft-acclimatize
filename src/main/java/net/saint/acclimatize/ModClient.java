@@ -34,8 +34,10 @@ public class ModClient implements ClientModInitializer {
 	private static long clientTickElapsed = 0;
 
 	private static long lastWindUpdateTick = 0;
-	private static double lastWindIntensity = 0;
-	private static double lastWindDirection = 0;
+
+	private static double lastEffectiveWindIntensity = 0;
+	private static double lastLocalWindIntensity = 0;
+	private static double lastLocalWindDirection = 0;
 
 	// Properties
 
@@ -88,44 +90,47 @@ public class ModClient implements ClientModInitializer {
 
 		cachedTemperatureValues = values;
 
-		if (previousValues.windDirection != values.windDirection) {
-			lastWindDirection = previousValues.windDirection;
+		if (previousValues.localWindDirection != values.localWindDirection) {
+			lastLocalWindDirection = previousValues.localWindDirection;
 			lastWindUpdateTick = serverTick;
 		}
 
-		if (previousValues.windIntensity != values.windIntensity) {
-			lastWindIntensity = previousValues.windIntensity;
+		if (previousValues.playerWindIntensity != values.playerWindIntensity) {
+			lastEffectiveWindIntensity = previousValues.playerWindIntensity;
 			lastWindUpdateTick = serverTick;
 		}
 	}
 
 	public static double getAcclimatizationRate() {
-		return cachedTemperatureValues.acclimatizationRate;
+		return cachedTemperatureValues.playerAcclimatizationRate;
 	}
 
 	public static double getBodyTemperature() {
-		return cachedTemperatureValues.bodyTemperature;
+		return cachedTemperatureValues.playerBodyTemperature;
 	}
 
 	public static double getAmbientTemperature() {
-		return cachedTemperatureValues.ambientTemperature;
+		return cachedTemperatureValues.playerAmbientTemperature;
 	}
 
 	public static double getWindTemperature() {
-		return cachedTemperatureValues.windTemperature;
+		return cachedTemperatureValues.playerWindTemperature;
 	}
 
-	public static double getWindDirection() {
-		return MathUtil.lerp(lastWindDirection, cachedTemperatureValues.windDirection, windInterpolationValue());
+	public static double getEffectiveWindIntensity() {
+		return MathUtil.lerp(lastEffectiveWindIntensity, cachedTemperatureValues.playerWindIntensity, windInterpolationValue());
+	}
+
+	public static double getLocalWindIntensity() {
+		return MathUtil.lerp(lastLocalWindIntensity, cachedTemperatureValues.localWindIntensity, windInterpolationValue());
+	}
+
+	public static double getLocalWindDirection() {
+		return MathUtil.lerp(lastLocalWindDirection, cachedTemperatureValues.localWindDirection, windInterpolationValue());
 	}
 
 	public static boolean getIsPlayerInInterior() {
 		return SPACE_MANAGER.isPlayerInInterior();
-	}
-
-	public static double getWindIntensity() {
-		return MathUtil.lerp(lastWindIntensity, cachedTemperatureValues.windIntensity, windInterpolationValue())
-				* windPrecipitationFactor();
 	}
 
 	// Transforms
@@ -136,18 +141,6 @@ public class ModClient implements ClientModInitializer {
 		var transitionFactor = (double) deltaTime / (double) Mod.CONFIG.windTransitionInterval;
 
 		return MathUtil.clamp(transitionFactor, 0.0, 1.0);
-	}
-
-	private static double windPrecipitationFactor() {
-		var world = getWorld();
-
-		if (world.isThundering()) {
-			return 3.0;
-		} else if (world.isRaining()) {
-			return 2.0;
-		}
-
-		return 1.0;
 	}
 
 	// Set-Up

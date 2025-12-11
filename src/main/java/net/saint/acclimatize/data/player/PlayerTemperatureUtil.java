@@ -63,7 +63,8 @@ public class PlayerTemperatureUtil {
 
 		// Wind
 
-		var windIntensity = windManager.getWindIntensity();
+		var localWindIntensity = windManager.getLocalWindIntensity();
+		var effectiveWindIntensity = windManager.getEffectiveWindIntensity();
 		var windTemperatureDelta = WindTemperatureUtil.windTemperatureForEnvironment(serverState, player, isInInterior);
 		effectiveTemperature += windTemperatureDelta;
 
@@ -113,7 +114,8 @@ public class PlayerTemperatureUtil {
 		playerState.windTemperature = windTemperatureDelta;
 		playerState.blockTemperature = blockTemperatureDelta;
 		playerState.itemTemperature = itemTemperatureDelta;
-		playerState.windIntensity = windIntensity;
+		playerState.localWindIntensity = localWindIntensity;
+		playerState.effectiveWindIntensity = effectiveWindIntensity;
 
 		playerState.markDirty();
 	}
