@@ -6,6 +6,7 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Pair;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -31,7 +32,8 @@ public final class WindManager {
 
 	private int numberOfRaysFired;
 
-	private double windIntensity = 0.0;
+	private double localWindIntensity = 0.0;
+	private double effectiveWindIntensity = 0.0;
 
 	// Reload
 
@@ -41,8 +43,12 @@ public final class WindManager {
 
 	// Access
 
-	public double getWindIntensity() {
-		return windIntensity;
+	public double getLocalWindIntensity() {
+		return localWindIntensity;
+	}
+
+	public double getEffectiveWindIntensity() {
+		return effectiveWindIntensity;
 	}
 
 	public int getNumberOfRaysFired() {
@@ -52,18 +58,24 @@ public final class WindManager {
 	// Ticking
 
 	public void tick(ServerState serverState, ServerPlayerEntity player) {
-		windIntensity = getWindIntensityFactorForPlayer(serverState, player);
+		var windIntensityPair = getWindIntensityFactorForPlayer(serverState, player);
+
+		localWindIntensity = windIntensityPair.getLeft();
+		effectiveWindIntensity = windIntensityPair.getRight();
 	}
 
 	// Wind (Aggregate)
 
-	public double getWindIntensityFactorForPlayer(ServerState serverState, ServerPlayerEntity player) {
+	public Pair<Double, Double> getWindIntensityFactorForPlayer(ServerState serverState, ServerPlayerEntity player) {
 		var baseWindIntensity = serverState.windIntensity;
 		var positionalWindFactor = BiomeWindUtil.positionalWindFactorForPlayer(player);
 		var precipitationWindFactor = getPrecipitationWindFactorForPlayer(player);
 		var unblockedWindFactor = getUnblockedWindFactorForPlayer(player, serverState.windDirection);
 
-		return baseWindIntensity * positionalWindFactor * precipitationWindFactor * unblockedWindFactor;
+		var localWindIntensity = baseWindIntensity * positionalWindFactor * precipitationWindFactor;
+		var effectiveWindIntensity = localWindIntensity * unblockedWindFactor;
+
+		return new Pair<>(localWindIntensity, effectiveWindIntensity);
 	}
 
 	// Wind (Weather)
@@ -76,15 +88,15 @@ public final class WindManager {
 
 		if (precipitation == Biome.Precipitation.RAIN) {
 			if (world.isThundering()) {
-				return 1.4;
+				return 1.5;
 			}
 
 			if (world.isRaining()) {
-				return 1.2;
+				return 1.3;
 			}
 		} else if (precipitation == Biome.Precipitation.SNOW) {
 			if (world.isRaining()) {
-				return 1.1;
+				return 1.2;
 			}
 		}
 
