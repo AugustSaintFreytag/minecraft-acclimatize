@@ -136,7 +136,7 @@ public final class AmbienceSoundManager {
 			return AmbienceStateProperties.none();
 		}
 
-		var windIntensity = Math.max(0.0, ModClient.getWindIntensity());
+		var windIntensity = Math.max(0.0, ModClient.getLocalWindIntensity());
 		var windLevel = determineWindLevel(windIntensity);
 		var windBiomeKind = WindBiomeKindUtil.kindForPlayer(client);
 
@@ -163,7 +163,7 @@ public final class AmbienceSoundManager {
 
 	private float volumeForProperties(World world, BlockPos position, AmbienceStateProperties properties) {
 		var windLevel = properties.level();
-		var windIntensity = ModClient.getWindIntensity();
+		var windIntensity = ModClient.getLocalWindIntensity();
 		var volumeScalingFactor = Mod.CONFIG.ambientSoundWindIntensityFactor;
 
 		if (Mod.CONFIG.enableRainSounds && properties.isRaining()) {

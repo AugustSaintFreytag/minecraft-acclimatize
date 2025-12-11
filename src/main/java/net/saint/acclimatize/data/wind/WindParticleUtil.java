@@ -22,7 +22,7 @@ public class WindParticleUtil {
 		}
 
 		var random = world.getRandom();
-		var windIntensity = ModClient.getWindIntensity();
+		var windIntensity = ModClient.getEffectiveWindIntensity();
 		var spawnRate = Math.max(0.0, Mod.CONFIG.windParticleSpawnRate);
 		var minIntensity = Mod.CONFIG.windIntensityMin;
 		var maxIntensity = Mod.CONFIG.windIntensityMax;
@@ -47,7 +47,7 @@ public class WindParticleUtil {
 			return;
 		}
 
-		var windDirection = ModClient.getWindDirection();
+		var windDirection = ModClient.getLocalWindDirection();
 		var spawnRadius = Math.max(1, Mod.CONFIG.windParticleSpawnRadius);
 
 		for (var i = 0; i < spawnCount; i++) {

@@ -22,8 +22,8 @@ public interface RainParticleMixinLogic {
 
 	public default ValueTuple windAffectedVelocityForParticle(RainParticle particle, Vec3d velocity) {
 		// Fetch our mod's wind parameters
-		double windDirection = ModClient.getWindDirection(); // radians, 0 = north→south
-		double windIntensity = ModClient.getWindIntensity();
+		double windDirection = ModClient.getLocalWindDirection(); // radians, 0 = north→south
+		double windIntensity = ModClient.getEffectiveWindIntensity();
 		double effectFactor = Mod.CONFIG.particleWeatherEffectFactor;
 
 		// Build a horizontal vector so 0 rad → +Z
