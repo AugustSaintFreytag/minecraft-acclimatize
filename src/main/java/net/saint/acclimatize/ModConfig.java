@@ -313,8 +313,8 @@ public class ModConfig implements ConfigData {
 	public boolean enableWindParticles = true;
 
 	@ConfigEntry.Category("particles")
-	@Comment("Spawn rate for random wind particles. Spawn rate is first determined by wind intensity, then scaled by this value. (Default: 0.05)")
-	public double windParticleSpawnRate = 0.05;
+	@Comment("Spawn rate for random wind particles. Spawn rate is first determined by wind intensity, then scaled by this value. (Default: 1.0)")
+	public double windParticleSpawnRate = 1.0;
 
 	@ConfigEntry.Category("particles")
 	@Comment("Radius around the player to spawn wind particles. (Default: 16)")
@@ -333,23 +333,23 @@ public class ModConfig implements ConfigData {
 	public double particleRainMaxAngle = 30.0;
 
 	@ConfigEntry.Category("particles")
-	@Comment("Toggles particles being affected by heat source blocks (only applies to smoke). (Performance impact: low) (Default: true)")
+	@Comment("Toggles particles being affected by heat source blocks (only applies to smoke). (Performance Impact: low) (Default: true)")
 	public boolean enableParticleHeatEffects = true;
 
 	@ConfigEntry.Category("particles")
-	@Comment("Toggles blocks being able to affect particle velocity if wind path is obstructed. (Performance impact: medium) (Default: true)")
+	@Comment("Toggles blocks being able to affect particle velocity if wind path is obstructed. (Performance Impact: medium) (Default: true)")
 	public boolean enableParticleBlockChecks = true;
 
 	@ConfigEntry.Category("particles")
-	@Comment("Toggles particles being affected by near-by fluid blocks. (Performance impact: medium) (Default: true)")
+	@Comment("Toggles particles being affected by near-by fluid blocks. (Performance Impact: medium) (Default: true)")
 	public boolean enableParticleFluidBlockChecks = true;
 
 	@ConfigEntry.Category("particles")
-	@Comment("Toggles complex wind simulation, including being pushed alongside and around obstacles. (Performance impact: high) (Default: false)")
+	@Comment("Toggles complex wind simulation, including being pushed alongside and around obstacles. (Performance Impact: high) (Default: false)")
 	public boolean enableParticleComplexInteractions = false;
 
 	@ConfigEntry.Category("particles")
-	@Comment("Toggles complex wind simulation to allow particles to be funelled through gaps in obstacles. (Performance impact: high) (Default: false)")
+	@Comment("Toggles complex wind simulation to allow particles to be funelled through gaps in obstacles. (Performance Impact: high) (Default: false)")
 	public boolean enableParticleFunneling = false;
 
 	// HUD
