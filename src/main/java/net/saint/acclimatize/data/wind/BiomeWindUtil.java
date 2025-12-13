@@ -90,7 +90,7 @@ public class BiomeWindUtil {
 		// Above Ground
 		var aboveAnchorFactor = (altitude - anchorAltitude) / (maximumAltitude - anchorAltitude);
 		// Start from baseline 100%, increase to altitude factor at max altitude.
-		return aboveAnchorFactor * Mod.CONFIG.windAltitudeFactor;
+		return 1 + (aboveAnchorFactor * (Mod.CONFIG.windAltitudeFactor - 1.0));
 	}
 
 }
