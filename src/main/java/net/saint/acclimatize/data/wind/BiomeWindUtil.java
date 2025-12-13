@@ -8,7 +8,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.saint.acclimatize.Mod;
-import net.saint.acclimatize.util.MathUtil;
 
 public class BiomeWindUtil {
 
@@ -67,20 +66,31 @@ public class BiomeWindUtil {
 	}
 
 	private static double windFactorForAltitude(double altitude) {
-		var anchor = (double) Mod.CONFIG.altitudeZeroingAnchor;
-		var maxAltitude = anchor + (double) Mod.CONFIG.windAltitudeMax;
-		var minAltitude = 0.0;
+		var anchorAltitude = (double) Mod.CONFIG.altitudeZeroingAnchor;
+		var maximumAltitude = (double) Mod.CONFIG.windAltitudeMax;
+		var minimumAltitude = 30.0;
 
-		if (altitude <= minAltitude) {
+		// Lower Depths
+		if (altitude <= minimumAltitude) {
 			return 0.0;
 		}
 
-		if (altitude >= maxAltitude) {
+		// Higher Highs
+		if (altitude >= maximumAltitude) {
 			return Mod.CONFIG.windAltitudeFactor;
 		}
 
-		var factor = (altitude - minAltitude) / (maxAltitude - minAltitude);
-		return MathUtil.clamp(factor, 0.0, 1.0) * Mod.CONFIG.windAltitudeFactor;
+		// Below Ground
+		if (altitude <= anchorAltitude) {
+			var belowAnchorFactor = 1 - (altitude - minimumAltitude) / (anchorAltitude - minimumAltitude);
+			// Start from baseline 100%, decrease to 0% below ground, no altitude factor applied.
+			return belowAnchorFactor;
+		}
+
+		// Above Ground
+		var aboveAnchorFactor = (altitude - anchorAltitude) / (maximumAltitude - anchorAltitude);
+		// Start from baseline 100%, increase to altitude factor at max altitude.
+		return 1 + (aboveAnchorFactor * (Mod.CONFIG.windAltitudeFactor - 1.0));
 	}
 
 }
