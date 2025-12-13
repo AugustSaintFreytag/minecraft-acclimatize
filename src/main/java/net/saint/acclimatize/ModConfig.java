@@ -241,36 +241,36 @@ public class ModConfig implements ConfigData {
 	public boolean enableWind = true;
 
 	@ConfigEntry.Category("wind")
-	@Comment("The base number of ticks until wind direction is updated, plus randomization. (Default: 6000)")
-	public int windDirectionUpdateInterval = 6000;
+	@Comment("The base number of ticks until wind direction is updated, plus randomization. (Default: 7200, 6 minutes)")
+	public int windDirectionUpdateInterval = 7200;
 
 	@ConfigEntry.Category("wind")
-	@Comment("The base number of ticks until wind intensity is updated, plus randomization. (Default: 1200)")
-	public int windIntensityUpdateInterval = 1200;
+	@Comment("The base number of ticks until wind intensity is updated, plus randomization. (Default: 3600, 3 minutes)")
+	public int windIntensityUpdateInterval = 3600;
 
 	@ConfigEntry.Category("wind")
-	@Comment("The number of ticks to transition from one wind intensity or direction to a new value. (Default: 200)")
+	@Comment("The number of ticks to transition from one wind intensity or direction to a new value client-side. (Default: 200)")
 	public int windTransitionInterval = 200;
 
 	@ConfigEntry.Category("wind")
-	@Comment("The minimum intensity wind can be transitioned to in random tick assignment. (Default: 0.15)")
+	@Comment("The minimum intensity wind can be set to in the server-side continuous weather cycle. (Default: 0.15)")
 	public double windIntensityMin = 0.15;
 
 	@ConfigEntry.Category("wind")
-	@Comment("The maximum intensity wind can be transitioned to in random tick assignment. (Default: 5.0)")
-	public double windIntensityMax = 5.0;
+	@Comment("The maximum intensity wind can be set to in the server-side continuous weather cycle. (Default: 4.0)")
+	public double windIntensityMax = 4.0;
 
 	@ConfigEntry.Category("wind")
 	@Comment("The altitude at which altitude-based wind factor reaches its maximum value (in blocks). (Default: 196)")
 	public int windAltitudeMax = 196;
 
 	@ConfigEntry.Category("world")
-	@Comment("The applied coefficient for player-local altitude-based wind factor. (Default: 1.25)")
-	public double windAltitudeFactor = 1.25;
+	@Comment("The applied factor for how much player-local wind increases with altitude. Lower altitudes will always have reduced wind. (Default: 1.5)")
+	public double windAltitudeFactor = 1.5;
 
 	@ConfigEntry.Category("wind")
-	@Comment("The factor for how much wind affects ambient temperature when fully exposed. (Default: -1.25)")
-	public double windChillFactor = -1.25;
+	@Comment("The factor for how much wind affects ambient temperature when fully exposed. (Default: -1.35)")
+	public double windChillFactor = -1.35;
 
 	@ConfigEntry.Category("wind")
 	@Comment("Number of rays used in wind calculation. Increase for more precise wind simulation. (Default: 8)")
