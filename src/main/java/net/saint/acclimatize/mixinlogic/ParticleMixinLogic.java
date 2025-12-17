@@ -77,11 +77,12 @@ public interface ParticleMixinLogic {
 		var direction = ModClient.getLocalWindDirection();
 		var particleDirection = new Vec3d(MathUtil.cos(direction), 0, MathUtil.sin(direction));
 
-		var baseFactor = windInfluenceFactorForUnblockedOppositeDirection(particlePosition, particleDirection);
+		var baseFactor = windInfluenceFactorBaseline();
+		var environmentalFactor = windInfluenceFactorForUnblockedOppositeDirection(particlePosition, particleDirection);
 		var spaceFactor = windInfluenceForCurrentSpace();
 		var typeFactor = windInfluenceFactorForParticleType();
 
-		return baseFactor * spaceFactor * typeFactor * Mod.CONFIG.particleWindEffectFactor;
+		return baseFactor * environmentalFactor * spaceFactor * typeFactor * Mod.CONFIG.particleWindEffectFactor;
 	}
 
 	// Calculation Details
@@ -101,6 +102,10 @@ public interface ParticleMixinLogic {
 		}
 
 		return 1.0;
+	}
+
+	private double windInfluenceFactorBaseline() {
+		return 5.0;
 	}
 
 	private double windInfluenceFactorForUnblockedOppositeDirection(Vec3d particlePosition, Vec3d windDirection) {
@@ -130,8 +135,8 @@ public interface ParticleMixinLogic {
 					var fluidDistance = findDistanceToNearestFluidBlock(blockPosition, particlePosition);
 
 					if (fluidDistance < 0.5) {
-						// No influence if within 0.5 blocks away from fluid.
-						return 0.0;
+						// Minor influence if within 0.5 blocks away from fluid.
+						return 0.1;
 					}
 				}
 
@@ -140,7 +145,7 @@ public interface ParticleMixinLogic {
 			} else {
 				// Solid block found, return influence based on distance.
 				// Not sure what checking for non-solid blocks like lava or water was about.
-				return 0.0;
+				return 0.1;
 			}
 		}
 
