@@ -326,7 +326,7 @@ public class ModConfig implements ConfigData {
 
 	@ConfigEntry.Category("particles")
 	@Comment("The intensity by which weather particles are titled towards wind direction. (Default: 0.1)")
-	public double particleWeatherEffectFactor = 0.1;
+	public double particleWeatherTiltFactor = 0.1;
 
 	@ConfigEntry.Category("particles")
 	@Comment("The maximum angle a rain particle can get skewed by wind intensity and angle, in degrees. (Default: 30.0)")

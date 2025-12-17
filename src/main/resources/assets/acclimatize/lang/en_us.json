@@ -99,7 +99,7 @@
 	"text.autoconfig.acclimatize.option.windRayLength": "Wind Ray Length",
 	"text.autoconfig.acclimatize.option.enableParticleWindEffects": "Enable Particle Wind Effects",
 	"text.autoconfig.acclimatize.option.particleWindEffectFactor": "Particle Wind Effect Factor",
-	"text.autoconfig.acclimatize.option.particleWeatherEffectFactor": "Particle Weather Effect Factor",
+	"text.autoconfig.acclimatize.option.particleWeatherTiltFactor": "Particle Weather Tilt Factor",
 	"text.autoconfig.acclimatize.option.particleRainMaxAngle": "Particle Rain Max Angle",
 	"text.autoconfig.acclimatize.option.enableAmbientSounds": "Enable Ambient Sounds",
 	"text.autoconfig.acclimatize.option.enableRainSounds": "Enable Rain Sounds",
