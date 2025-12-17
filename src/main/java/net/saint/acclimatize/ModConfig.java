@@ -106,11 +106,11 @@ public class ModConfig implements ConfigData {
 	public double hyperthermiaThresholdMajor = 85.0;
 
 	@ConfigEntry.Category("player")
-	@Comment("The factor applied to server tick rate for client-side updates. (Default: 3)")
+	@Comment("The factor applied to the tick rate at which raycast checks are performed on client vs. server-side. (Default: 3)")
 	public int clientTickFactor = 3;
 
 	@ConfigEntry.Category("player")
-	@Comment("The factor applied to server raycast checks for client-side updates. (Default: 1)")
+	@Comment("The factor applied to the number of raycast checks accumulated on client vs. server-side. (Default: 1)")
 	public int clientRayCastFactor = 1;
 
 	// Blocks
@@ -326,7 +326,7 @@ public class ModConfig implements ConfigData {
 
 	@ConfigEntry.Category("particles")
 	@Comment("The intensity by which weather particles are titled towards wind direction. (Default: 0.1)")
-	public double particleWeatherEffectFactor = 0.1;
+	public double particleWeatherTiltFactor = 0.1;
 
 	@ConfigEntry.Category("particles")
 	@Comment("The maximum angle a rain particle can get skewed by wind intensity and angle, in degrees. (Default: 30.0)")
