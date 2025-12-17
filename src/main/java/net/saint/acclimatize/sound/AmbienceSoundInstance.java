@@ -5,12 +5,9 @@ import net.minecraft.client.sound.MovingSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.saint.acclimatize.data.space.SpaceKind;
 
 public class AmbienceSoundInstance extends MovingSoundInstance {
-
-	// Configuration
-
-	private static final float VOLUME_STEP = 0.04f;
 
 	// References
 
@@ -18,11 +15,14 @@ public class AmbienceSoundInstance extends MovingSoundInstance {
 
 	// Properties
 
+	private SpaceKind spaceKind;
+
 	private float targetVolume;
+	private float volumeStep = 0.01f;
 
 	// Init
 
-	protected AmbienceSoundInstance(MinecraftClient client, SoundCategory soundCategory, SoundEvent soundEvent) {
+	protected AmbienceSoundInstance(MinecraftClient client, SoundCategory soundCategory, SoundEvent soundEvent, SpaceKind spaceKind) {
 		super(soundEvent, soundCategory, SoundInstance.createRandom());
 
 		this.client = client;
@@ -32,6 +32,7 @@ public class AmbienceSoundInstance extends MovingSoundInstance {
 		this.targetVolume = this.volume;
 		this.pitch = 1.0f;
 		this.relative = true;
+		this.spaceKind = spaceKind;
 	}
 
 	// Tick
@@ -52,15 +53,35 @@ public class AmbienceSoundInstance extends MovingSoundInstance {
 		updateVolume();
 	}
 
+	// Access
+
+	public SpaceKind getSpaceKind() {
+		return spaceKind;
+	}
+
+	public float getTargetVolume() {
+		return targetVolume;
+	}
+
 	public void setTargetVolume(float targetVolume) {
 		this.targetVolume = Math.max(0.0f, targetVolume);
 	}
 
+	public float getVolumeStep() {
+		return volumeStep;
+	}
+
+	public void setVolumeStep(float volumeStep) {
+		this.volumeStep = volumeStep;
+	}
+
+	// Volume
+
 	private void updateVolume() {
 		if (volume < targetVolume) {
-			volume = Math.min(targetVolume, volume + VOLUME_STEP);
+			volume = Math.min(targetVolume, volume + volumeStep);
 		} else if (volume > targetVolume) {
-			volume = Math.max(targetVolume, volume - VOLUME_STEP / 2.0f);
+			volume = Math.max(targetVolume, volume - volumeStep / 2.0f);
 		}
 
 		if (targetVolume == 0.0f && volume == 0.0f) {

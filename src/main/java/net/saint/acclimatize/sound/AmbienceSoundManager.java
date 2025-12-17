@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.ModClient;
+import net.saint.acclimatize.data.space.SpaceKind;
 import net.saint.acclimatize.data.world.WorldUtil;
 import net.saint.acclimatize.util.MathUtil;
 
@@ -19,7 +20,7 @@ public final class AmbienceSoundManager {
 
 	private static final double LOW_WIND_THRESHOLD = 0.01;
 	private static final double MAX_WIND_REFERENCE = 6.0;
-	private static final double HIGH_WIND_THRESHOLD = 2.65;
+	private static final double HIGH_WIND_THRESHOLD = 2.75;
 
 	private static final float INTERIOR_RAIN_VOLUME_MULTIPLIER = 1.0f;
 	private static final float EXTERIOR_RAIN_VOLUME_MULTIPLIER = 1.0f;
@@ -30,11 +31,17 @@ public final class AmbienceSoundManager {
 	private static final float FOREST_VOLUME_MULTIPLIER = 0.95f;
 	private static final float SNOW_VOLUME_MULTIPLIER = 1.0f;
 
+	private static final float VOLUME_STEP_REGULAR = 0.005f;
+	private static final float VOLUME_STEP_FAST = 0.04f;
+
 	// References
 
 	private AmbienceStateProperties activeProperties = AmbienceStateProperties.none();
 
 	private AmbienceSoundInstance activeSound;
+
+	private SpaceKind activeSoundSpaceKind;
+
 	private final List<AmbienceSoundInstance> fadingSounds = new ArrayList<>();
 
 	// Access
@@ -88,16 +95,24 @@ public final class AmbienceSoundManager {
 
 			var soundEvent = soundEventForProperties(properties);
 			var soundCategory = soundCategoryForEvent(soundEvent);
+			var soundSpaceKind = spaceKindForProperties(properties);
 
 			if (soundEvent == null) {
 				return;
 			}
 
+			var didFlipSpaceKind = activeSoundSpaceKind != null && activeSoundSpaceKind != soundSpaceKind;
+
 			activeProperties = properties;
-			activeSound = new AmbienceSoundInstance(client, soundCategory, soundEvent);
+			activeSoundSpaceKind = soundSpaceKind;
+			activeSound = new AmbienceSoundInstance(client, soundCategory, soundEvent, soundSpaceKind);
 			activeSound.setTargetVolume(targetVolume * Mod.CONFIG.ambientSoundVolume);
 
 			soundManager.play(activeSound);
+
+			if (didFlipSpaceKind) {
+				updateFadeSpeedForSpaceChange();
+			}
 
 			return;
 		}
@@ -112,6 +127,19 @@ public final class AmbienceSoundManager {
 		}
 
 		activeProperties = AmbienceStateProperties.none();
+	}
+
+	private void updateFadeSpeedForSpaceChange() {
+		var currentSpaceKind = spaceKindForProperties(activeProperties);
+		var oppositeSpaceKind = oppositeSpaceKindForKind(currentSpaceKind);
+
+		for (var sound : fadingSounds) {
+			if (sound.getSpaceKind() == oppositeSpaceKind) {
+				sound.setVolumeStep(VOLUME_STEP_FAST);
+			} else {
+				sound.setVolumeStep(VOLUME_STEP_REGULAR);
+			}
+		}
 	}
 
 	private void fadeOutSound(AmbienceSoundInstance sound) {
@@ -204,6 +232,7 @@ public final class AmbienceSoundManager {
 		if (properties.isCave()) {
 			var caveDepth = WorldUtil.getApproximateRelativeCaveDepth(world, position);
 			var caveDepthFactor = 1 - MathUtil.clamp((float) caveDepth / 36.0f, 0.0f, 1.0f);
+
 			return Math.max(0.15f, CAVE_VOLUME_MULTIPLIER * caveDepthFactor);
 		}
 
@@ -294,6 +323,22 @@ public final class AmbienceSoundManager {
 		};
 		default -> null;
 		};
+	}
+
+	private SpaceKind spaceKindForProperties(AmbienceStateProperties properties) {
+		if (properties.isInterior()) {
+			return SpaceKind.INTERIOR;
+		}
+
+		return SpaceKind.EXTERIOR;
+	}
+
+	private SpaceKind oppositeSpaceKindForKind(SpaceKind spaceKind) {
+		if (spaceKind == SpaceKind.INTERIOR) {
+			return SpaceKind.EXTERIOR;
+		}
+
+		return SpaceKind.INTERIOR;
 	}
 
 }
