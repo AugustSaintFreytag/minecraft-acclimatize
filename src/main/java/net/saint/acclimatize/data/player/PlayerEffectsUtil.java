@@ -137,7 +137,7 @@ public final class PlayerEffectsUtil {
 			return;
 		}
 
-		var thirstStatusEffectId = new Identifier("dehydration", "thirst_effect");
+		var thirstStatusEffectId = new Identifier("dehydration", "thirst");
 		var thirstStatusEffectType = Registries.STATUS_EFFECT.get(thirstStatusEffectId);
 		var thirstStatusEffect = new StatusEffectInstance(thirstStatusEffectType, EFFECT_DURATION, amplifier);
 		player.addStatusEffect(thirstStatusEffect);
