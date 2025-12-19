@@ -42,7 +42,7 @@ public class WindParticleUtil {
 
 		var x = entity.getX() + Math.cos(spawnAngle) * spawnRadius;
 		var z = entity.getZ() + Math.sin(spawnAngle) * spawnRadius;
-		var y = entity.getBodyY(0.5) + random.nextTriangular(0, 1.5);
+		var y = entity.getBodyY(1.0) + random.nextTriangular(0, 2.5);
 
 		var horizontalSpeed = random.nextDouble() * 0.005 + 0.001;
 		var vx = -Math.sin(windDirection) * horizontalSpeed;
