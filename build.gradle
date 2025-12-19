@@ -36,14 +36,14 @@ loom {
 		}
 	}
 
-	runs {
-		client {
-			vmArgs.add("-XX:+AllowEnhancedClassRedefinition")
-		}
-		server {
-			vmArgs.add("-XX:+AllowEnhancedClassRedefinition")
-		}
-	}
+	// runs {
+	// 	client {
+	// 		vmArgs.add("-XX:+AllowEnhancedClassRedefinition")
+	// 	}
+	// 	server {
+	// 		vmArgs.add("-XX:+AllowEnhancedClassRedefinition")
+	// 	}
+	// }
 }
 
 dependencies {
@@ -70,31 +70,31 @@ dependencies {
 	
 	// Falling Leaves
 
-	modImplementation("maven.modrinth:fallingleaves:${project.fallingleaves_version}") {
+	modCompileOnly("maven.modrinth:fallingleaves:${project.fallingleaves_version}") {
 		transitive = false
 	}
 
 	// Particle Rain
 
-	modImplementation("maven.modrinth:particle-rain:${project.particlerain_version}") {
+	modCompileOnly("maven.modrinth:particle-rain:${project.particlerain_version}") {
 		transitive = false
 	}
 
 	// Dynamic Surroundings
 
-	modImplementation("maven.modrinth:dynamicsurroundingsfabric:${project.dynamicsurroundings_version}") {
+	modCompileOnly("maven.modrinth:dynamicsurroundingsfabric:${project.dynamicsurroundings_version}") {
 		transitive = false
 	}
 
 	// Ambient Sounds
 
-	modImplementation("maven.modrinth:ambientsounds:${project.ambientsounds_version}") {
+	modCompileOnly("maven.modrinth:ambientsounds:${project.ambientsounds_version}") {
 		transitive = false
 	}
 
 	// Atmosfera
 
-	modImplementation("maven.modrinth:atmosfera:${project.atmosfera_version}") {
+	modCompileOnly("maven.modrinth:atmosfera:${project.atmosfera_version}") {
 		transitive = false
 	}
 
