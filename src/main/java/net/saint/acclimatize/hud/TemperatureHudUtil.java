@@ -305,11 +305,11 @@ public final class TemperatureHudUtil {
 	}
 
 	private static Identifier textureIdentifierForThermometer(String textureName) {
-		return new Identifier(Mod.MOD_ID, "textures/thermometer" + textureName);
+		return new Identifier(Mod.MOD_ID, "textures/gui/thermometer" + textureName);
 	}
 
 	private static Identifier textureIdentifier(THERMOMETER_STYLE style, String textureName) {
-		return new Identifier(Mod.MOD_ID, "textures/" + textureGroupForThermometerStyle(style) + "/" + textureName);
+		return new Identifier(Mod.MOD_ID, "textures/gui/" + textureGroupForThermometerStyle(style) + "/" + textureName);
 	}
 
 	private static String textureGroupForThermometerStyle(THERMOMETER_STYLE style) {
