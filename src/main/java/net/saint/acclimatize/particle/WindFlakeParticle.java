@@ -32,8 +32,8 @@ public class WindFlakeParticle extends SpriteBillboardParticle {
 
 		var color = getRandomParticleColorForTemperature(random, ModClient.getAmbientTemperature());
 
-		this.setMaxAge(80);
-		this.scale(0.8f + this.random.nextFloat() * 0.1f);
+		this.setMaxAge(Mod.CONFIG.windParticleLifetime);
+		this.scale(Mod.CONFIG.windParticleSizeFactor * (1.0f + Mod.CONFIG.windParticleSizeVarianceFactor * this.random.nextFloat()));
 		this.setColor(color.getRed() / 255.0F, color.getGreen() / 255.0F, color.getBlue() / 255.0F);
 
 		this.gravityStrength = 0.01f;

@@ -313,8 +313,24 @@ public class ModConfig implements ConfigData {
 	public boolean enableWindParticles = true;
 
 	@ConfigEntry.Category("particles")
+	@Comment("Allows wind flake particles to collide with blocks. (Performance Impact: Medium) (Default: false)")
+	public boolean enableWindParticleCollision = false;
+
+	@ConfigEntry.Category("particles")
 	@Comment("Spawn rate for random wind particles. Spawn rate is first determined by wind intensity, then scaled by this value. (Default: 1.0)")
 	public double windParticleSpawnRate = 1.0;
+
+	@ConfigEntry.Category("particles")
+	@Comment("Size factor applied to wind flake particles, the base particle size. (Default: 0.75)")
+	public float windParticleSizeFactor = 0.75f;
+
+	@ConfigEntry.Category("particles")
+	@Comment("Size variance factor applied to wind flake particles, relative to the base size. (Default: 0.1)")
+	public float windParticleSizeVarianceFactor = 0.1f;
+
+	@ConfigEntry.Category("particles")
+	@Comment("Lifetime in ticks of wind flake particles, in ticks. (Default: 80)")
+	public int windParticleLifetime = 80;
 
 	@ConfigEntry.Category("particles")
 	@Comment("Radius around the player to spawn wind particles. (Default: 16)")
@@ -333,23 +349,23 @@ public class ModConfig implements ConfigData {
 	public double particleRainMaxAngle = 30.0;
 
 	@ConfigEntry.Category("particles")
-	@Comment("Toggles particles being affected by heat source blocks (only applies to smoke). (Performance Impact: low) (Default: true)")
+	@Comment("Toggles particles being affected by heat source blocks (only applies to smoke). (Performance Impact: Low) (Default: true)")
 	public boolean enableParticleHeatEffects = true;
 
 	@ConfigEntry.Category("particles")
-	@Comment("Toggles blocks being able to affect particle velocity if wind path is obstructed. (Performance Impact: medium) (Default: true)")
+	@Comment("Toggles blocks being able to affect particle velocity if wind path is obstructed. (Performance Impact: Medium) (Default: true)")
 	public boolean enableParticleBlockChecks = true;
 
 	@ConfigEntry.Category("particles")
-	@Comment("Toggles particles being affected by near-by fluid blocks. (Performance Impact: medium) (Default: true)")
+	@Comment("Toggles particles being affected by near-by fluid blocks. (Performance Impact: Medium) (Default: true)")
 	public boolean enableParticleFluidBlockChecks = true;
 
 	@ConfigEntry.Category("particles")
-	@Comment("Toggles complex wind simulation, including being pushed alongside and around obstacles. (Performance Impact: high) (Default: false)")
+	@Comment("Toggles complex wind simulation, including being pushed alongside and around obstacles. (Performance Impact: High) (Default: false)")
 	public boolean enableParticleComplexInteractions = false;
 
 	@ConfigEntry.Category("particles")
-	@Comment("Toggles complex wind simulation to allow particles to be funelled through gaps in obstacles. (Performance Impact: high) (Default: false)")
+	@Comment("Toggles complex wind simulation to allow particles to be funelled through gaps in obstacles. (Performance Impact: High) (Default: false)")
 	public boolean enableParticleFunneling = false;
 
 	// HUD
