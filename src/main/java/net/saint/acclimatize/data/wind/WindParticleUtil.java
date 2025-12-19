@@ -69,13 +69,11 @@ public class WindParticleUtil {
 	}
 
 	private static double calculateEffectiveParticleSpawnRate(World world) {
-		var windIntensity = ModClient.getEffectiveWindIntensity();
+		var windIntensity = ModClient.getLocalWindIntensity();
 		var spawnRate = Math.max(0.0, Mod.CONFIG.windParticleSpawnRate);
 		var minIntensity = Mod.CONFIG.windIntensityMin;
 		var maxIntensity = Mod.CONFIG.windIntensityMax;
-		var normalizedIntensity = maxIntensity > minIntensity
-				? Math.min(1.0, Math.max(0.0, (windIntensity - minIntensity) / (maxIntensity - minIntensity)))
-				: 1.0;
+		var normalizedIntensity = MathUtil.clamp((windIntensity - minIntensity) / (maxIntensity - minIntensity), 0.0, 1.0);
 
 		var effectiveRate = PARTICLE_BASE_SPAWN_RATE * spawnRate * normalizedIntensity;
 
