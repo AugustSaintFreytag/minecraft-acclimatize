@@ -321,8 +321,8 @@ public class ModConfig implements ConfigData {
 	public double windParticleSpawnRate = 1.0;
 
 	@ConfigEntry.Category("particles")
-	@Comment("Size factor applied to wind flake particles, the base particle size. (Default: 0.75)")
-	public float windParticleSizeFactor = 0.75f;
+	@Comment("Size factor applied to wind flake particles, the base particle size. (Default: 1.0)")
+	public float windParticleSizeFactor = 1.0f;
 
 	@ConfigEntry.Category("particles")
 	@Comment("Size variance factor applied to wind flake particles, relative to the base size. (Default: 0.1)")

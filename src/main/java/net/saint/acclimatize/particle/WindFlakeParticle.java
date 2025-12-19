@@ -17,6 +17,8 @@ import net.saint.acclimatize.ModClient;
 @Environment(EnvType.CLIENT)
 public class WindFlakeParticle extends SpriteBillboardParticle {
 
+	private static final float PARTICLE_SIZE = 0.5f;
+
 	// References
 
 	private final SpriteProvider spriteProvider;
@@ -33,7 +35,8 @@ public class WindFlakeParticle extends SpriteBillboardParticle {
 		var color = getRandomParticleColorForTemperature(random, ModClient.getAmbientTemperature());
 
 		this.setMaxAge(Mod.CONFIG.windParticleLifetime);
-		this.scale(Mod.CONFIG.windParticleSizeFactor * (1.0f + Mod.CONFIG.windParticleSizeVarianceFactor * this.random.nextFloat()));
+		this.scale(PARTICLE_SIZE * Mod.CONFIG.windParticleSizeFactor
+				* (1.0f + Mod.CONFIG.windParticleSizeVarianceFactor * this.random.nextFloat()));
 		this.setColor(color.getRed() / 255.0F, color.getGreen() / 255.0F, color.getBlue() / 255.0F);
 
 		this.gravityStrength = 0.01f;
