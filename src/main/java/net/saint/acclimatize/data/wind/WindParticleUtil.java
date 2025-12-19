@@ -1,22 +1,16 @@
 package net.saint.acclimatize.data.wind;
 
-import java.util.Set;
-
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.world.World;
 import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.ModClient;
+import net.saint.acclimatize.ModParticles;
+import net.saint.acclimatize.util.MathUtil;
 
 public class WindParticleUtil {
 
-	private static final Set<DefaultParticleType> PARTICLE_TYPES = Set.of(ParticleTypes.ASH, ParticleTypes.WHITE_ASH);
-
-	private static final DefaultParticleType[] PARTICLE_POOL = PARTICLE_TYPES.toArray(new DefaultParticleType[0]);
-
-	private static final double PARTICLE_BASE_SPAWN_RATE = 5.0;
+	private static final double PARTICLE_BASE_SPAWN_RATE = 4.0;
 
 	// Spawning
 
@@ -55,8 +49,7 @@ public class WindParticleUtil {
 		var vz = Math.cos(windDirection) * horizontalSpeed;
 		var vy = random.nextDouble() * 0.02 - 0.01;
 
-		var particleType = PARTICLE_POOL[random.nextInt(PARTICLE_POOL.length)];
-		world.addParticle(particleType, x, y, z, vx, vy, vz);
+		world.addParticle(ModParticles.WIND_FLAKE, x, y, z, vx, vy, vz);
 	}
 
 	// Spawn Rates & Counts
