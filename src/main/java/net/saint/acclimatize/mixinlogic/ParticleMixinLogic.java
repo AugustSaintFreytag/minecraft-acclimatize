@@ -3,11 +3,9 @@ package net.saint.acclimatize.mixinlogic;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.particle.AshParticle;
 import net.minecraft.client.particle.LargeFireSmokeParticle;
 import net.minecraft.client.particle.RainSplashParticle;
 import net.minecraft.client.particle.SnowflakeParticle;
-import net.minecraft.client.particle.WhiteAshParticle;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +18,7 @@ import net.saint.acclimatize.ModClient;
 import net.saint.acclimatize.compat.FallingLeafParticleCompat;
 import net.saint.acclimatize.compat.ParticleRainParticleCompat;
 import net.saint.acclimatize.data.world.WorldUtil;
+import net.saint.acclimatize.particle.WindFlakeParticle;
 import net.saint.acclimatize.util.MathUtil;
 
 public interface ParticleMixinLogic {
@@ -462,16 +461,16 @@ public interface ParticleMixinLogic {
 	// Particle Specifics
 
 	private double windInfluenceFactorForParticleType() {
+		if (this instanceof WindFlakeParticle) {
+			return 1.65;
+		}
+
 		if (this instanceof SnowflakeParticle) {
 			return 1.5;
 		}
 
 		if (this instanceof RainSplashParticle) {
 			return 0.1;
-		}
-
-		if (this instanceof AshParticle || this instanceof WhiteAshParticle) {
-			return 1.5;
 		}
 
 		if (ParticleRainParticleCompat.isRainParticle(this)) {

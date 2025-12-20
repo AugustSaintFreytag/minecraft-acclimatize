@@ -61,10 +61,10 @@ public class Mod implements ModInitializer {
 
 		// Registration
 
-		ModStatusEffects.registerStatusEffects();
-		AmbienceSoundEvents.registerSoundEvents();
 		ModBlocks.registerBlocks();
 		ModItems.registerItems();
+		ModStatusEffects.registerStatusEffects();
+		AmbienceSoundEvents.registerSoundEvents();
 		ModServerEvents.registerServerEvents();
 		ModCommands.registerCommands();
 

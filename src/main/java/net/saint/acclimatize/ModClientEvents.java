@@ -46,7 +46,7 @@ public final class ModClientEvents {
 		ModClient.AMBIENCE_SOUND_MANAGER.tick(client, false);
 
 		if (Mod.CONFIG.enableWindParticles) {
-			WindParticleUtil.renderWindParticles(client);
+			WindParticleUtil.spawnWindParticles(client);
 		}
 
 		if (Mod.CONFIG.enableSkyAngleLogging && world.getTime() % 20 == 0) {

@@ -47,6 +47,7 @@ public class ModClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		setUpParticles();
 		setUpKeybindings();
 		setUpNetworkingPacketRegistration();
 		setUpItemTooltipCallback();
@@ -144,6 +145,10 @@ public class ModClient implements ClientModInitializer {
 	}
 
 	// Set-Up
+
+	private static void setUpParticles() {
+		ModParticles.registerParticles();
+	}
 
 	private static void setUpKeybindings() {
 		HUD_KEYBINDING = KeyBindingHelper
