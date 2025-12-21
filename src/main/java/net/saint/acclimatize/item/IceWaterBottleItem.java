@@ -50,7 +50,7 @@ public class IceWaterBottleItem extends Item {
 
 			var serverWorld = (ServerWorld) world;
 			serverWorld.playSound(null, serverPlayer.getBlockPos(), SoundEvents.ENTITY_WANDERING_TRADER_DRINK_POTION, SoundCategory.PLAYERS,
-					1.0F, 1.0F);
+					1.0f, 1.0f);
 
 			serverPlayer.addStatusEffect(
 					new StatusEffectInstance(ModStatusEffects.HEAT_DISSIPATION, Mod.CONFIG.iceWaterEffectDuration, 0, false, true));
