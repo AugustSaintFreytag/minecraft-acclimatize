@@ -1,8 +1,5 @@
 package net.saint.acclimatize;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
@@ -14,11 +11,13 @@ import net.saint.acclimatize.data.wind.PlayerWindManager;
 import net.saint.acclimatize.data.wind.WindManager;
 import net.saint.acclimatize.profiler.Profiler;
 import net.saint.acclimatize.sound.AmbienceSoundEvents;
+import net.saint.acclimatize.util.Logger;
 
 public class Mod implements ModInitializer {
 	// Metadata
 
 	public static final String MOD_ID = "acclimatize";
+	public static final String MOD_NAME = "Acclimatize";
 
 	public static String MOD_VERSION;
 
@@ -28,7 +27,7 @@ public class Mod implements ModInitializer {
 
 	// Modules
 
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Logger LOGGER = Logger.create(MOD_NAME);
 	public static final Profiler PROFILER = Profiler.getProfiler(MOD_ID);
 
 	public static final PlayerSpaceManager PLAYER_SPACE_MANAGER = new PlayerSpaceManager();

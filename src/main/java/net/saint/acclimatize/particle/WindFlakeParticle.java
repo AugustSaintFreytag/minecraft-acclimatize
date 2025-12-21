@@ -37,10 +37,10 @@ public class WindFlakeParticle extends SpriteBillboardParticle {
 		this.setMaxAge(Mod.CONFIG.windParticleLifetime);
 		this.scale(PARTICLE_SIZE * Mod.CONFIG.windParticleSizeFactor
 				* (1.0f + Mod.CONFIG.windParticleSizeVarianceFactor * this.random.nextFloat()));
-		this.setColor(color.getRed() / 255.0F, color.getGreen() / 255.0F, color.getBlue() / 255.0F);
+		this.setColor(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f);
 
-		this.gravityStrength = 0.01f;
-		this.velocityMultiplier = 1.0F;
+		this.gravityStrength = 0.0f;
+		this.velocityMultiplier = 0.9f;
 		this.collidesWithWorld = Mod.CONFIG.enableWindParticleCollision;
 
 		this.velocityX += velocityX;
@@ -87,8 +87,8 @@ public class WindFlakeParticle extends SpriteBillboardParticle {
 		var temperatureSaturationFactor = (float) Math.abs(temperatureFactor) * getSaturationFactorForTemperature(biomeTemperature);
 
 		var hue = getColorHueForTemperature(biomeTemperature);
-		var saturation = 0.0F + 0.5F * temperatureSaturationFactor * (0.5F + 0.5F * random.nextFloat());
-		var brightness = 0.4F + 0.45F * random.nextFloat();
+		var saturation = 0.0f + 0.5f * temperatureSaturationFactor * (0.5f + 0.5f * random.nextFloat());
+		var brightness = 0.4f + 0.45f * random.nextFloat();
 
 		var colorValue = Color.HSBtoRGB(hue, saturation, brightness);
 
@@ -97,18 +97,18 @@ public class WindFlakeParticle extends SpriteBillboardParticle {
 
 	private static float getColorHueForTemperature(double biomeTemperature) {
 		if (biomeTemperature > 50) {
-			return 0.115F;
+			return 0.115f;
 		} else {
-			return 0.525F;
+			return 0.525f;
 		}
 	}
 
 	private static float getSaturationFactorForTemperature(double biomeTemperature) {
 
 		if (biomeTemperature > 50) {
-			return 1.0F;
+			return 1.0f;
 		} else {
-			return 0.5F;
+			return 0.5f;
 		}
 	}
 
