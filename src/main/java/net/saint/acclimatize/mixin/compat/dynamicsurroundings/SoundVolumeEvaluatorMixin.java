@@ -18,19 +18,19 @@ public abstract class SoundVolumeEvaluatorMixin {
 
 	@Inject(method = "getAdjustedVolume", at = @At("RETURN"), cancellable = true, remap = false)
 	private static void acclimatize$getAdjustedVolume(SoundInstance sound, CallbackInfoReturnable<Float> callbackInfo) {
-		if (!Mod.CONFIG.enableDynamicSurroundingsInterop || !shouldModifyVolume()) {
+		if (!Mod.CONFIG.enableDynamicSurroundingsInterop || !acclimatize$shouldModifyVolume()) {
 			return;
 		}
 
 		var volume = callbackInfo.getReturnValue();
 		var tick = ModClient.getClientTickElapsed();
-		var modifier = volumeModifierForTick(tick);
+		var modifier = acclimatize$volumeModifierForTick(tick);
 		var modifiedVolume = volume * modifier;
 
 		callbackInfo.setReturnValue(modifiedVolume);
 	}
 
-	private static float volumeModifierForTick(long tick) {
+	private static float acclimatize$volumeModifierForTick(long tick) {
 		if (tick <= FADE_IN_DELAY) {
 			return 0.0f;
 		} else if (tick <= FADE_IN_DELAY + Mod.CONFIG.soundSuppressionTransitionTicks) {
@@ -41,7 +41,7 @@ public abstract class SoundVolumeEvaluatorMixin {
 		}
 	}
 
-	private static boolean shouldModifyVolume() {
+	private static boolean acclimatize$shouldModifyVolume() {
 		var client = MinecraftClient.getInstance();
 
 		if (client != null && client.world != null && client.player != null) {

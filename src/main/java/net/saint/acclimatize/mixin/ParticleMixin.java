@@ -98,17 +98,17 @@ public abstract class ParticleMixin implements ParticleMixinLogic, ParticleAcces
 	}
 
 	@ModifyVariable(method = "move(DDD)V", at = @At("HEAD"), ordinal = 0, argsOnly = true)
-	private double mixinMoveDx(double dx) {
+	private double acclimatize$moveDx(double dx) {
 		return this.calculateDeltaX(dx);
 	}
 
 	@ModifyVariable(method = "move(DDD)V", at = @At("HEAD"), ordinal = 1, argsOnly = true)
-	private double mixinMoveDy(double dy) {
+	private double acclimatize$moveDy(double dy) {
 		return dy;
 	}
 
 	@ModifyVariable(method = "move(DDD)V", at = @At("HEAD"), ordinal = 2, argsOnly = true)
-	private double mixinMoveDz(double dz) {
+	private double acclimatize$moveDz(double dz) {
 		return this.calculateDeltaZ(dz);
 	}
 
