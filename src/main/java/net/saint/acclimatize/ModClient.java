@@ -96,6 +96,11 @@ public class ModClient implements ClientModInitializer {
 			lastWindUpdateTick = serverTick;
 		}
 
+		if (previousValues.localWindIntensity != values.localWindIntensity) {
+			lastLocalWindIntensity = previousValues.localWindIntensity;
+			lastWindUpdateTick = serverTick;
+		}
+
 		if (previousValues.playerWindIntensity != values.playerWindIntensity) {
 			lastEffectiveWindIntensity = previousValues.playerWindIntensity;
 			lastWindUpdateTick = serverTick;
