@@ -7,7 +7,7 @@ version = project.mod_version
 group = project.maven_group
 
 base {
-    archivesBaseName = 'acclimatize'
+    archivesName = project.archives_base_name
 }
 
 repositories {
@@ -126,14 +126,14 @@ java {
 }
 
 jar {
-	archiveBaseName.set(project.archivesBaseName)
+	archiveBaseName.set(project.base.archivesName)
     archiveVersion.set(project.version)
     archiveClassifier.set('')
 
 	inputs.property "archivesName", project.base.archivesName
 
 	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
+		rename { "${it}_${project.base.archivesName.get()}"}
 	}
 }
 
