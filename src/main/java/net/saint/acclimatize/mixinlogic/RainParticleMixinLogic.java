@@ -4,7 +4,7 @@ import net.minecraft.util.math.Vec3d;
 import net.saint.acclimatize.Mod;
 import net.saint.acclimatize.ModClient;
 import net.saint.acclimatize.util.MathUtil;
-import pigcart.particlerain.particle.RainParticle;
+import pigcart.particlerain.particle.CustomParticle;
 
 public interface RainParticleMixinLogic {
 
@@ -20,7 +20,7 @@ public interface RainParticleMixinLogic {
 		}
 	}
 
-	public default ValueTuple windAffectedVelocityForParticle(RainParticle particle, Vec3d velocity) {
+	public default ValueTuple windAffectedVelocityForParticle(CustomParticle particle, Vec3d velocity) {
 		// Fetch our mod's wind parameters
 		double windDirection = ModClient.getLocalWindDirection(); // radians, 0 = north→south
 		double windIntensity = ModClient.getEffectiveWindIntensity();
