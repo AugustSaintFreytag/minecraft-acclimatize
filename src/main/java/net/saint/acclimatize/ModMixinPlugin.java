@@ -18,6 +18,7 @@ public final class ModMixinPlugin implements IMixinConfigPlugin {
 	private static final Supplier<Boolean> TRUE = () -> true;
 
 	private static final Map<String, Supplier<Boolean>> CONDITIONS = ImmutableMap.<String, Supplier<Boolean>>builder()
+			.put("net.saint.acclimatize.mixin.compat.iris.CommonUniformsMixin", () -> FabricLoader.getInstance().isModLoaded("iris"))
 			.put("net.saint.acclimatize.mixin.compat.fallingleaves.FallingLeafParticleMixin",
 					() -> FabricLoader.getInstance().isModLoaded("fallingleaves"))
 			.put("net.saint.acclimatize.mixin.compat.particlerain.RainParticleMixin",
