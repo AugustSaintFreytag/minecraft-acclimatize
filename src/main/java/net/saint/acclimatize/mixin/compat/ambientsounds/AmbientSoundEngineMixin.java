@@ -63,7 +63,7 @@ public abstract class AmbientSoundEngineMixin {
 		synchronized (sounds) {
 			try {
 				for (SoundStream sound : sounds) {
-					var soundVolume = getEffectiveSoundVolume(sound);
+					var soundVolume = acclimatize$getEffectiveSoundVolume(sound);
 					var modifiedSoundVolume = MathUtil.lerp(soundVolume, soundVolume * soundVolumeFactor, fadeTickProgress);
 
 					sound.generatedVoume = modifiedSoundVolume;
@@ -80,7 +80,7 @@ public abstract class AmbientSoundEngineMixin {
 		}
 	}
 
-	private float getEffectiveSoundVolume(SoundStream sound) {
+	private float acclimatize$getEffectiveSoundVolume(SoundStream sound) {
 		// Property name sic, as it is written in Ambient Sounds.
 		return sound.generatedVoume;
 	}
