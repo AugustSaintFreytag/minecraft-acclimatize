@@ -11,6 +11,7 @@
 		"PlayerStatusEffectsMixin",
 		"SoundSystemMixin",
 		"SuspendedParticleMixin",
+		"compat.iris.CommonUniformsMixin",
 		"compat.fallingleaves.FallingLeafParticleMixin",
 		"compat.particlerain.RainParticleMixin",
 		"compat.dynamicsurroundings.CeilingScannerMixin",

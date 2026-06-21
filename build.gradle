@@ -62,10 +62,16 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
   	}
 	
-	// Modmenu
+	// Mod Menu
 
 	modImplementation("com.terraformersmc:modmenu:${project.mod_menu_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
+	}
+
+	// Iris
+
+	modCompileOnly("maven.modrinth:iris:${project.iris_version}") {
+		transitive = false
 	}
 	
 	// Falling Leaves
