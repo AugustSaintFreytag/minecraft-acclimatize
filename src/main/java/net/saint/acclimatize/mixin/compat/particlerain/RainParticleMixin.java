@@ -9,29 +9,31 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.Vec3d;
+import pigcart.particlerain.particle.CustomParticle;
+import pigcart.particlerain.particle.WeatherParticle;
+import pigcart.particlerain.config.ParticleData;
+
 import net.saint.acclimatize.mixinlogic.ParticleAccessor;
 import net.saint.acclimatize.mixinlogic.RainParticleMixinLogic;
-import pigcart.particlerain.particle.RainParticle;
-import pigcart.particlerain.particle.WeatherParticle;
 
 @Environment(EnvType.CLIENT)
-@Mixin(RainParticle.class)
+@Mixin(CustomParticle.class)
 public abstract class RainParticleMixin extends WeatherParticle implements RainParticleMixinLogic {
 
 	// Init
 
-	private RainParticleMixin(ClientWorld world, double x, double y, double z) {
-		super(world, x, y, z);
+	private RainParticleMixin(ClientWorld world, double x, double y, double z, ParticleData options) {
+		super(world, x, y, z, null);
 	}
 
 	// Injections
 
 	@Inject(method = "<init>", at = @At("TAIL"))
-	private void acclimatize$init(ClientWorld world, double x, double y, double z, ConfigData.ParticleData options,
+	private void acclimatize$init(ClientWorld world, double x, double y, double z, ParticleData options,
 			CallbackInfo callbackInfo) {
 		var accessor = (ParticleAccessor) this;
 		var velocity = new Vec3d(accessor.getVelocityX(), accessor.getVelocityY(), accessor.getVelocityZ());
-		var values = windAffectedVelocityForParticle((RainParticle) (Object) this, velocity);
+		var values = windAffectedVelocityForParticle((CustomParticle) (Object) this, velocity);
 
 		this.velocityX = values.velocityX;
 		this.velocityZ = values.velocityZ;
