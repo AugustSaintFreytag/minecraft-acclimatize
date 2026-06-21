@@ -22,11 +22,16 @@ public abstract class PlayerStatusEffectsMixin extends Entity {
 		super(null, null);
 	}
 
+	// Shadow
+
+	@Shadow
+	protected abstract void clearPotionSwirls();
+
 	// Injection
 
 	@Inject(method = "setSprinting", at = @At("HEAD"), cancellable = true)
-	private void setSprintingMixin(boolean sprinting, CallbackInfo callbackInfo) {
-		withPlayerEntity(player -> {
+	private void acclimatize$setSprintingMixin(boolean sprinting, CallbackInfo callbackInfo) {
+		acclimatize$withPlayerEntity(player -> {
 			// Check for extreme body temperature status effects and disable sprinting.
 			if (!PlayerStatusEffectsUtil.entityHasAnyTemperatureStatusEffects(player)) {
 				return;
@@ -37,27 +42,22 @@ public abstract class PlayerStatusEffectsMixin extends Entity {
 		});
 	}
 
-	@Shadow
-	protected abstract void clearPotionSwirls();
-
 	/**
 	 * Right after vanilla resets potion‑swirl visibility, if the entity has Hypothermia we zero out
 	 * the colour so tickStatusEffects() never spawns any particles.
 	 */
 	@Inject(method = "updatePotionVisibility", at = @At("TAIL"))
-	private void mixinUpdatePotionVisibility(CallbackInfo ci) {
-		withPlayerEntity(player -> {
+	private void acclimatize$mixinUpdatePotionVisibility(CallbackInfo ci) {
+		acclimatize$withPlayerEntity(player -> {
 			if (PlayerStatusEffectsUtil.entityHasOnlyBlacklistedStatusEffects(player)) {
 				clearPotionSwirls();
 			}
 		});
 	}
 
-	// Effects Analysis
-
 	// Utility
 
-	private void withPlayerEntity(Consumer<PlayerEntity> block) {
+	private void acclimatize$withPlayerEntity(Consumer<PlayerEntity> block) {
 		var entity = (LivingEntity) (Object) this;
 
 		if (!(entity instanceof PlayerEntity)) {

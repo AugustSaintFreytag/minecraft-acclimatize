@@ -11,7 +11,8 @@ import net.minecraft.client.particle.SpriteBillboardParticle;
 import net.minecraft.client.particle.SuspendParticle;
 import net.minecraft.client.world.ClientWorld;
 
-@Environment(EnvType.CLIENT) @Mixin(SuspendParticle.class)
+@Environment(EnvType.CLIENT)
+@Mixin(SuspendParticle.class)
 public abstract class SuspendedParticleMixin extends SpriteBillboardParticle {
 
 	// Init
@@ -23,7 +24,7 @@ public abstract class SuspendedParticleMixin extends SpriteBillboardParticle {
 	// Logic
 
 	@Inject(method = "move", at = @At("TAIL"))
-	public void move(double dx, double dy, double dz, CallbackInfo callbackInfo) {
+	public void acclimatize$move(double dx, double dy, double dz, CallbackInfo callbackInfo) {
 		super.move(this.velocityX, this.velocityY, this.velocityZ);
 	}
 
